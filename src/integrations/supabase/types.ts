@@ -9,13 +9,84 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      instruments: {
+        Row: {
+          brand: string
+          compare_count: number | null
+          created_at: string | null
+          description: string | null
+          id: string
+          image: string | null
+          name: string
+          popularity_score: number | null
+          price: number
+          rating: number | null
+          release_year: number | null
+          specs: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          brand: string
+          compare_count?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image?: string | null
+          name: string
+          popularity_score?: number | null
+          price: number
+          rating?: number | null
+          release_year?: number | null
+          specs?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          brand?: string
+          compare_count?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image?: string | null
+          name?: string
+          popularity_score?: number | null
+          price?: number
+          rating?: number | null
+          release_year?: number | null
+          specs?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      users: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          is_admin: boolean | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id: string
+          is_admin?: boolean | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          is_admin?: boolean | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
