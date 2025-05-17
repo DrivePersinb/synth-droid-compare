@@ -161,3 +161,46 @@ export async function fetchFilteredInstruments(
   
   return (data || []).map(mapDbRecordToInstrument);
 }
+
+// New function to update an instrument
+export async function updateInstrument(instrument: Instrument): Promise<void> {
+  const { id, ...instrumentData } = instrument;
+  
+  // Convert from our frontend model to database model
+  const dbData = {
+    name: instrumentData.name,
+    brand: instrumentData.brand,
+    image: instrumentData.image,
+    price: instrumentData.price,
+    rating: instrumentData.rating,
+    release_year: instrumentData.releaseYear,
+    description: instrumentData.description,
+    specs: instrumentData.specs,
+    compare_count: instrumentData.compareCount,
+    popularity_score: instrumentData.popularityScore,
+    updated_at: new Date().toISOString()
+  };
+  
+  const { error } = await supabase
+    .from('instruments')
+    .update(dbData)
+    .eq('id', id);
+    
+  if (error) {
+    console.error("Error updating instrument:", error);
+    throw new Error("Failed to update instrument");
+  }
+}
+
+// New function to delete an instrument
+export async function deleteInstrument(id: string): Promise<void> {
+  const { error } = await supabase
+    .from('instruments')
+    .delete()
+    .eq('id', id);
+    
+  if (error) {
+    console.error("Error deleting instrument:", error);
+    throw new Error("Failed to delete instrument");
+  }
+}
