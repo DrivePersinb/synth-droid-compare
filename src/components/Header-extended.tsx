@@ -1,17 +1,16 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, ChevronDown, ShoppingBag, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCompare } from "@/contexts/CompareContext";
 import { useAuth } from "@/contexts/AuthContext";
-import { useMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const HeaderExtended = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { compareItems } = useCompare();
   const { user, isAdmin, signOut } = useAuth();
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
 
   return (
     <header className="bg-androidBox border-b border-gray-800">

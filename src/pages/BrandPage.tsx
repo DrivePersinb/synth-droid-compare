@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import FilterSortBar from "@/components/FilterSortBar";
 import { getInstrumentsByBrand } from "@/data/instruments";
-import { FilterOptions, SortOption, Brand } from "@/data/instrumentTypes";
+import { FilterOptions, SortOption, Brand, Instrument } from "@/data/instrumentTypes";
 
 const BrandPage = () => {
   const { brandName } = useParams<{ brandName: string }>();
@@ -15,9 +15,8 @@ const BrandPage = () => {
     brandName.charAt(0).toUpperCase() + brandName.slice(1) as Brand : 
     "Roland"; // Default fallback
   
-  const [instruments, setInstruments] = useState(
-    getInstrumentsByBrand(capitalizedBrandName)
-  );
+  const [instruments, setInstruments] = useState<Instrument[]>([]);
+  const [loading, setLoading] = useState(true);
   
   const [currentSort, setCurrentSort] = useState<SortOption>("popularity");
   const [currentFilters, setCurrentFilters] = useState<FilterOptions>({
@@ -27,14 +26,27 @@ const BrandPage = () => {
   });
   
   useEffect(() => {
-    if (brandName) {
-      const brand = brandName.charAt(0).toUpperCase() + brandName.slice(1) as Brand;
-      setInstruments(getInstrumentsByBrand(brand));
-      setCurrentFilters({
-        ...currentFilters,
-        brands: [brand]
-      });
+    async function loadInstruments() {
+      setLoading(true);
+      if (brandName) {
+        const brand = brandName.charAt(0).toUpperCase() + brandName.slice(1) as Brand;
+        try {
+          const fetchedInstruments = await getInstrumentsByBrand(brand);
+          setInstruments(fetchedInstruments);
+          setCurrentFilters({
+            ...currentFilters,
+            brands: [brand]
+          });
+        } catch (error) {
+          console.error("Error loading instruments:", error);
+          setInstruments([]);
+        } finally {
+          setLoading(false);
+        }
+      }
     }
+    
+    loadInstruments();
   }, [brandName]);
   
   return (
@@ -73,7 +85,7 @@ const BrandPage = () => {
                 </div>
                 <div>
                   <div className="text-2xl font-bold">
-                    ${Math.min(...instruments.map(i => i.price))}+
+                    ${instruments.length > 0 ? Math.min(...instruments.map(i => i.price)) : 0}+
                   </div>
                   <div className="text-gray-400">Starting Price</div>
                 </div>
@@ -82,36 +94,44 @@ const BrandPage = () => {
           </div>
           
           <div className="md:w-2/3">
-            <FilterSortBar 
-              onFilterChange={setCurrentFilters}
-              onSortChange={setCurrentSort}
-              currentSort={currentSort}
-              currentFilters={currentFilters}
-            />
-            
-            {instruments.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {instruments.map(instrument => (
-                  <ProductCard key={instrument.id} instrument={instrument} />
-                ))}
+            {loading ? (
+              <div className="flex justify-center py-12">
+                <div className="animate-pulse text-xl">Loading...</div>
               </div>
             ) : (
-              <div className="text-center py-16 bg-androidBox rounded-lg">
-                <h2 className="text-2xl font-bold mb-2">No instruments found</h2>
-                <p className="text-gray-400 mb-6">
-                  Try adjusting your filters to see more results
-                </p>
-                <button 
-                  onClick={() => setCurrentFilters({
-                    priceRange: [0, 5000],
-                    brands: [capitalizedBrandName],
-                    releaseYears: []
-                  })}
-                  className="android-btn bg-primary text-white hover:bg-primary/90"
-                >
-                  Clear Filters
-                </button>
-              </div>
+              <>
+                <FilterSortBar 
+                  onFilterChange={setCurrentFilters}
+                  onSortChange={setCurrentSort}
+                  currentSort={currentSort}
+                  currentFilters={currentFilters}
+                />
+                
+                {instruments.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {instruments.map(instrument => (
+                      <ProductCard key={instrument.id} instrument={instrument} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-16 bg-androidBox rounded-lg">
+                    <h2 className="text-2xl font-bold mb-2">No instruments found</h2>
+                    <p className="text-gray-400 mb-6">
+                      Try adjusting your filters to see more results
+                    </p>
+                    <button 
+                      onClick={() => setCurrentFilters({
+                        priceRange: [0, 5000],
+                        brands: [capitalizedBrandName],
+                        releaseYears: []
+                      })}
+                      className="android-btn bg-primary text-white hover:bg-primary/90"
+                    >
+                      Clear Filters
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

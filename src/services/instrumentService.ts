@@ -2,6 +2,23 @@
 import { supabase } from "@/integrations/supabase/client";
 import { Brand, FilterOptions, Instrument, SortOption } from "@/data/instrumentTypes";
 
+// Helper function to map database record to Instrument type
+function mapDbRecordToInstrument(record: any): Instrument {
+  return {
+    id: record.id,
+    name: record.name,
+    brand: record.brand as Brand,
+    image: record.image || '/placeholder.svg',
+    price: record.price,
+    rating: record.rating || 4.5,
+    releaseYear: record.release_year,
+    description: record.description || '',
+    specs: record.specs || {},
+    compareCount: record.compare_count || 0,
+    popularityScore: record.popularity_score || 50
+  };
+}
+
 export async function fetchAllInstruments(): Promise<Instrument[]> {
   const { data, error } = await supabase
     .from('instruments')
@@ -12,7 +29,7 @@ export async function fetchAllInstruments(): Promise<Instrument[]> {
     throw new Error("Failed to fetch instruments");
   }
   
-  return data || [];
+  return (data || []).map(mapDbRecordToInstrument);
 }
 
 export async function fetchInstrumentById(id: string): Promise<Instrument | null> {
@@ -30,7 +47,7 @@ export async function fetchInstrumentById(id: string): Promise<Instrument | null
     throw new Error("Failed to fetch instrument");
   }
   
-  return data;
+  return data ? mapDbRecordToInstrument(data) : null;
 }
 
 export async function fetchInstrumentsByBrand(brand: Brand): Promise<Instrument[]> {
@@ -44,7 +61,7 @@ export async function fetchInstrumentsByBrand(brand: Brand): Promise<Instrument[
     throw new Error(`Failed to fetch instruments for brand: ${brand}`);
   }
   
-  return data || [];
+  return (data || []).map(mapDbRecordToInstrument);
 }
 
 export async function fetchLatestInstruments(limit = 6): Promise<Instrument[]> {
@@ -59,14 +76,22 @@ export async function fetchLatestInstruments(limit = 6): Promise<Instrument[]> {
     throw new Error("Failed to fetch latest instruments");
   }
   
-  return data || [];
+  return (data || []).map(mapDbRecordToInstrument);
 }
 
 export async function incrementCompareCount(id: string): Promise<void> {
-  const { error } = await supabase.rpc('increment_compare_count', { instrument_id: id });
-  
-  if (error) {
-    console.error("Error incrementing compare count:", error);
+  // Since we don't have the increment_compare_count function yet, let's directly update the count
+  const { data: instrument } = await supabase
+    .from('instruments')
+    .select('compare_count')
+    .eq('id', id)
+    .single();
+    
+  if (instrument) {
+    await supabase
+      .from('instruments')
+      .update({ compare_count: (instrument.compare_count || 0) + 1 })
+      .eq('id', id);
   }
 }
 
@@ -134,5 +159,5 @@ export async function fetchFilteredInstruments(
     throw new Error("Failed to fetch instruments");
   }
   
-  return data || [];
+  return (data || []).map(mapDbRecordToInstrument);
 }

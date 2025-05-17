@@ -13,13 +13,29 @@ import { ArrowLeft, Trash } from "lucide-react";
 const ComparePage = () => {
   const { compareItems, clearCompare } = useCompare();
   const [instruments, setInstruments] = useState<Instrument[]>([]);
+  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
-    const loadedInstruments = compareItems
-      .map(item => getInstrumentById(item.instrumentId))
-      .filter(item => item !== undefined) as Instrument[];
-      
-    setInstruments(loadedInstruments);
+    async function fetchInstruments() {
+      setLoading(true);
+      try {
+        const loadedInstruments = await Promise.all(
+          compareItems.map(async item => {
+            const instrument = await getInstrumentById(item.instrumentId);
+            return instrument;
+          })
+        );
+        
+        // Filter out any undefined results
+        setInstruments(loadedInstruments.filter((item): item is Instrument => item !== undefined));
+      } catch (error) {
+        console.error("Error loading instruments for comparison:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    fetchInstruments();
   }, [compareItems]);
 
   return (
@@ -42,22 +58,28 @@ const ComparePage = () => {
           )}
         </div>
         
-        <div className="bg-androidBox rounded-xl overflow-hidden">
-          <CompareTable instruments={instruments} />
-          
-          {instruments.length > 0 && instruments.length < 4 && (
-            <div className="p-6 border-t border-gray-700">
-              <div className="flex flex-wrap items-center gap-4">
-                <div className="text-gray-300">
-                  You can add up to {4 - instruments.length} more instrument{instruments.length === 3 ? '' : 's'} to compare
+        {loading ? (
+          <div className="flex justify-center py-12">
+            <div className="animate-pulse text-xl">Loading...</div>
+          </div>
+        ) : (
+          <div className="bg-androidBox rounded-xl overflow-hidden">
+            <CompareTable instruments={instruments} />
+            
+            {instruments.length > 0 && instruments.length < 4 && (
+              <div className="p-6 border-t border-gray-700">
+                <div className="flex flex-wrap items-center gap-4">
+                  <div className="text-gray-300">
+                    You can add up to {4 - instruments.length} more instrument{instruments.length === 3 ? '' : 's'} to compare
+                  </div>
+                  <Button asChild>
+                    <Link to="/all-instruments">Add More Instruments</Link>
+                  </Button>
                 </div>
-                <Button asChild>
-                  <Link to="/all-instruments">Add More Instruments</Link>
-                </Button>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </main>
       
       <Footer />
