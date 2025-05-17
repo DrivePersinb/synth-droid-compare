@@ -4,40 +4,19 @@ import { Link, useParams } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCompare } from "@/contexts/CompareContext";
-import { getInstrumentById, instruments, brands } from "@/data/instruments";
-import { Instrument } from "@/data/instrumentTypes";
+import { getInstrumentById, instruments } from "@/data/instruments";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, MinusCircle, ArrowLeft } from "lucide-react";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const [instrument, setInstrument] = useState<Instrument | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [similarInstruments, setSimilarInstruments] = useState<Instrument[]>([]);
+  const [instrument, setInstrument] = useState(id ? getInstrumentById(id) : null);
   const { addToCompare, removeFromCompare, isInCompare } = useCompare();
   
   useEffect(() => {
-    async function fetchData() {
-      setLoading(true);
-      if (id) {
-        try {
-          const fetchedInstrument = await getInstrumentById(id);
-          setInstrument(fetchedInstrument || null);
-          
-          // Once we have the instrument, we can fetch similar ones
-          if (fetchedInstrument) {
-            // Placeholder for similar instruments - in a real app, you'd fetch these
-            setSimilarInstruments([]);
-          }
-        } catch (error) {
-          console.error("Error fetching instrument:", error);
-        } finally {
-          setLoading(false);
-        }
-      }
+    if (id) {
+      setInstrument(getInstrumentById(id));
     }
-    
-    fetchData();
   }, [id]);
   
   const inCompare = instrument ? isInCompare(instrument.id) : false;
@@ -51,18 +30,11 @@ const ProductDetail = () => {
       addToCompare(instrument.id);
     }
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex flex-col bg-background">
-        <Header />
-        <div className="container mx-auto px-4 py-16 flex justify-center items-center">
-          <div className="animate-pulse text-2xl">Loading...</div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
+  
+  // Find similar instruments (same brand, but not the same instrument)
+  const similarInstruments = instruments.filter(
+    instr => instr.brand === instrument?.brand && instr.id !== instrument?.id
+  ).slice(0, 3);
 
   if (!instrument) {
     return (
@@ -98,7 +70,7 @@ const ProductDetail = () => {
             {/* Image */}
             <div className="bg-black rounded-lg flex items-center justify-center p-8">
               <img 
-                src={instrument.image === '/placeholder.svg' ? '/placeholder.svg' : instrument.image} 
+                src={instrument.image === '/placeholder.svg' ? '/placeholder.svg' : `/placeholder.svg`} 
                 alt={instrument.name}
                 className="max-w-full max-h-[400px] object-contain"
               />
@@ -161,7 +133,7 @@ const ProductDetail = () => {
                   {Object.entries(instrument.specs).slice(0, 6).map(([key, value]) => (
                     <div key={key} className="flex justify-between">
                       <span className="text-gray-400 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}:</span>
-                      <span>{typeof value === 'boolean' ? (value ? 'Yes' : 'No') : String(value)}</span>
+                      <span>{typeof value === 'boolean' ? (value ? 'Yes' : 'No') : value}</span>
                     </div>
                   ))}
                 </div>
@@ -176,7 +148,7 @@ const ProductDetail = () => {
               {Object.entries(instrument.specs).map(([key, value]) => (
                 <div key={key} className="flex justify-between py-2 border-b border-gray-700">
                   <span className="text-gray-400 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                  <span className="font-medium">{typeof value === 'boolean' ? (value ? 'Yes' : 'No') : String(value)}</span>
+                  <span className="font-medium">{typeof value === 'boolean' ? (value ? 'Yes' : 'No') : value}</span>
                 </div>
               ))}
             </div>
@@ -197,7 +169,7 @@ const ProductDetail = () => {
                   <div className="p-4">
                     <div className="bg-black rounded-lg h-40 flex items-center justify-center mb-4">
                       <img 
-                        src={instr.image === '/placeholder.svg' ? '/placeholder.svg' : instr.image}
+                        src={instr.image === '/placeholder.svg' ? '/placeholder.svg' : `/placeholder.svg`}
                         alt={instr.name}
                         className="max-h-full max-w-full object-contain p-4"
                       />
