@@ -1,11 +1,18 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { Instrument } from "@/data/instrumentTypes";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { Instrument } from "@/data/instrumentTypes";
 import { useCompare } from "@/contexts/CompareContext";
-import { getInstrumentImagePath } from "@/data/instruments";
-import { X } from "lucide-react";
+import { Trash } from "lucide-react";
 
 interface CompareTableProps {
   instruments: Instrument[];
@@ -13,13 +20,13 @@ interface CompareTableProps {
 
 const CompareTable: React.FC<CompareTableProps> = ({ instruments }) => {
   const { removeFromCompare } = useCompare();
-
+  
   if (instruments.length === 0) {
     return (
-      <div className="text-center py-12">
+      <div className="p-12 text-center">
         <h2 className="text-2xl font-bold mb-4">No instruments to compare</h2>
-        <p className="text-gray-400 mb-6">
-          Add some instruments to your comparison list to see them here
+        <p className="mb-6 text-gray-400">
+          Add some instruments to your comparison list to see how they stack up.
         </p>
         <Button asChild>
           <Link to="/all-instruments">Browse Instruments</Link>
@@ -27,103 +34,120 @@ const CompareTable: React.FC<CompareTableProps> = ({ instruments }) => {
       </div>
     );
   }
-
+  
   // Get all unique spec keys from all instruments
-  const allSpecs = new Set<string>();
+  const allSpecsKeys = new Set<string>();
   instruments.forEach(instrument => {
     Object.keys(instrument.specs).forEach(key => {
-      allSpecs.add(key);
+      allSpecsKeys.add(key);
     });
   });
   
-  const specKeys = Array.from(allSpecs);
+  // Sort spec keys alphabetically for consistent display
+  const sortedSpecsKeys = Array.from(allSpecsKeys).sort();
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full border-collapse">
-        {/* Header */}
-        <thead>
-          <tr>
-            <th className="p-4 text-left border-b border-gray-700 bg-androidBox sticky left-0 z-10">Specification</th>
+    <div className="w-full overflow-auto">
+      <Table className="table-fixed min-w-full">
+        <TableHeader>
+          <TableRow className="bg-black/40">
+            <TableHead className="w-1/4 min-w-[200px]">Specification</TableHead>
             {instruments.map((instrument) => (
-              <th key={instrument.id} className="p-4 text-center border-b border-gray-700 bg-androidBox min-w-[200px]">
-                <div className="relative">
-                  <button 
+              <TableHead key={instrument.id} className="w-1/4 min-w-[200px]">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <div className="text-xs text-muted-foreground">{instrument.brand}</div>
+                    <div className="font-medium">{instrument.name}</div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={() => removeFromCompare(instrument.id)}
-                    className="absolute top-0 right-0 text-gray-400 hover:text-white"
-                    title="Remove from comparison"
+                    className="h-7 w-7"
                   >
-                    <X size={16} />
-                  </button>
-                  <div className="h-32 flex items-center justify-center mb-2">
-                    <img 
-                      src={instrument.image === '/placeholder.svg' ? '/placeholder.svg' : getInstrumentImagePath(instrument.id)} 
+                    <Trash size={14} />
+                  </Button>
+                </div>
+              </TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        
+        <TableBody>
+          <TableRow>
+            <TableCell className="font-medium">Image</TableCell>
+            {instruments.map((instrument) => (
+              <TableCell key={`${instrument.id}-image`}>
+                <Link to={`/product/${instrument.id}`}>
+                  <div className="h-32 flex items-center justify-center bg-black rounded overflow-hidden">
+                    <img
+                      src={instrument.image === '/placeholder.svg' ? '/placeholder.svg' : `/placeholder.svg`}
                       alt={instrument.name}
-                      className="max-h-full max-w-full object-contain"
+                      className="max-h-full max-w-full object-contain p-4"
                     />
                   </div>
-                  <div className="text-sm text-gray-400">{instrument.brand}</div>
-                  <div className="text-lg font-medium">{instrument.name}</div>
-                  <div className="text-xl font-bold text-primary mt-1">${instrument.price}</div>
-                  <div className="mt-2">
-                    <Button asChild size="sm">
-                      <Link to={`/product/${instrument.id}`}>View Details</Link>
-                    </Button>
-                  </div>
-                </div>
-              </th>
+                </Link>
+              </TableCell>
             ))}
-          </tr>
-        </thead>
-        
-        {/* Body */}
-        <tbody>
-          {/* Basic specs */}
-          <tr>
-            <td className="p-4 text-left border-b border-gray-700 bg-androidBox font-medium sticky left-0 z-10">
-              Rating
-            </td>
-            {instruments.map((instrument) => (
-              <td key={instrument.id} className="p-4 text-center border-b border-gray-700">
-                <div className="flex items-center justify-center">
-                  <span className="text-yellow-400">★</span> {instrument.rating}
-                </div>
-              </td>
-            ))}
-          </tr>
+          </TableRow>
           
-          <tr>
-            <td className="p-4 text-left border-b border-gray-700 bg-androidBox font-medium sticky left-0 z-10">
-              Release Year
-            </td>
+          <TableRow>
+            <TableCell className="font-medium">Price</TableCell>
             {instruments.map((instrument) => (
-              <td key={instrument.id} className="p-4 text-center border-b border-gray-700">
+              <TableCell key={`${instrument.id}-price`} className="text-primary font-bold">
+                <div className="flex items-center">
+                  <span className="mr-1">₹</span>{instrument.price.toLocaleString('en-IN')}
+                </div>
+              </TableCell>
+            ))}
+          </TableRow>
+          
+          <TableRow>
+            <TableCell className="font-medium">Rating</TableCell>
+            {instruments.map((instrument) => (
+              <TableCell key={`${instrument.id}-rating`}>
+                <div className="flex items-center">
+                  <span className="text-yellow-400 mr-1">★</span>
+                  <span>{instrument.rating}</span>
+                </div>
+              </TableCell>
+            ))}
+          </TableRow>
+          
+          <TableRow>
+            <TableCell className="font-medium">Year</TableCell>
+            {instruments.map((instrument) => (
+              <TableCell key={`${instrument.id}-year`}>
                 {instrument.releaseYear}
-              </td>
+              </TableCell>
             ))}
-          </tr>
+          </TableRow>
           
-          {/* Dynamic specs */}
-          {specKeys.map((key) => (
-            <tr key={key}>
-              <td className="p-4 text-left border-b border-gray-700 bg-androidBox font-medium sticky left-0 z-10 capitalize">
-                {key.replace(/([A-Z])/g, ' $1').trim()}
-              </td>
+          <TableRow className="bg-black/20">
+            <TableCell colSpan={instruments.length + 1} className="font-bold py-2">
+              Specifications
+            </TableCell>
+          </TableRow>
+          
+          {sortedSpecsKeys.map(specKey => (
+            <TableRow key={`spec-${specKey}`}>
+              <TableCell className="font-medium capitalize">
+                {specKey.replace(/([A-Z])/g, ' $1').trim()}
+              </TableCell>
               {instruments.map((instrument) => (
-                <td key={instrument.id} className="p-4 text-center border-b border-gray-700">
-                  {instrument.specs[key] !== undefined ? (
-                    typeof instrument.specs[key] === 'boolean' ? 
-                      instrument.specs[key] ? '✓' : '✗' : 
-                      instrument.specs[key]
-                  ) : (
-                    <span className="text-gray-500">—</span>
-                  )}
-                </td>
+                <TableCell key={`${instrument.id}-${specKey}`}>
+                  {instrument.specs[specKey] !== undefined ? 
+                    typeof instrument.specs[specKey] === 'boolean' 
+                      ? (instrument.specs[specKey] ? 'Yes' : 'No')
+                      : instrument.specs[specKey]
+                    : '-'
+                  }
+                </TableCell>
               ))}
-            </tr>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 };

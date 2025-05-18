@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Instrument } from "@/data/instrumentTypes";
 import { useCompare } from "@/contexts/CompareContext";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, MinusCircle } from "lucide-react";
+import { PlusCircle, MinusCircle, indianRupee } from "lucide-react";
 import { getInstrumentImagePath } from "@/data/instruments";
 
 interface ProductCardProps {
@@ -32,6 +32,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ instrument }) => {
     Yamaha: "border-yamaha/30 hover:border-yamaha/60",
     Korg: "border-korg/30 hover:border-korg/60",
   }[instrument.brand];
+
+  // Format the price in Indian Rupees
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0
+    }).format(price);
+  };
 
   return (
     <div 
@@ -63,7 +72,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ instrument }) => {
           <h3 className="text-lg font-medium mb-2">{instrument.name}</h3>
           
           <div className="flex justify-between items-center mb-3">
-            <div className="text-lg font-bold text-primary">${instrument.price}</div>
+            <div className="text-lg font-bold text-primary flex items-center">
+              <span className="mr-1">₹</span>{instrument.price.toLocaleString('en-IN')}
+            </div>
             <div className="bg-androidBox rounded-full px-2 py-1 text-xs">
               ★ {instrument.rating}
             </div>
