@@ -73,7 +73,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ instrument }) => {
           
           <div className="flex justify-between items-center mb-3">
             <div className="text-lg font-bold text-primary flex items-center">
-              <span className="mr-1">₹</span>{instrument.price.toLocaleString('en-IN')}
+              <IndianRupee size={18} className="mr-1" />
+              {instrument.price.toLocaleString('en-IN')}
             </div>
             <div className="bg-androidBox rounded-full px-2 py-1 text-xs">
               ★ {instrument.rating}

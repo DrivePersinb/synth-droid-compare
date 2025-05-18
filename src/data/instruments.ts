@@ -1,9 +1,9 @@
 
 import { Brand, Instrument } from "./instrumentTypes";
 
-// Sample data for our synthesizers from different brands available in India
+// Comprehensive data for keyboard synthesizers from different brands available in India
 export const instruments: Instrument[] = [
-  // Roland synthesizers
+  // Roland keyboards
   {
     id: "roland-juno-ds88",
     name: "JUNO-DS88",
@@ -12,7 +12,7 @@ export const instruments: Instrument[] = [
     price: 129990,
     rating: 4.7,
     releaseYear: 2020,
-    description: "A versatile 88-key synthesizer with professional sounds for stage and studio",
+    description: "A versatile 88-key synthesizer with professional sounds for stage and studio. Lightweight and loaded with great sounds, the JUNO-DS88 is ready to support your musical vision.",
     specs: {
       keys: 88,
       keyType: "Ivory Feel-G Keyboard with Escapement",
@@ -39,7 +39,7 @@ export const instruments: Instrument[] = [
     price: 244990,
     rating: 4.8,
     releaseYear: 2022,
-    description: "Professional workstation synthesizer with 88 keys and cutting-edge sound design",
+    description: "Professional workstation synthesizer with 88 keys and cutting-edge sound design. The FANTOM-08 represents Roland's most cutting-edge synthesis technology in a sleek, modern design.",
     specs: {
       keys: 88,
       keyType: "PHA-50 Wood and Plastic Hybrid Keyboard",
@@ -68,7 +68,7 @@ export const instruments: Instrument[] = [
     price: 109990,
     rating: 4.6,
     releaseYear: 2019,
-    description: "76-note music workstation with integrated sampler and sequencer",
+    description: "76-note music workstation with integrated sampler and sequencer. The FA-07 provides a massive selection of sounds and studio-quality effects for all types of music production.",
     specs: {
       keys: 76,
       keyType: "Semi-weighted with velocity sensitivity",
@@ -89,8 +89,68 @@ export const instruments: Instrument[] = [
     compareCount: 218,
     popularityScore: 89
   },
+  {
+    id: "roland-rd-2000",
+    name: "RD-2000",
+    brand: "Roland",
+    image: "/images/roland-rd-2000.jpg",
+    price: 184990,
+    rating: 4.9,
+    releaseYear: 2021,
+    description: "Premium stage piano with dual sound engines and premium keyboard action. The RD-2000 is designed for the most demanding performing keyboardist.",
+    specs: {
+      keys: 88,
+      keyType: "PHA-50 Wood and Plastic Hybrid Keyboard",
+      soundEngine: "V-Piano + SuperNATURAL",
+      polyphony: "Unlimited (V-Piano), 128 voices (SuperNATURAL)",
+      presets: 1100,
+      sequencer: true,
+      effects: "Multiple effects (Modulation, Reverb, Delay, EQ, Comp)",
+      outputs: "Main Output (L/MONO, R), 4 assignable outputs, Phones",
+      weight: "21.7 kg",
+      dimensions: "1412 x 375 x 142 mm",
+      connectivity: "USB Audio/MIDI, MIDI IN/OUT/THRU, XLR outputs",
+      displayType: "Graphic LCD 256 x 80 dots",
+      zones: "8 independent configurable zones",
+      midiControl: "47 physical controllers",
+      internationalAvailability: "India, USA, Europe, Japan"
+    },
+    compareCount: 175,
+    popularityScore: 94
+  },
+  {
+    id: "roland-jupiter-x",
+    name: "JUPITER-X",
+    brand: "Roland",
+    image: "/images/roland-jupiter-x.jpg",
+    price: 199990,
+    rating: 4.7,
+    releaseYear: 2020,
+    description: "Premium synthesizer with vintage-inspired design and modern sound engines. The JUPITER-X combines classic Roland synthesis with modern capabilities.",
+    specs: {
+      keys: 61,
+      keyType: "Semi-weighted with velocity and channel aftertouch",
+      soundEngine: "ZEN-Core with Jupiter-8, Juno-106, SH-101, XV-5080 models",
+      polyphony: 256,
+      presets: 4000,
+      sequencer: true,
+      effects: "90+ types, multiple simultaneous effects",
+      outputs: "Main Output (L/MONO, R), Phones",
+      weight: "17 kg",
+      dimensions: "1073 x 350 x 125 mm",
+      i-Arpeggio: "Advanced intelligent arpeggiator",
+      connectivity: "USB Audio/MIDI, MIDI IN/OUT, 1/4" expression",
+      pattern: "16-track pattern sequencer with TR-REC",
+      scenes: "90 scenes with 16 parts each",
+      sceneMemory: "256 user scenes",
+      model: "Imported Model",
+      indianAvailability: "Available through authorized dealers"
+    },
+    compareCount: 192,
+    popularityScore: 90
+  },
 
-  // Casio synthesizers
+  // Casio keyboards
   {
     id: "casio-ct-x5000",
     name: "CT-X5000",
@@ -99,7 +159,7 @@ export const instruments: Instrument[] = [
     price: 42990,
     rating: 4.5,
     releaseYear: 2020,
-    description: "Advanced high-grade keyboard with AiX Sound Source",
+    description: "Advanced high-grade keyboard with AiX Sound Source. The CT-X5000 delivers a level of sound quality and expressiveness that's unprecedented in this class of instruments.",
     specs: {
       keys: 61,
       keyType: "Touch sensitive",
@@ -128,7 +188,7 @@ export const instruments: Instrument[] = [
     price: 69990,
     rating: 4.7,
     releaseYear: 2022,
-    description: "Ultra-slim digital piano with Smart Hybrid Hammer Action keyboard",
+    description: "Ultra-slim digital piano with Smart Hybrid Hammer Action keyboard. The PX-S3100 combines elegant design with authentic piano sound and touch.",
     specs: {
       keys: 88,
       keyType: "Smart Scaled Hammer Action Keyboard with simulated ebony and ivory key surfaces",
@@ -149,8 +209,101 @@ export const instruments: Instrument[] = [
     compareCount: 201,
     popularityScore: 87
   },
+  {
+    id: "casio-cdp-s350",
+    name: "CDP-S350",
+    brand: "Casio",
+    image: "/images/casio-cdp-s350.jpg",
+    price: 39990,
+    rating: 4.5,
+    releaseYear: 2021,
+    description: "Compact digital piano with scaled hammer action and lesson functions. The CDP-S350 offers premium piano feel in a portable design.",
+    specs: {
+      keys: 88,
+      keyType: "Scaled Hammer Action Keyboard II",
+      soundEngine: "AHL Sound Source",
+      polyphony: 64,
+      presets: 700,
+      sequencer: true,
+      effects: "Reverb (10 types), Chorus (4 types), DSP effects",
+      outputs: "Headphones/Line Out, USB Audio",
+      weight: "10.5 kg",
+      dimensions: "1322 x 232 x 99 mm",
+      speakers: "8W + 8W (16 cm x 8 cm) x 2",
+      rhythms: "200 built-in rhythms, 10 user rhythms",
+      registration: "32 registrations (4 sets x 8 banks)",
+      connectivity: "USB to Host, Pedal connector",
+      batteryOperation: "AA batteries x 6 or AC adaptor",
+      accessories: "Music stand, sustain pedal",
+      warranty: "1 year Indian warranty"
+    },
+    compareCount: 156,
+    popularityScore: 82
+  },
+  {
+    id: "casio-wk-7600",
+    name: "WK-7600",
+    brand: "Casio",
+    image: "/images/casio-wk-7600.jpg",
+    price: 29990,
+    rating: 4.3,
+    releaseYear: 2019,
+    description: "76-key workstation keyboard with powerful sequencing and remix functions. The WK-7600 is built for music creation and live performance.",
+    specs: {
+      keys: 76,
+      keyType: "Touch-responsive",
+      soundEngine: "AHL+ Sound Source",
+      polyphony: 64,
+      presets: 820,
+      sequencer: true,
+      effects: "Reverb, Chorus, DSP (100 types)",
+      outputs: "Line outputs (L/MONO, R), Headphones",
+      weight: "8.3 kg",
+      dimensions: "1161 x 385 x 138 mm",
+      speakers: "7W + 7W (12 cm x 2 + 3 cm x 2)",
+      displayType: "LCD with backlight",
+      drawbars: "9 drawbars for realistic organ sound",
+      rhythms: "260 built-in rhythms",
+      toneEditor: "Built-in tone editing",
+      mixerFunctions: "16 tracks, 32 channels",
+      recordingCapacity: "100 songs, 16 tracks"
+    },
+    compareCount: 120,
+    popularityScore: 75
+  },
+  {
+    id: "casio-ct-s1000v",
+    name: "CT-S1000V",
+    brand: "Casio",
+    image: "/images/casio-ct-s1000v.jpg",
+    price: 34990,
+    rating: 4.6,
+    releaseYear: 2022,
+    description: "Vocal synthesizer keyboard with lyric input. The CT-S1000V is the world's first keyboard that can sing phrases and words you enter.",
+    specs: {
+      keys: 61,
+      keyType: "Touch-responsive",
+      soundEngine: "AiX Sound Source",
+      polyphony: 64,
+      presets: 800,
+      sequencer: true,
+      effects: "System Effects, DSP (100 types)",
+      outputs: "Line outputs (L/MONO, R), Headphones, USB Audio",
+      weight: "4.5 kg",
+      dimensions: "930 x 258 x 90 mm",
+      speakers: "2.5W + 2.5W",
+      vocalSynthesizer: "Built-in Vocal Synthesizer function",
+      lyricCreator: "22 vocalist types with phrases in English and Japanese",
+      melodyGenerator: "Auto Accompaniment with 243 built-in rhythms",
+      connectivity: "USB to Host, Audio In (3.5mm)",
+      appIntegration: "Works with Casio Music Space app",
+      portability: "Battery operation (6 AA batteries)"
+    },
+    compareCount: 98,
+    popularityScore: 85
+  },
 
-  // Yamaha synthesizers
+  // Yamaha keyboards
   {
     id: "yamaha-psrs975",
     name: "PSR-S975",
@@ -159,7 +312,7 @@ export const instruments: Instrument[] = [
     price: 89990,
     rating: 4.8,
     releaseYear: 2021,
-    description: "Premium arranger workstation keyboard with vocal harmony and DJ functions",
+    description: "Premium arranger workstation keyboard with vocal harmony and DJ functions. The PSR-S975 is a versatile performance keyboard with professional features.",
     specs: {
       keys: 61,
       keyType: "FSB (Full Size with initial touch response)",
@@ -189,7 +342,7 @@ export const instruments: Instrument[] = [
     price: 159990,
     rating: 4.7,
     releaseYear: 2020,
-    description: "88-key synthesizer with Motion Control Synthesis Engine and Super Knob",
+    description: "88-key synthesizer with Motion Control Synthesis Engine and Super Knob. The MODX8 brings the power of MONTAGE synthesizers in a more affordable package.",
     specs: {
       keys: 88,
       keyType: "GHS weighted action",
@@ -211,8 +364,99 @@ export const instruments: Instrument[] = [
     compareCount: 210,
     popularityScore: 93
   },
+  {
+    id: "yamaha-p125",
+    name: "P-125",
+    brand: "Yamaha",
+    image: "/images/yamaha-p125.jpg",
+    price: 65990,
+    rating: 4.6,
+    releaseYear: 2021,
+    description: "Compact digital piano with weighted keys and Pure CF sound engine. The P-125 offers authentic piano experience in a slim, portable design.",
+    specs: {
+      keys: 88,
+      keyType: "Graded Hammer Standard (GHS) keyboard",
+      soundEngine: "Pure CF Sound Engine",
+      polyphony: 192,
+      presets: 24,
+      sequencer: true,
+      effects: "Reverb (4 types), Sound Boost, Intelligent Acoustic Control",
+      outputs: "Headphones/Line Output (L/MONO, R), USB Audio",
+      weight: "11.8 kg",
+      dimensions: "1326 x 295 x 166 mm",
+      speakers: "7W + 7W dual speakers",
+      piano: "Yamaha CFX concert grand piano sampling",
+      modes: "Dual, Split, Duo modes",
+      rhythms: "20 built-in rhythms",
+      connectivity: "USB to Host, AUX OUT, Sustain pedal",
+      appIntegration: "Smart Pianist app compatible",
+      accessories: "Sustain pedal included"
+    },
+    compareCount: 230,
+    popularityScore: 90
+  },
+  {
+    id: "yamaha-mx88",
+    name: "MX88",
+    brand: "Yamaha",
+    image: "/images/yamaha-mx88.jpg",
+    price: 89990,
+    rating: 4.5,
+    releaseYear: 2020,
+    description: "Music synthesizer with full-size weighted keys and integrated audio interface. The MX88 combines synthesizer sounds with piano-focused playability.",
+    specs: {
+      keys: 88,
+      keyType: "Graded Hammer Standard (GHS) keyboard",
+      soundEngine: "AWM2 (Advanced Wave Memory)",
+      polyphony: 128,
+      presets: 1106,
+      sequencer: false,
+      effects: "Reverb (9 types), Chorus (17 types), Insertion Effect (48 types)",
+      outputs: "OUTPUT (L/MONO, R), PHONES (standard stereo phone jack)",
+      weight: "13.9 kg",
+      dimensions: "1320 x 405 x 168 mm",
+      performanceMemory: "128 performances (16 parts)",
+      virtualCircuitModeling: "VCM effects technology",
+      usbAudio: "2-in/2-out USB audio interface",
+      connectivity: "USB TO HOST, FOOT CONTROLLER, SUSTAIN",
+      bundledSoftware: "Cubase AI DAW software",
+      warrantyPeriod: "1 year Indian warranty"
+    },
+    compareCount: 145,
+    popularityScore: 85
+  },
+  {
+    id: "yamaha-reface-cs",
+    name: "reface CS",
+    brand: "Yamaha",
+    image: "/images/yamaha-reface-cs.jpg",
+    price: 32990,
+    rating: 4.7,
+    releaseYear: 2019,
+    description: "Portable analog modeling synthesizer with multi-touch interface. The reface CS offers intuitive control over a powerful analog modeling engine.",
+    specs: {
+      keys: 37,
+      keyType: "Mini keys with velocity sensitivity",
+      soundEngine: "AN (Analog Physical Modeling)",
+      polyphony: 8,
+      presets: "Built-in phrase looper, save up to 8 scenes",
+      sequencer: false,
+      effects: "VCM Delay, VCM Chorus/Flanger, Distortion, Phaser",
+      outputs: "OUTPUT (L/MONO, R), PHONES",
+      weight: "1.9 kg",
+      dimensions: "530 x 175 x 60 mm",
+      oscillator: "5 oscillator types: Multi Saw, Pulse, Oscillator Sync, Ring Mod, FM",
+      filters: "18 dB/octave LPF with resonance",
+      envelope: "ADSR envelope",
+      lfo: "Triangle/Square wave LFO with sample & hold",
+      portability: "Battery operation (6 AA batteries)",
+      connectivity: "USB TO HOST (Audio and MIDI), AUX IN, MIDI IN/OUT"
+    },
+    compareCount: 165,
+    popularityScore: 86
+  },
 
-  // Korg synthesizers
+  // Korg keyboards
   {
     id: "korg-pa5x",
     name: "Pa5X",
@@ -221,7 +465,7 @@ export const instruments: Instrument[] = [
     price: 279990,
     rating: 4.9,
     releaseYear: 2023,
-    description: "Professional arranger with enhanced sound engine and touchview display",
+    description: "Professional arranger with enhanced sound engine and touchview display. The Pa5X is Korg's flagship arranger keyboard with stunning sounds and intuitive operation.",
     specs: {
       keys: 61,
       keyType: "Semi-weighted with velocity sensitivity and aftertouch",
@@ -251,7 +495,7 @@ export const instruments: Instrument[] = [
     price: 64990,
     rating: 4.8,
     releaseYear: 2021,
-    description: "4-voice analog synthesizer with digital multi-engine and effects",
+    description: "4-voice analog synthesizer with digital multi-engine and effects. The Minilogue XD combines analog warmth with digital versatility.",
     specs: {
       keys: 37,
       keyType: "Slim keyboard (velocity sensitive)",
@@ -281,7 +525,7 @@ export const instruments: Instrument[] = [
     price: 84990,
     rating: 4.7,
     releaseYear: 2022,
-    description: "Advanced wave sequencing synthesizer with deep modulation capabilities",
+    description: "Advanced wave sequencing synthesizer with deep modulation capabilities. The Wavestate reinvents Korg's legendary wavestation with modern architecture.",
     specs: {
       keys: 37,
       keyType: "Full-size keys (velocity sensitive)",
@@ -302,6 +546,69 @@ export const instruments: Instrument[] = [
     },
     compareCount: 179,
     popularityScore: 88
+  },
+  {
+    id: "korg-nautilus",
+    name: "Nautilus",
+    brand: "Korg",
+    image: "/images/korg-nautilus.jpg",
+    price: 159990,
+    rating: 4.8,
+    releaseYear: 2022,
+    description: "Professional workstation with nine sound engines and detailed articulation. The Nautilus builds on Korg's flagship workstation legacy.",
+    specs: {
+      keys: 61,
+      keyType: "Semi-weighted with velocity sensitivity",
+      soundEngine: "9 Synthesis Engines (SGX-2, EP-1, CX-3, HD-1, MS-20EX, PolysixEX, MOD-7, STR-1, AL-1)",
+      polyphony: "Varies by engine, up to 240 voices",
+      presets: 2200,
+      sequencer: true,
+      effects: "197 effect types, 12 insert effects, 2 master effects",
+      outputs: "Main Output (L/MONO, R), 4 Individual outputs, Headphones",
+      weight: "13 kg",
+      dimensions: "1037 x 387 x 139 mm",
+      displayType: "7-inch color TouchView display",
+      storage: "SSD 60GB internal, SD card slot",
+      drumTracks: "702 preset patterns and 1000 user patterns",
+      pads: "8 velocity-sensitive pads with chord assignment",
+      setList: "128 Set Lists with Smooth Sound Transition",
+      connectivity: "USB-A, USB-B, MIDI IN/OUT/THRU, S/PDIF",
+      variants: "Available in 61, 73, and 88 key models"
+    },
+    compareCount: 154,
+    popularityScore: 92
+  },
+  {
+    id: "korg-opsix",
+    name: "opsix",
+    brand: "Korg",
+    image: "/images/korg-opsix.jpg",
+    price: 74990,
+    rating: 4.6,
+    releaseYear: 2021,
+    description: "Altered FM synthesizer with extensive operator control. The opsix reimagines FM synthesis with a more intuitive interface and expanded sound capabilities.",
+    specs: {
+      keys: 37,
+      keyType: "Full-size keys with velocity sensitivity",
+      soundEngine: "Altered FM (6 operators)",
+      polyphony: 32,
+      presets: 500,
+      sequencer: true,
+      effects: "30 effect types, 3 simultaneous",
+      outputs: "OUTPUT (L/MONO, R), HEADPHONE",
+      weight: "2.9 kg",
+      dimensions: "565 x 338 x 90 mm",
+      operators: "6 operators with 21 oscillator modes each",
+      algorithms: "40 preset algorithms + user algorithms",
+      filter: "11 filter types including MS-20 and Polysix",
+      modulation: "12 fixed modulation routings + 12 virtual patches",
+      arpeggiator: "Built-in with multiple patterns",
+      stepSequencer: "16-step x 6 lane sequencer",
+      connectivity: "USB MIDI/Audio, MIDI IN/OUT",
+      availability: "Limited stock in Indian market"
+    },
+    compareCount: 132,
+    popularityScore: 85
   }
 ];
 
