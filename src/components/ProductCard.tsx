@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Instrument } from "@/data/instrumentTypes";
 import { useCompare } from "@/contexts/CompareContext";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, MinusCircle, indianRupee } from "lucide-react";
+import { PlusCircle, MinusCircle, IndianRupee } from "lucide-react";
 import { getInstrumentImagePath } from "@/data/instruments";
 
 interface ProductCardProps {
