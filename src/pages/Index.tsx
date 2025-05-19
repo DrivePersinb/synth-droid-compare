@@ -8,7 +8,16 @@ import ProductCard from "@/components/ProductCard";
 import { brands, instruments } from "@/data/instruments";
 import { Brand } from "@/data/instrumentTypes";
 
-const Button = ({ children, asChild, variant, size, className, ...props }) => {
+interface ButtonProps {
+  children: React.ReactNode;
+  asChild?: boolean;
+  variant?: 'default' | 'outline';
+  size?: 'sm' | 'md' | 'lg';
+  className?: string;
+  [key: string]: any;
+}
+
+const Button = ({ children, asChild, variant, size, className, ...props }: ButtonProps) => {
   return (
     <button
       {...props}
@@ -49,10 +58,10 @@ const HomePage = () => {
                 top models from Roland, Casio, Yamaha, and Korg side by side.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Button asChild size="lg">
+                <Button asChild size="lg" variant="default" className="">
                   <Link to="/all-instruments">Browse All Instruments</Link>
                 </Button>
-                <Button asChild variant="outline" size="lg">
+                <Button asChild variant="outline" size="lg" className="">
                   <Link to="/compare">Compare Now</Link>
                 </Button>
               </div>
@@ -124,7 +133,7 @@ const HomePage = () => {
           <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
             Add instruments to your comparison list and find the perfect match for your music production needs.
           </p>
-          <Button asChild size="lg">
+          <Button asChild size="lg" variant="default" className="">
             <Link to="/all-instruments">Start Comparing</Link>
           </Button>
         </div>
