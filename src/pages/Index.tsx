@@ -8,28 +8,6 @@ import ProductCard from "@/components/ProductCard";
 import { brands, instruments } from "@/data/instruments";
 import { Brand } from "@/data/instrumentTypes";
 
-interface ButtonProps {
-  children: React.ReactNode;
-  asChild?: boolean;
-  variant?: 'default' | 'outline';
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
-  [key: string]: any;
-}
-
-const Button = ({ children, asChild, variant, size, className, ...props }: ButtonProps) => {
-  return (
-    <button
-      {...props}
-      className={`android-btn ${variant === 'outline' 
-        ? 'border border-primary text-primary hover:bg-primary/10' 
-        : 'bg-primary text-white hover:bg-primary/90'} 
-        ${size === 'lg' ? 'text-lg py-3 px-6' : size === 'sm' ? 'text-sm py-1 px-3' : ''}
-        ${className || ''}`}
-    />
-  );
-};
-
 const HomePage = () => {
   // Get the three most popular instruments
   const popularInstruments = [...instruments]
@@ -58,10 +36,10 @@ const HomePage = () => {
                 top models from Roland, Casio, Yamaha, and Korg side by side.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Button asChild size="lg" variant="default" className="">
+                <Button asChild size="lg">
                   <Link to="/all-instruments">Browse All Instruments</Link>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="">
+                <Button asChild variant="outline" size="lg">
                   <Link to="/compare">Compare Now</Link>
                 </Button>
               </div>
@@ -133,7 +111,7 @@ const HomePage = () => {
           <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
             Add instruments to your comparison list and find the perfect match for your music production needs.
           </p>
-          <Button asChild size="lg" variant="default" className="">
+          <Button asChild size="lg">
             <Link to="/all-instruments">Start Comparing</Link>
           </Button>
         </div>
@@ -143,5 +121,18 @@ const HomePage = () => {
     </div>
   );
 };
+
+export function Button(props) {
+  return (
+    <button
+      {...props}
+      className={`android-btn ${props.variant === 'outline' 
+        ? 'border border-primary text-primary hover:bg-primary/10' 
+        : 'bg-primary text-white hover:bg-primary/90'} 
+        ${props.size === 'lg' ? 'text-lg py-3 px-6' : props.size === 'sm' ? 'text-sm py-1 px-3' : ''}
+        ${props.className || ''}`}
+    />
+  );
+}
 
 export default HomePage;

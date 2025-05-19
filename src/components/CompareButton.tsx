@@ -2,6 +2,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useCompare } from "@/contexts/CompareContext";
+import { Button } from "@/components/ui/button";
 
 interface CompareButtonProps {
   variant?: "default" | "compact";
@@ -24,17 +25,15 @@ const CompareButton: React.FC<CompareButtonProps> = ({ variant = "default" }) =>
   }
 
   return (
-    <Link 
-      to="/compare"
-      className={`
-        android-btn ${count > 0 
-          ? "bg-primary text-white hover:bg-primary/90" 
-          : "bg-secondary text-white hover:bg-secondary/90"}
-        ${count > 0 ? "animate-pulse" : ""}
-      `}
+    <Button 
+      asChild
+      variant={count > 0 ? "default" : "secondary"}
+      className={count > 0 ? "animate-pulse" : ""}
     >
-      {count > 0 ? `Compare (${count})` : "Compare"}
-    </Link>
+      <Link to="/compare">
+        {count > 0 ? `Compare (${count})` : "Compare"}
+      </Link>
+    </Button>
   );
 };
 

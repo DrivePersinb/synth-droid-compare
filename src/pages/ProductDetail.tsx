@@ -36,15 +36,6 @@ const ProductDetail = () => {
     instr => instr.brand === instrument?.brand && instr.id !== instrument?.id
   ).slice(0, 3);
 
-  // Format the price in Indian Rupees
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-IN', {
-      style: 'currency',
-      currency: 'INR',
-      maximumFractionDigits: 0
-    }).format(price);
-  };
-
   if (!instrument) {
     return (
       <div className="min-h-screen flex flex-col bg-background">
@@ -103,8 +94,8 @@ const ProductDetail = () => {
                 </div>
               </div>
               
-              <div className="text-3xl font-bold text-primary mb-6 flex items-center">
-                <span className="mr-1">₹</span>{instrument.price.toLocaleString('en-IN')}
+              <div className="text-3xl font-bold text-primary mb-6">
+                ${instrument.price}
               </div>
               
               <p className="text-gray-300 mb-6">
@@ -185,9 +176,7 @@ const ProductDetail = () => {
                     </div>
                     <h3 className="font-medium">{instr.name}</h3>
                     <div className="flex justify-between items-center mt-2">
-                      <span className="text-primary font-bold flex items-center">
-                        <span className="mr-1">₹</span>{instr.price.toLocaleString('en-IN')}
-                      </span>
+                      <span className="text-primary font-bold">${instr.price}</span>
                       <div className="flex items-center">
                         <span className="text-yellow-400 mr-1">★</span>
                         <span>{instr.rating}</span>
