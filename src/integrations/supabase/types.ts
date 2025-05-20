@@ -9,13 +9,150 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      admins: {
+        Row: {
+          created_at: string | null
+          id: string
+          password: string
+          username: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          password: string
+          username: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          password?: string
+          username?: string
+        }
+        Relationships: []
+      }
+      excel_tutorials: {
+        Row: {
+          command: string
+          content: string | null
+          created_at: string | null
+          difficulty: string | null
+          duration: string | null
+          excel_version: string | null
+          id: string
+          title: string
+          updated_at: string | null
+          views: number | null
+        }
+        Insert: {
+          command: string
+          content?: string | null
+          created_at?: string | null
+          difficulty?: string | null
+          duration?: string | null
+          excel_version?: string | null
+          id?: string
+          title: string
+          updated_at?: string | null
+          views?: number | null
+        }
+        Update: {
+          command?: string
+          content?: string | null
+          created_at?: string | null
+          difficulty?: string | null
+          duration?: string | null
+          excel_version?: string | null
+          id?: string
+          title?: string
+          updated_at?: string | null
+          views?: number | null
+        }
+        Relationships: []
+      }
+      instruments: {
+        Row: {
+          brand: string
+          category: string | null
+          compare_count: number | null
+          created_at: string | null
+          description: string | null
+          id: string
+          image: string | null
+          name: string
+          popularity_score: number | null
+          price: number
+          rating: number | null
+          release_year: number | null
+          specs: Json | null
+          subcategory: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          brand: string
+          category?: string | null
+          compare_count?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image?: string | null
+          name: string
+          popularity_score?: number | null
+          price: number
+          rating?: number | null
+          release_year?: number | null
+          specs?: Json | null
+          subcategory?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          brand?: string
+          category?: string | null
+          compare_count?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          image?: string | null
+          name?: string
+          popularity_score?: number | null
+          price?: number
+          rating?: number | null
+          release_year?: number | null
+          specs?: Json | null
+          subcategory?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      users: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          is_admin: boolean | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id: string
+          is_admin?: boolean | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          is_admin?: boolean | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

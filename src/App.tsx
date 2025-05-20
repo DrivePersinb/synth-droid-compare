@@ -15,6 +15,8 @@ import ProductDetail from "./pages/ProductDetail";
 import ComparePage from "./pages/ComparePage";
 import LatestInstruments from "./pages/LatestInstruments";
 import NotFound from "./pages/NotFound";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +35,8 @@ const App = () => (
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/compare" element={<ComparePage />} />
             <Route path="/latest" element={<LatestInstruments />} />
+            <Route path="/admin" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

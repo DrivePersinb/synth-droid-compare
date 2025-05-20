@@ -7,6 +7,7 @@ import BrandCard from "@/components/BrandCard";
 import ProductCard from "@/components/ProductCard";
 import { brands, instruments } from "@/data/instruments";
 import { Brand } from "@/data/instrumentTypes";
+import { Button } from "@/components/ui/button";
 
 const HomePage = () => {
   // Get the three most popular instruments
@@ -41,6 +42,9 @@ const HomePage = () => {
                 </Button>
                 <Button asChild variant="outline" size="lg">
                   <Link to="/compare">Compare Now</Link>
+                </Button>
+                <Button asChild variant="secondary" size="lg">
+                  <Link to="/admin">Admin Login</Link>
                 </Button>
               </div>
             </div>
@@ -121,18 +125,5 @@ const HomePage = () => {
     </div>
   );
 };
-
-export function Button(props) {
-  return (
-    <button
-      {...props}
-      className={`android-btn ${props.variant === 'outline' 
-        ? 'border border-primary text-primary hover:bg-primary/10' 
-        : 'bg-primary text-white hover:bg-primary/90'} 
-        ${props.size === 'lg' ? 'text-lg py-3 px-6' : props.size === 'sm' ? 'text-sm py-1 px-3' : ''}
-        ${props.className || ''}`}
-    />
-  );
-}
 
 export default HomePage;
