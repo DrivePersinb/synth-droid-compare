@@ -43,9 +43,6 @@ const HomePage = () => {
                 <Button asChild variant="outline" size="lg">
                   <Link to="/compare">Compare Now</Link>
                 </Button>
-                <Button asChild variant="secondary" size="lg">
-                  <Link to="/admin">Admin Login</Link>
-                </Button>
               </div>
             </div>
             <div className="md:w-1/2 flex justify-center animate-fade-in">

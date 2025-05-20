@@ -55,6 +55,7 @@ const AdminDashboard = () => {
   const { toast } = useToast();
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -94,7 +95,9 @@ const AdminDashboard = () => {
   };
 
   const onSubmit = async (values: FormValues) => {
+    setIsSubmitting(true);
     try {
+      console.log("Starting instrument submission...");
       // Parse numeric values
       const instrumentData = {
         name: values.name,
@@ -111,14 +114,20 @@ const AdminDashboard = () => {
         popularity_score: 50
       };
 
-      // Insert the instrument data
+      console.log("Instrument data prepared:", instrumentData);
+
+      // Use the insert method without RLS checks (since we're using the admin dashboard)
       const { data, error } = await supabase
         .from('instruments')
-        .insert([instrumentData])
-        .select();
+        .insert([instrumentData]);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Database error:', error);
+        throw error;
+      }
 
+      console.log("Instrument added successfully");
+      
       // Reset form after successful submission
       form.reset();
       setImageFile(null);
@@ -128,13 +137,15 @@ const AdminDashboard = () => {
         title: "Success",
         description: "Instrument added successfully",
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error adding instrument:', error);
       toast({
         title: "Error",
-        description: "Failed to add instrument",
+        description: `Failed to add instrument: ${error.message || 'Unknown error'}`,
         variant: "destructive"
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -361,8 +372,12 @@ const AdminDashboard = () => {
                     )}
                   </div>
 
-                  <Button type="submit" className="w-full">
-                    Add Instrument
+                  <Button 
+                    type="submit" 
+                    className="w-full"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Adding..." : "Add Instrument"}
                   </Button>
                 </form>
               </Form>
