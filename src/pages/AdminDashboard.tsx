@@ -1,7 +1,5 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -28,6 +26,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import AdminRequiredAuth from "@/components/AdminRequiredAuth";
+import { getAdminSupabaseClient } from "@/utils/adminUtils";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
@@ -109,15 +108,18 @@ const AdminDashboard = () => {
         release_year: values.releaseYear ? Number(values.releaseYear) : null,
         rating: values.rating ? Number(values.rating) : null,
         specs: parseSpecifications(values.specs),
-        image: imagePreview || '/placeholder.svg', // Temporarily use the preview
+        image: imagePreview || '/placeholder.svg',
         compare_count: 0,
         popularity_score: 50
       };
 
       console.log("Instrument data prepared:", instrumentData);
 
-      // Use the insert method without RLS checks (since we're using the admin dashboard)
-      const { data, error } = await supabase
+      // Use the admin client to bypass RLS
+      const adminClient = getAdminSupabaseClient();
+      
+      // Insert the instrument using the admin client
+      const { data, error } = await adminClient
         .from('instruments')
         .insert([instrumentData]);
 

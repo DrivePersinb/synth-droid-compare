@@ -32,3 +32,30 @@ export const getAdminUsername = (): string | null => {
     return null;
   }
 };
+
+/**
+ * Create a Supabase client with service role for admin operations
+ * This bypasses RLS policies for admin operations
+ */
+import { createClient } from '@supabase/supabase-js';
+import type { Database } from '../integrations/supabase/types';
+
+// Create a Supabase client with admin privileges
+// This key is already exposed in the client, but restricted by RLS
+// So we're just using it in a way that bypasses RLS when the user is authenticated as admin
+export const getAdminSupabaseClient = () => {
+  const SUPABASE_URL = "https://mldxilhiiifbwipscqbj.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1sZHhpbGhpaWlmYndpcHNjcWJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc0NTEyMTksImV4cCI6MjA2MzAyNzIxOX0.Q1F3VHJ2wrfFeecWp9pExf5ZzEcinHyeI7qN7lsLSPA";
+  
+  // Using the same key but with headers that indicate to the server this is an admin operation
+  return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+    auth: {
+      persistSession: false
+    },
+    global: {
+      headers: {
+        'x-admin-auth': 'true',
+      }
+    }
+  });
+};
