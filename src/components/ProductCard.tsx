@@ -1,147 +1,93 @@
 
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Instrument } from "@/data/instrumentTypes";
-import { useCompare } from "@/contexts/CompareContext";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, MinusCircle, ShoppingCart } from "lucide-react";
-import { getInstrumentImagePath } from "@/data/instruments";
-import BuyLinksDialog from "./BuyLinksDialog";
+import { useCompareContext } from '@/contexts/CompareContext';
+import CompareButton from './CompareButton';
+import BuyLinksDialog from './BuyLinksDialog';
 
-// Helper function to format price in Indian Rupees
-const formatIndianPrice = (price: number): string => {
-  return new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-    maximumFractionDigits: 0
-  }).format(price);
-};
+const ProductCard = ({ instrument }) => {
+  const { isInCompare, toggleCompare } = useCompareContext();
+  const isCompared = isInCompare(instrument.id);
+  const [buyDialogOpen, setBuyDialogOpen] = useState(false);
 
-interface ProductCardProps {
-  instrument: Instrument;
-}
-
-const ProductCard: React.FC<ProductCardProps> = ({ instrument }) => {
-  const { addToCompare, removeFromCompare, isInCompare } = useCompare();
-  const [showBuyDialog, setShowBuyDialog] = useState(false);
-  const inCompare = isInCompare(instrument.id);
-
-  const handleCompareToggle = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    if (inCompare) {
-      removeFromCompare(instrument.id);
-    } else {
-      addToCompare(instrument.id);
-    }
-  };
-
-  const handleBuyClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setShowBuyDialog(true);
-  };
-
-  // Mock buy links - in real app, this would come from database
-  const buyLinks = [
-    { store: "Amazon", url: `https://amazon.in/search?k=${encodeURIComponent(instrument.name)}` },
-    { store: "Flipkart", url: `https://flipkart.com/search?q=${encodeURIComponent(instrument.name)}` },
-    { store: "Music Store", url: `https://musicstore.in/search?q=${encodeURIComponent(instrument.name)}` }
-  ];
+  // Extract buy links from specs if they exist
+  const buyLinks = instrument.specs?.buyLinks || [];
+  const hasBuyLinks = buyLinks && buyLinks.length > 0;
   
-  const brandColor = {
-    Roland: "border-roland/30 hover:border-roland/60",
-    Casio: "border-casio/30 hover:border-casio/60",
-    Yamaha: "border-yamaha/30 hover:border-yamaha/60",
-    Korg: "border-korg/30 hover:border-korg/60",
-  }[instrument.brand] || "border-gray-500/30 hover:border-gray-500/60";
-
   return (
-    <>
-      <div 
-        className={`product-card border-2 ${brandColor} h-full flex flex-col`}
-      >
-        <Link to={`/product/${instrument.id}`} className="flex-1 flex flex-col">
-          {/* Image */}
-          <div className="relative h-48 bg-black flex items-center justify-center overflow-hidden">
-            <img 
-              src={instrument.image === '/placeholder.svg' ? '/placeholder.svg' : getInstrumentImagePath(instrument.id)} 
-              alt={instrument.name}
-              className="object-contain h-full w-full p-4"
-            />
-            <div 
-              className="absolute top-2 right-2 z-10 cursor-pointer" 
-              onClick={handleCompareToggle}
-            >
-              {inCompare ? (
-                <MinusCircle size={24} className="text-red-500 hover:text-red-400" />
-              ) : (
-                <PlusCircle size={24} className="text-primary hover:text-primary/80" />
-              )}
-            </div>
-          </div>
+    <div className="bg-androidBox rounded-lg overflow-hidden hover:shadow-lg border border-gray-800 transition-all duration-300 flex flex-col">
+      <Link to={`/product/${instrument.id}`} className="block relative">
+        <div className="aspect-[4/3] overflow-hidden bg-black">
+          <img 
+            src={instrument.image} 
+            alt={instrument.name} 
+            className="w-full h-full object-contain mix-blend-lighten p-2"
+          />
+        </div>
+      </Link>
+      
+      <div className="p-4 flex-1 flex flex-col">
+        <div className="flex justify-between items-start mb-2">
+          <Link 
+            to={`/brands/${instrument.brand?.toLowerCase()}`}
+            className="text-xs uppercase tracking-wider text-primary hover:text-primary/80"
+          >
+            {instrument.brand}
+          </Link>
           
-          {/* Content */}
-          <div className="p-4 flex-1 flex flex-col">
-            <div className="mb-2 text-xs font-medium text-gray-400">{instrument.brand}</div>
-            <h3 className="text-lg font-medium mb-2">{instrument.name}</h3>
-            
-            <div className="flex justify-between items-center mb-3">
-              <div className="text-lg font-bold text-primary">{formatIndianPrice(instrument.price)}</div>
-              <div className="bg-androidBox rounded-full px-2 py-1 text-xs">
-                ★ {instrument.rating}
-              </div>
-            </div>
-            
-            <div className="flex flex-wrap gap-2 mt-auto mb-4">
-              {Object.entries(instrument.specs).slice(0, 3).map(([key, value]) => (
-                <div 
-                  key={key} 
-                  className="text-xs bg-accent/30 px-2 py-1 rounded-sm"
-                  title={`${key}: ${value}`}
-                >
-                  {key}: {value.toString().substring(0, 10)}
-                  {value.toString().length > 10 ? "..." : ""}
-                </div>
-              ))}
-              <div className="text-xs bg-accent/30 px-2 py-1 rounded-sm">
-                +{Object.keys(instrument.specs).length - 3} more
-              </div>
-            </div>
+          <div className="flex items-center text-amber-400">
+            <Star className="fill-amber-400 stroke-amber-400 h-4 w-4 mr-1" />
+            <span className="text-xs">{instrument.rating?.toFixed(1) || "N/A"}</span>
           </div>
+        </div>
+        
+        <Link to={`/product/${instrument.id}`} className="block mb-2">
+          <h3 className="font-medium text-lg leading-tight hover:text-primary transition-colors">
+            {instrument.name}
+          </h3>
         </Link>
         
-        <div className="p-4 pt-0 mt-auto">
-          <div className="flex gap-2">
-            <Button className="flex-1" asChild>
-              <Link to={`/product/${instrument.id}`}>View</Link>
-            </Button>
-            <Button 
-              variant={inCompare ? "destructive" : "outline"}
-              className="flex-1"
-              onClick={handleCompareToggle}
-            >
-              {inCompare ? "Remove" : "Compare"}
-            </Button>
-            <Button 
-              variant="secondary"
-              size="sm"
-              onClick={handleBuyClick}
-            >
-              <ShoppingCart className="h-4 w-4" />
-            </Button>
+        <div className="mb-4 flex-grow">
+          <p className="text-sm text-gray-300 line-clamp-2">
+            {instrument.description?.substring(0, 100)}...
+          </p>
+        </div>
+        
+        <div className="flex justify-between items-center">
+          <div className="font-semibold">
+            ₹{instrument.price?.toLocaleString() || "Call for price"}
+          </div>
+          
+          <div className="flex space-x-2">
+            {hasBuyLinks && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setBuyDialogOpen(true);
+                }}
+              >
+                Buy
+              </Button>
+            )}
+            <CompareButton 
+              isCompared={isCompared}
+              onClick={() => toggleCompare(instrument)}
+            />
           </div>
         </div>
       </div>
 
-      <BuyLinksDialog
-        isOpen={showBuyDialog}
-        onClose={() => setShowBuyDialog(false)}
+      <BuyLinksDialog 
+        isOpen={buyDialogOpen}
+        onClose={() => setBuyDialogOpen(false)}
         instrumentName={instrument.name}
         buyLinks={buyLinks}
       />
-    </>
+    </div>
   );
 };
 

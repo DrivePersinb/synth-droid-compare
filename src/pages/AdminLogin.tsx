@@ -35,6 +35,7 @@ const AdminLogin = () => {
           description: "Invalid username or password",
           variant: "destructive"
         });
+        setLoading(false);
         return;
       }
 
@@ -44,12 +45,13 @@ const AdminLogin = () => {
           description: "Invalid username or password",
           variant: "destructive"
         });
+        setLoading(false);
         return;
       }
 
       // For demo purposes, we'll do simple password comparison
       // In production, you should hash passwords
-      if (admins.password === password || password === 'admin123') {
+      if (admins.password === password) {
         localStorage.setItem('adminSession', JSON.stringify({ 
           username: admins.username, 
           isAdmin: true,
@@ -87,8 +89,6 @@ const AdminLogin = () => {
           <CardTitle className="text-2xl font-bold">Admin Login</CardTitle>
           <CardDescription>
             Enter your credentials to access the admin dashboard
-            <br />
-            <small className="text-muted-foreground">Demo: admin / admin123</small>
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleLogin}>
