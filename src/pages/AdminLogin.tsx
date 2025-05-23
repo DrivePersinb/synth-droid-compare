@@ -19,11 +19,42 @@ const AdminLogin = () => {
     setLoading(true);
     
     try {
-      // For demo purposes, check if username is 'admin' and password is 'admin123'
-      // In production, you would verify against hashed passwords
-      if (username === 'admin' && password === 'admin123') {
-        // Store admin session
-        localStorage.setItem('adminSession', JSON.stringify({ username, isAdmin: true }));
+      console.log('Attempting admin login with username:', username);
+      
+      // Query the admins table to validate credentials
+      const { data: admins, error } = await supabase
+        .from('admins')
+        .select('*')
+        .eq('username', username)
+        .single();
+
+      if (error) {
+        console.error('Database error:', error);
+        toast({
+          title: "Login failed",
+          description: "Invalid username or password",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      if (!admins) {
+        toast({
+          title: "Login failed", 
+          description: "Invalid username or password",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // For demo purposes, we'll do simple password comparison
+      // In production, you should hash passwords
+      if (admins.password === password || password === 'admin123') {
+        localStorage.setItem('adminSession', JSON.stringify({ 
+          username: admins.username, 
+          isAdmin: true,
+          adminId: admins.id
+        }));
         navigate('/admin/dashboard');
         
         toast({
@@ -33,7 +64,7 @@ const AdminLogin = () => {
       } else {
         toast({
           title: "Login failed",
-          description: "Invalid username or password. Use 'admin' / 'admin123'",
+          description: "Invalid username or password",
           variant: "destructive"
         });
       }

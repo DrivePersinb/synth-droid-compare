@@ -8,21 +8,25 @@ import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { useInstruments, useBrands } from "@/hooks/useInstruments";
 import { Skeleton } from "@/components/ui/skeleton";
+import { convertDatabaseToInstrument } from "@/utils/typeConverters";
 
 const HomePage = () => {
-  const { data: instruments = [], isLoading: instrumentsLoading } = useInstruments();
+  const { data: dbInstruments = [], isLoading: instrumentsLoading } = useInstruments();
   const { data: brands = [], isLoading: brandsLoading } = useBrands();
+
+  // Convert database instruments to the expected type
+  const instruments = dbInstruments.map(convertDatabaseToInstrument);
 
   // Get the three most popular instruments
   const popularInstruments = [...instruments]
-    .sort((a, b) => b.popularity_score - a.popularity_score)
+    .sort((a, b) => b.popularityScore - a.popularityScore)
     .slice(0, 3);
 
   // Get the newest instruments
   const newestInstruments = [...instruments]
     .sort((a, b) => {
-      const yearA = a.release_year || 0;
-      const yearB = b.release_year || 0;
+      const yearA = a.releaseYear || 0;
+      const yearB = b.releaseYear || 0;
       return yearB - yearA;
     })
     .slice(0, 3);

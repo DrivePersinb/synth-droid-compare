@@ -1,11 +1,12 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Instrument } from "@/data/instrumentTypes";
 import { useCompare } from "@/contexts/CompareContext";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, MinusCircle } from "lucide-react";
+import { PlusCircle, MinusCircle, ShoppingCart } from "lucide-react";
 import { getInstrumentImagePath } from "@/data/instruments";
+import BuyLinksDialog from "./BuyLinksDialog";
 
 // Helper function to format price in Indian Rupees
 const formatIndianPrice = (price: number): string => {
@@ -22,6 +23,7 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ instrument }) => {
   const { addToCompare, removeFromCompare, isInCompare } = useCompare();
+  const [showBuyDialog, setShowBuyDialog] = useState(false);
   const inCompare = isInCompare(instrument.id);
 
   const handleCompareToggle = (e: React.MouseEvent) => {
@@ -34,6 +36,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ instrument }) => {
       addToCompare(instrument.id);
     }
   };
+
+  const handleBuyClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowBuyDialog(true);
+  };
+
+  // Mock buy links - in real app, this would come from database
+  const buyLinks = [
+    { store: "Amazon", url: `https://amazon.in/search?k=${encodeURIComponent(instrument.name)}` },
+    { store: "Flipkart", url: `https://flipkart.com/search?q=${encodeURIComponent(instrument.name)}` },
+    { store: "Music Store", url: `https://musicstore.in/search?q=${encodeURIComponent(instrument.name)}` }
+  ];
   
   const brandColor = {
     Roland: "border-roland/30 hover:border-roland/60",
@@ -43,74 +58,90 @@ const ProductCard: React.FC<ProductCardProps> = ({ instrument }) => {
   }[instrument.brand] || "border-gray-500/30 hover:border-gray-500/60";
 
   return (
-    <div 
-      className={`product-card border-2 ${brandColor} h-full flex flex-col`}
-    >
-      <Link to={`/product/${instrument.id}`} className="flex-1 flex flex-col">
-        {/* Image */}
-        <div className="relative h-48 bg-black flex items-center justify-center overflow-hidden">
-          <img 
-            src={instrument.image === '/placeholder.svg' ? '/placeholder.svg' : getInstrumentImagePath(instrument.id)} 
-            alt={instrument.name}
-            className="object-contain h-full w-full p-4"
-          />
-          <div 
-            className="absolute top-2 right-2 z-10 cursor-pointer" 
-            onClick={handleCompareToggle}
-          >
-            {inCompare ? (
-              <MinusCircle size={24} className="text-red-500 hover:text-red-400" />
-            ) : (
-              <PlusCircle size={24} className="text-primary hover:text-primary/80" />
-            )}
-          </div>
-        </div>
-        
-        {/* Content */}
-        <div className="p-4 flex-1 flex flex-col">
-          <div className="mb-2 text-xs font-medium text-gray-400">{instrument.brand}</div>
-          <h3 className="text-lg font-medium mb-2">{instrument.name}</h3>
-          
-          <div className="flex justify-between items-center mb-3">
-            <div className="text-lg font-bold text-primary">{formatIndianPrice(instrument.price)}</div>
-            <div className="bg-androidBox rounded-full px-2 py-1 text-xs">
-              ★ {instrument.rating}
+    <>
+      <div 
+        className={`product-card border-2 ${brandColor} h-full flex flex-col`}
+      >
+        <Link to={`/product/${instrument.id}`} className="flex-1 flex flex-col">
+          {/* Image */}
+          <div className="relative h-48 bg-black flex items-center justify-center overflow-hidden">
+            <img 
+              src={instrument.image === '/placeholder.svg' ? '/placeholder.svg' : getInstrumentImagePath(instrument.id)} 
+              alt={instrument.name}
+              className="object-contain h-full w-full p-4"
+            />
+            <div 
+              className="absolute top-2 right-2 z-10 cursor-pointer" 
+              onClick={handleCompareToggle}
+            >
+              {inCompare ? (
+                <MinusCircle size={24} className="text-red-500 hover:text-red-400" />
+              ) : (
+                <PlusCircle size={24} className="text-primary hover:text-primary/80" />
+              )}
             </div>
           </div>
           
-          <div className="flex flex-wrap gap-2 mt-auto mb-4">
-            {Object.entries(instrument.specs).slice(0, 3).map(([key, value]) => (
-              <div 
-                key={key} 
-                className="text-xs bg-accent/30 px-2 py-1 rounded-sm"
-                title={`${key}: ${value}`}
-              >
-                {key}: {value.toString().substring(0, 10)}
-                {value.toString().length > 10 ? "..." : ""}
+          {/* Content */}
+          <div className="p-4 flex-1 flex flex-col">
+            <div className="mb-2 text-xs font-medium text-gray-400">{instrument.brand}</div>
+            <h3 className="text-lg font-medium mb-2">{instrument.name}</h3>
+            
+            <div className="flex justify-between items-center mb-3">
+              <div className="text-lg font-bold text-primary">{formatIndianPrice(instrument.price)}</div>
+              <div className="bg-androidBox rounded-full px-2 py-1 text-xs">
+                ★ {instrument.rating}
               </div>
-            ))}
-            <div className="text-xs bg-accent/30 px-2 py-1 rounded-sm">
-              +{Object.keys(instrument.specs).length - 3} more
+            </div>
+            
+            <div className="flex flex-wrap gap-2 mt-auto mb-4">
+              {Object.entries(instrument.specs).slice(0, 3).map(([key, value]) => (
+                <div 
+                  key={key} 
+                  className="text-xs bg-accent/30 px-2 py-1 rounded-sm"
+                  title={`${key}: ${value}`}
+                >
+                  {key}: {value.toString().substring(0, 10)}
+                  {value.toString().length > 10 ? "..." : ""}
+                </div>
+              ))}
+              <div className="text-xs bg-accent/30 px-2 py-1 rounded-sm">
+                +{Object.keys(instrument.specs).length - 3} more
+              </div>
             </div>
           </div>
-        </div>
-      </Link>
-      
-      <div className="p-4 pt-0 mt-auto">
-        <div className="flex gap-2">
-          <Button className="flex-1" asChild>
-            <Link to={`/product/${instrument.id}`}>View</Link>
-          </Button>
-          <Button 
-            variant={inCompare ? "destructive" : "outline"}
-            className="flex-1"
-            onClick={handleCompareToggle}
-          >
-            {inCompare ? "Remove" : "Compare"}
-          </Button>
+        </Link>
+        
+        <div className="p-4 pt-0 mt-auto">
+          <div className="flex gap-2">
+            <Button className="flex-1" asChild>
+              <Link to={`/product/${instrument.id}`}>View</Link>
+            </Button>
+            <Button 
+              variant={inCompare ? "destructive" : "outline"}
+              className="flex-1"
+              onClick={handleCompareToggle}
+            >
+              {inCompare ? "Remove" : "Compare"}
+            </Button>
+            <Button 
+              variant="secondary"
+              size="sm"
+              onClick={handleBuyClick}
+            >
+              <ShoppingCart className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
+
+      <BuyLinksDialog
+        isOpen={showBuyDialog}
+        onClose={() => setShowBuyDialog(false)}
+        instrumentName={instrument.name}
+        buyLinks={buyLinks}
+      />
+    </>
   );
 };
 

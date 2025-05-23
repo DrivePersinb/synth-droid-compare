@@ -27,6 +27,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import AdminRequiredAuth from "@/components/AdminRequiredAuth";
+import InstrumentManagement from "@/components/InstrumentManagement";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -47,6 +48,7 @@ const formSchema = z.object({
   }).optional(),
   specs: z.string().min(5, { message: "Specifications are required" }),
   image: z.string().optional(),
+  buyLinks: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -72,6 +74,7 @@ const AdminDashboard = () => {
       rating: "",
       specs: "",
       image: "",
+      buyLinks: "",
     },
   });
 
@@ -96,10 +99,28 @@ const AdminDashboard = () => {
     }
   };
 
+  const parseBuyLinks = (buyLinksStr: string) => {
+    if (!buyLinksStr.trim()) return [];
+    
+    try {
+      return JSON.parse(buyLinksStr);
+    } catch {
+      // If JSON parsing fails, try simple format: store1:url1,store2:url2
+      const links = buyLinksStr.split(',');
+      return links.map(link => {
+        const [store, url] = link.split(':').map(s => s.trim());
+        return { store, url };
+      }).filter(link => link.store && link.url);
+    }
+  };
+
   const onSubmit = async (values: FormValues) => {
     setIsSubmitting(true);
     try {
       console.log("Starting instrument submission...");
+      
+      // Parse buy links
+      const buyLinks = parseBuyLinks(values.buyLinks || "");
       
       // Parse numeric values
       const instrumentData = {
@@ -111,7 +132,10 @@ const AdminDashboard = () => {
         description: values.description,
         release_year: values.releaseYear ? Number(values.releaseYear) : null,
         rating: values.rating ? Number(values.rating) : null,
-        specs: parseSpecifications(values.specs),
+        specs: {
+          ...parseSpecifications(values.specs),
+          buyLinks: buyLinks
+        },
         image: imagePreview || '/placeholder.svg',
         compare_count: 0,
         popularity_score: 50
@@ -195,7 +219,11 @@ const AdminDashboard = () => {
           </div>
         </header>
 
-        <main className="container mx-auto p-4 mt-8">
+        <main className="container mx-auto p-4 mt-8 space-y-8">
+          {/* Instrument Management Section */}
+          <InstrumentManagement />
+
+          {/* Add New Instrument Section */}
           <Card>
             <CardHeader>
               <CardTitle>Add New Instrument</CardTitle>
@@ -353,6 +381,27 @@ const AdminDashboard = () => {
                           </FormControl>
                           <FormDescription>
                             Enter specifications as key-value pairs, one per line (e.g., "keys: 61")
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="buyLinks"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Buy Links (Optional)</FormLabel>
+                          <FormControl>
+                            <Textarea 
+                              placeholder="Amazon:https://amazon.in/product,Flipkart:https://flipkart.com/product" 
+                              className="min-h-[100px]" 
+                              {...field} 
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            Enter buy links as Store:URL pairs separated by commas
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
