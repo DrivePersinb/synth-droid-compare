@@ -34,15 +34,11 @@ export const getAdminUsername = (): string | null => {
 };
 
 /**
- * Create a Supabase client for admin operations
- * Uses the standard client but with admin context
+ * Use the main Supabase client for admin operations
+ * Tables now have proper permissions set via RLS
  */
-import { createClient } from '@supabase/supabase-js';
-import type { Database } from '../integrations/supabase/types';
+import { supabase } from '../integrations/supabase/client';
 
 export const getAdminSupabaseClient = () => {
-  const SUPABASE_URL = "https://mldxilhiiifbwipscqbj.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1sZHhpbGhpaWlmYndpcHNjcWJqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc0NTEyMTksImV4cCI6MjA2MzAyNzIxOX0.Q1F3VHJ2wrfFeecWp9pExf5ZzEcinHyeI7qN7lsLSPA";
-  
-  return createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY);
+  return supabase;
 };

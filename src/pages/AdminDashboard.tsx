@@ -116,7 +116,6 @@ const AdminDashboard = () => {
 
       console.log("Instrument data prepared:", instrumentData);
 
-      // Use standard supabase client - RLS policies should allow this for admin operations
       const { data, error } = await supabase
         .from('instruments')
         .insert([instrumentData])
