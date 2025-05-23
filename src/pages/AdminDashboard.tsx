@@ -26,7 +26,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import AdminRequiredAuth from "@/components/AdminRequiredAuth";
-import { getAdminSupabaseClient } from "@/utils/adminUtils";
+import { supabase } from "@/integrations/supabase/client";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
@@ -97,6 +97,7 @@ const AdminDashboard = () => {
     setIsSubmitting(true);
     try {
       console.log("Starting instrument submission...");
+      
       // Parse numeric values
       const instrumentData = {
         name: values.name,
@@ -115,20 +116,18 @@ const AdminDashboard = () => {
 
       console.log("Instrument data prepared:", instrumentData);
 
-      // Use the admin client to bypass RLS
-      const adminClient = getAdminSupabaseClient();
-      
-      // Insert the instrument using the admin client
-      const { data, error } = await adminClient
+      // Use standard supabase client - RLS policies should allow this for admin operations
+      const { data, error } = await supabase
         .from('instruments')
-        .insert([instrumentData]);
+        .insert([instrumentData])
+        .select();
 
       if (error) {
         console.error('Database error:', error);
         throw error;
       }
 
-      console.log("Instrument added successfully");
+      console.log("Instrument added successfully:", data);
       
       // Reset form after successful submission
       form.reset();
