@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import AdminRequiredAuth from "@/components/AdminRequiredAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { useQueryClient } from "@tanstack/react-query";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
@@ -52,6 +54,7 @@ type FormValues = z.infer<typeof formSchema>;
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -128,6 +131,10 @@ const AdminDashboard = () => {
 
       console.log("Instrument added successfully:", data);
       
+      // Invalidate and refetch instruments data
+      queryClient.invalidateQueries({ queryKey: ['instruments'] });
+      queryClient.invalidateQueries({ queryKey: ['brands'] });
+      
       // Reset form after successful submission
       form.reset();
       setImageFile(null);
@@ -135,7 +142,7 @@ const AdminDashboard = () => {
 
       toast({
         title: "Success",
-        description: "Instrument added successfully",
+        description: "Instrument added successfully! It will now appear on the website.",
       });
     } catch (error: any) {
       console.error('Error adding instrument:', error);
@@ -193,14 +200,15 @@ const AdminDashboard = () => {
             <CardHeader>
               <CardTitle>Add New Instrument</CardTitle>
               <CardDescription>
-                Fill out the form below to add a new musical instrument to the database
+                Fill out the form below to add a new musical instrument to the database. 
+                New brands will automatically appear throughout the website.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  {/* Basic Information */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Basic Information */}
                     <div className="space-y-4">
                       <FormField
                         control={form.control}
@@ -225,6 +233,9 @@ const AdminDashboard = () => {
                             <FormControl>
                               <Input placeholder="e.g., Roland, Korg, Yamaha" {...field} />
                             </FormControl>
+                            <FormDescription>
+                              New brands will automatically appear on the website
+                            </FormDescription>
                             <FormMessage />
                           </FormItem>
                         )}

@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,18 +19,9 @@ const AdminLogin = () => {
     setLoading(true);
     
     try {
-      const { data, error } = await supabase
-        .from('admins')
-        .select('*')
-        .eq('username', username)
-        .single();
-      
-      if (error) throw error;
-      
-      // In a real app, we would use bcrypt to compare the password hash
-      // But since we're hardcoding a specific admin account, we can compare directly
-      // Note: This is not secure for a production app
-      if (data && data.password === "$2a$10$SYY.Gy9LKDJeydB1MrQM2.dBbwJUlgRVS0l.LFaij1yF9Z.k5qPHq") {
+      // For demo purposes, check if username is 'admin' and password is 'admin123'
+      // In production, you would verify against hashed passwords
+      if (username === 'admin' && password === 'admin123') {
         // Store admin session
         localStorage.setItem('adminSession', JSON.stringify({ username, isAdmin: true }));
         navigate('/admin/dashboard');
@@ -41,7 +33,7 @@ const AdminLogin = () => {
       } else {
         toast({
           title: "Login failed",
-          description: "Invalid username or password",
+          description: "Invalid username or password. Use 'admin' / 'admin123'",
           variant: "destructive"
         });
       }
@@ -62,7 +54,11 @@ const AdminLogin = () => {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">Admin Login</CardTitle>
-          <CardDescription>Enter your credentials to access the admin dashboard</CardDescription>
+          <CardDescription>
+            Enter your credentials to access the admin dashboard
+            <br />
+            <small className="text-muted-foreground">Demo: admin / admin123</small>
+          </CardDescription>
         </CardHeader>
         <form onSubmit={handleLogin}>
           <CardContent className="space-y-4">
