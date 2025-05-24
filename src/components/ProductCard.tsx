@@ -3,18 +3,26 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useCompareContext } from '@/contexts/CompareContext';
+import { useCompare } from '@/contexts/CompareContext';
 import CompareButton from './CompareButton';
 import BuyLinksDialog from './BuyLinksDialog';
 
 const ProductCard = ({ instrument }) => {
-  const { isInCompare, toggleCompare } = useCompareContext();
+  const { addToCompare, removeFromCompare, isInCompare } = useCompare();
   const isCompared = isInCompare(instrument.id);
   const [buyDialogOpen, setBuyDialogOpen] = useState(false);
 
   // Extract buy links from specs if they exist
   const buyLinks = instrument.specs?.buyLinks || [];
   const hasBuyLinks = buyLinks && buyLinks.length > 0;
+
+  const handleCompareToggle = () => {
+    if (isCompared) {
+      removeFromCompare(instrument.id);
+    } else {
+      addToCompare(instrument.id);
+    }
+  };
   
   return (
     <div className="bg-androidBox rounded-lg overflow-hidden hover:shadow-lg border border-gray-800 transition-all duration-300 flex flex-col">
@@ -74,8 +82,7 @@ const ProductCard = ({ instrument }) => {
               </Button>
             )}
             <CompareButton 
-              isCompared={isCompared}
-              onClick={() => toggleCompare(instrument)}
+              onClick={handleCompareToggle}
             />
           </div>
         </div>
