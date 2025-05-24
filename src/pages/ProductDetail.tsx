@@ -77,6 +77,17 @@ const ProductDetail = () => {
   const buyLinks = instrument?.specs?.buyLinks || [];
   const hasBuyLinks = buyLinks && buyLinks.length > 0;
 
+  // Helper function to safely render spec values
+  const renderSpecValue = (value: unknown): React.ReactNode => {
+    if (typeof value === 'boolean') {
+      return value ? 'Yes' : 'No';
+    }
+    if (value === null || value === undefined) {
+      return 'N/A';
+    }
+    return String(value);
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col bg-background">
@@ -192,7 +203,7 @@ const ProductDetail = () => {
                   {Object.entries(instrument.specs || {}).slice(0, 6).map(([key, value]) => (
                     <div key={key} className="flex justify-between">
                       <span className="text-gray-400 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}:</span>
-                      <span>{typeof value === 'boolean' ? (value ? 'Yes' : 'No') : value}</span>
+                      <span>{renderSpecValue(value)}</span>
                     </div>
                   ))}
                 </div>
@@ -207,7 +218,7 @@ const ProductDetail = () => {
               {Object.entries(instrument.specs || {}).map(([key, value]) => (
                 <div key={key} className="flex justify-between py-2 border-b border-gray-700">
                   <span className="text-gray-400 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                  <span className="font-medium">{typeof value === 'boolean' ? (value ? 'Yes' : 'No') : value}</span>
+                  <span className="font-medium">{renderSpecValue(value)}</span>
                 </div>
               ))}
             </div>

@@ -6,11 +6,24 @@ import { Button } from "@/components/ui/button";
 
 interface CompareButtonProps {
   variant?: "default" | "compact";
+  onClick?: () => void;
 }
 
-const CompareButton: React.FC<CompareButtonProps> = ({ variant = "default" }) => {
+const CompareButton: React.FC<CompareButtonProps> = ({ variant = "default", onClick }) => {
   const { compareItems } = useCompare();
   const count = compareItems.length;
+
+  if (onClick) {
+    return (
+      <Button 
+        variant={count > 0 ? "default" : "secondary"}
+        className={count > 0 ? "animate-pulse" : ""}
+        onClick={onClick}
+      >
+        {count > 0 ? `Compare (${count})` : "Compare"}
+      </Button>
+    );
+  }
 
   if (variant === "compact") {
     return (
