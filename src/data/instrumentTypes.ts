@@ -1,23 +1,5 @@
 
-// Types for our instrument data model
-export interface Instrument {
-  id: string;
-  name: string;
-  brand: Brand;
-  image: string;
-  price: number;
-  rating: number;
-  releaseYear: number;
-  description: string;
-  specs: {
-    [key: string]: string | number | boolean;
-  };
-  // For comparison features
-  compareCount: number;
-  popularityScore: number;
-}
-
-export type Brand = "Roland" | "Casio" | "Yamaha" | "Korg";
+export type Brand = "Roland" | "Yamaha" | "Korg" | "Moog" | "Sequential" | "Novation" | "Arturia" | "Behringer" | "Nord" | "Access" | "Waldorf" | "Elektron";
 
 export interface FilterOptions {
   priceRange: [number, number];

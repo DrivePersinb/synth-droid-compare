@@ -6,15 +6,16 @@ import { Button } from "@/components/ui/button";
 import { useCompare } from '@/contexts/CompareContext';
 import CompareButton from './CompareButton';
 import BuyLinksDialog from './BuyLinksDialog';
+import { InstrumentBasic } from '@/data/instrumentsData';
 
-const ProductCard = ({ instrument }) => {
+interface ProductCardProps {
+  instrument: InstrumentBasic;
+}
+
+const ProductCard: React.FC<ProductCardProps> = ({ instrument }) => {
   const { addToCompare, removeFromCompare, isInCompare } = useCompare();
   const isCompared = isInCompare(instrument.id);
   const [buyDialogOpen, setBuyDialogOpen] = useState(false);
-
-  // Extract buy links from specs if they exist
-  const buyLinks = instrument.specs?.buyLinks || [];
-  const hasBuyLinks = buyLinks && buyLinks.length > 0;
 
   const handleCompareToggle = () => {
     if (isCompared) {
@@ -69,18 +70,16 @@ const ProductCard = ({ instrument }) => {
           </div>
           
           <div className="flex space-x-2">
-            {hasBuyLinks && (
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setBuyDialogOpen(true);
-                }}
-              >
-                Buy
-              </Button>
-            )}
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={(e) => {
+                e.preventDefault();
+                setBuyDialogOpen(true);
+              }}
+            >
+              Buy
+            </Button>
             <CompareButton 
               onClick={handleCompareToggle}
             />
@@ -92,7 +91,7 @@ const ProductCard = ({ instrument }) => {
         isOpen={buyDialogOpen}
         onClose={() => setBuyDialogOpen(false)}
         instrumentName={instrument.name}
-        buyLinks={buyLinks}
+        buyLinks={[]}
       />
     </div>
   );

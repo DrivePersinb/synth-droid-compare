@@ -1,65 +1,24 @@
-import React, { useState, useEffect } from "react";
+
+import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCompare } from "@/contexts/CompareContext";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, MinusCircle, ArrowLeft } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { DatabaseInstrument } from "@/hooks/useInstruments";
+import { getInstrumentById } from "@/data/instrumentsData";
+import { useProductDetails } from "@/hooks/useProductDetails";
 import BuyLinksDialog from "@/components/BuyLinksDialog";
 import StructuredSpecifications from "@/components/StructuredSpecifications";
+import FAQSection from "@/components/FAQSection";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { addToCompare, removeFromCompare, isInCompare } = useCompare();
   const [buyDialogOpen, setBuyDialogOpen] = useState(false);
   
-  const { data: instrument, isLoading } = useQuery({
-    queryKey: ['instrument', id],
-    queryFn: async () => {
-      if (!id) return null;
-      console.log('Fetching instrument with id:', id);
-      const { data, error } = await supabase
-        .from('instruments')
-        .select('*')
-        .eq('id', id)
-        .single();
-
-      if (error) {
-        console.error('Error fetching instrument:', error);
-        throw error;
-      }
-
-      console.log('Fetched instrument:', data);
-      return data as DatabaseInstrument;
-    },
-    enabled: !!id,
-  });
-
-  const { data: similarInstruments = [] } = useQuery({
-    queryKey: ['similar-instruments', instrument?.brand, id],
-    queryFn: async () => {
-      if (!instrument?.brand) return [];
-      console.log(`Fetching similar instruments for brand: ${instrument.brand}`);
-      const { data, error } = await supabase
-        .from('instruments')
-        .select('*')
-        .ilike('brand', instrument.brand)
-        .neq('id', id)
-        .limit(3);
-
-      if (error) {
-        console.error('Error fetching similar instruments:', error);
-        return [];
-      }
-
-      console.log('Similar instruments:', data);
-      return data as DatabaseInstrument[];
-    },
-    enabled: !!instrument?.brand && !!id,
-  });
+  const instrument = id ? getInstrumentById(id) : undefined;
+  const { data: productDetails, isLoading: detailsLoading } = useProductDetails(id || '');
   
   const inCompare = instrument ? isInCompare(instrument.id) : false;
 
@@ -72,33 +31,6 @@ const ProductDetail = () => {
       addToCompare(instrument.id);
     }
   };
-
-  // Extract buy links from specs if they exist
-  const buyLinks = instrument?.specs?.buyLinks || [];
-  const hasBuyLinks = buyLinks && buyLinks.length > 0;
-
-  // Helper function to safely render spec values
-  const renderSpecValue = (value: unknown): React.ReactNode => {
-    if (typeof value === 'boolean') {
-      return value ? 'Yes' : 'No';
-    }
-    if (value === null || value === undefined) {
-      return 'N/A';
-    }
-    return String(value);
-  };
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex flex-col bg-background">
-        <Header />
-        <div className="container mx-auto px-4 py-16 text-center">
-          <h1 className="text-3xl font-bold mb-6">Loading...</h1>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
 
   if (!instrument) {
     return (
@@ -154,7 +86,7 @@ const ProductDetail = () => {
                   <span className="ml-1">{instrument.rating || "N/A"}</span>
                 </div>
                 <div className="text-muted-foreground">
-                  {instrument.release_year}
+                  {instrument.releaseYear}
                 </div>
               </div>
               
@@ -167,7 +99,7 @@ const ProductDetail = () => {
               </p>
               
               <div className="flex space-x-4 mb-8">
-                {hasBuyLinks && (
+                {productDetails?.buyLinks && productDetails.buyLinks.length > 0 && (
                   <Button 
                     size="lg" 
                     className="flex-1"
@@ -198,46 +130,21 @@ const ProductDetail = () => {
             </div>
           </div>
           
-          {/* Full Specifications with Categories */}
-          <div className="border-t border-gray-700 p-6">
-            <h2 className="text-2xl font-bold mb-6">Full Specifications</h2>
-            <StructuredSpecifications specs={instrument.specs || {}} />
-          </div>
-        </div>
-        
-        {/* Similar Instruments */}
-        {similarInstruments.length > 0 && (
-          <div className="mt-12">
-            <h2 className="text-2xl font-bold mb-6">Similar Instruments</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {similarInstruments.map(instr => (
-                <Link 
-                  key={instr.id} 
-                  to={`/product/${instr.id}`}
-                  className="bg-androidBox rounded-xl overflow-hidden hover:translate-y-[-4px] transition-transform duration-200"
-                >
-                  <div className="p-4">
-                    <div className="bg-black rounded-lg h-40 flex items-center justify-center mb-4">
-                      <img 
-                        src={instr.image || '/placeholder.svg'}
-                        alt={instr.name}
-                        className="max-h-full max-w-full object-contain p-4"
-                      />
-                    </div>
-                    <h3 className="font-medium">{instr.name}</h3>
-                    <div className="flex justify-between items-center mt-2">
-                      <span className="text-primary font-bold">₹{instr.price?.toLocaleString()}</span>
-                      <div className="flex items-center">
-                        <span className="text-yellow-400 mr-1">★</span>
-                        <span>{instr.rating || "N/A"}</span>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              ))}
+          {/* Specifications */}
+          {productDetails?.specifications && (
+            <div className="border-t border-gray-700 p-6">
+              <h2 className="text-2xl font-bold mb-6">Full Specifications</h2>
+              <StructuredSpecifications specifications={productDetails.specifications} />
             </div>
-          </div>
-        )}
+          )}
+
+          {/* FAQ Section */}
+          {productDetails?.faq && (
+            <div className="border-t border-gray-700 p-6">
+              <FAQSection faqs={productDetails.faq} />
+            </div>
+          )}
+        </div>
       </main>
       
       <Footer />
@@ -246,7 +153,7 @@ const ProductDetail = () => {
         isOpen={buyDialogOpen}
         onClose={() => setBuyDialogOpen(false)}
         instrumentName={instrument.name}
-        buyLinks={buyLinks}
+        buyLinks={productDetails?.buyLinks || []}
       />
     </div>
   );

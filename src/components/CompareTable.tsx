@@ -2,18 +2,22 @@
 import React from "react";
 import { useInstruments } from "@/hooks/useInstruments";
 import { useCompare } from "@/contexts/CompareContext";
+import { useProductDetails } from "@/hooks/useProductDetails";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
-import { useSpecCategories, useSpecFields } from "@/hooks/useSpecifications";
 
 const CompareTable = () => {
   const { compareItems, removeFromCompare } = useCompare();
   const { data: instruments = [] } = useInstruments();
-  const { data: categories = [] } = useSpecCategories();
-  const { data: fields = [] } = useSpecFields();
 
   const comparedInstruments = instruments.filter(instrument => 
     compareItems.some(item => item.instrumentId === instrument.id)
+  );
+
+  // Get product details for each compared instrument
+  const productDetailsQueries = comparedInstruments.map(instrument => 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useProductDetails(instrument.id)
   );
 
   const renderSpecValue = (value: unknown): React.ReactNode => {
@@ -26,22 +30,6 @@ const CompareTable = () => {
     return String(value);
   };
 
-  const getCategoryFields = (categoryId: string) => {
-    return fields
-      .filter(field => field.category_id === categoryId)
-      .sort((a, b) => a.display_order - b.display_order);
-  };
-
-  const hasAnyData = (fieldName: string) => {
-    return comparedInstruments.some(instrument => 
-      instrument.specs?.[fieldName] !== undefined && 
-      instrument.specs?.[fieldName] !== null && 
-      instrument.specs?.[fieldName] !== ""
-    );
-  };
-
-  const sortedCategories = [...categories].sort((a, b) => a.display_order - b.display_order);
-
   if (comparedInstruments.length === 0) {
     return (
       <div className="text-center py-12">
@@ -50,6 +38,21 @@ const CompareTable = () => {
       </div>
     );
   }
+
+  // Collect all specification categories from all instruments
+  const allCategories = new Map<string, Set<string>>();
+  productDetailsQueries.forEach(query => {
+    if (query.data?.specifications) {
+      query.data.specifications.forEach(category => {
+        if (!allCategories.has(category.name)) {
+          allCategories.set(category.name, new Set());
+        }
+        Object.keys(category.specs).forEach(specKey => {
+          allCategories.get(category.name)?.add(specKey);
+        });
+      });
+    }
+  });
 
   return (
     <div className="overflow-x-auto">
@@ -104,71 +107,48 @@ const CompareTable = () => {
             <td className="p-4 font-medium text-primary">Release Year</td>
             {comparedInstruments.map(instrument => (
               <td key={instrument.id} className="p-4">
-                {instrument.release_year || 'N/A'}
+                {instrument.releaseYear || 'N/A'}
               </td>
             ))}
           </tr>
 
-          {/* Categorized Specifications */}
-          {sortedCategories.map(category => {
-            const categoryFields = getCategoryFields(category.id);
-            const fieldsWithData = categoryFields.filter(field => hasAnyData(field.name));
-            
-            if (fieldsWithData.length === 0) return null;
-
-            return (
-              <React.Fragment key={category.id}>
-                <tr className="border-b border-gray-700">
-                  <td colSpan={comparedInstruments.length + 1} className="p-4 bg-gray-800/50">
-                    <h3 className="font-semibold text-primary">{category.name}</h3>
-                  </td>
-                </tr>
-                {fieldsWithData.map(field => (
-                  <tr key={field.id} className="border-b border-gray-700/50">
-                    <td className="p-4 font-medium">{field.display_name}</td>
-                    {comparedInstruments.map(instrument => (
-                      <td key={instrument.id} className="p-4">
-                        {renderSpecValue(instrument.specs?.[field.name])}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </React.Fragment>
-            );
-          })}
-
-          {/* Other specifications not in defined categories */}
-          {comparedInstruments.some(instrument => 
-            Object.keys(instrument.specs || {}).some(key => 
-              key !== 'buyLinks' && !fields.some(field => field.name === key)
-            )
-          ) && (
-            <>
+          {/* Detailed Specifications by Category */}
+          {Array.from(allCategories.entries()).map(([categoryName, specs]) => (
+            <React.Fragment key={categoryName}>
               <tr className="border-b border-gray-700">
                 <td colSpan={comparedInstruments.length + 1} className="p-4 bg-gray-800/50">
-                  <h3 className="font-semibold text-primary">Other Specifications</h3>
+                  <h3 className="font-semibold text-primary">{categoryName}</h3>
                 </td>
               </tr>
-              {Array.from(new Set(
-                comparedInstruments.flatMap(instrument => 
-                  Object.keys(instrument.specs || {}).filter(key => 
-                    key !== 'buyLinks' && !fields.some(field => field.name === key)
+              {Array.from(specs).map(specKey => {
+                // Check if at least one instrument has this specification
+                const hasData = productDetailsQueries.some(query => 
+                  query.data?.specifications?.some(cat => 
+                    cat.name === categoryName && cat.specs[specKey] !== undefined
                   )
-                )
-              )).map(specKey => (
-                <tr key={specKey} className="border-b border-gray-700/50">
-                  <td className="p-4 font-medium capitalize">
-                    {specKey.replace(/([A-Z])/g, ' $1').trim()}
-                  </td>
-                  {comparedInstruments.map(instrument => (
-                    <td key={instrument.id} className="p-4">
-                      {renderSpecValue(instrument.specs?.[specKey])}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </>
-          )}
+                );
+
+                if (!hasData) return null;
+
+                return (
+                  <tr key={specKey} className="border-b border-gray-700/50">
+                    <td className="p-4 font-medium">{specKey}</td>
+                    {comparedInstruments.map((instrument, index) => {
+                      const productDetails = productDetailsQueries[index].data;
+                      const category = productDetails?.specifications?.find(cat => cat.name === categoryName);
+                      const value = category?.specs[specKey];
+                      
+                      return (
+                        <td key={instrument.id} className="p-4">
+                          {renderSpecValue(value)}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </React.Fragment>
+          ))}
         </tbody>
       </table>
     </div>

@@ -1,87 +1,41 @@
 
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
-
-export interface DatabaseInstrument {
-  id: string;
-  name: string;
-  brand: string;
-  image: string | null;
-  price: number;
-  rating: number | null;
-  release_year: number | null;
-  description: string;
-  specs: any;
-  compare_count: number;
-  popularity_score: number;
-  category: string;
-  subcategory: string | null;
-  created_at: string;
-  updated_at: string;
-}
+import { useState, useEffect } from 'react';
+import { instrumentsData, InstrumentBasic, getBrands } from '@/data/instrumentsData';
 
 export const useInstruments = () => {
-  return useQuery({
-    queryKey: ['instruments'],
-    queryFn: async () => {
-      console.log('Fetching instruments from database...');
-      const { data, error } = await supabase
-        .from('instruments')
-        .select('*')
-        .order('created_at', { ascending: false });
+  const [data, setData] = useState<InstrumentBasic[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-      if (error) {
-        console.error('Error fetching instruments:', error);
-        throw error;
-      }
+  useEffect(() => {
+    // Simulate async loading
+    const loadData = async () => {
+      setIsLoading(true);
+      // Add small delay to simulate network request
+      await new Promise(resolve => setTimeout(resolve, 100));
+      setData(instrumentsData);
+      setIsLoading(false);
+    };
 
-      console.log('Fetched instruments:', data);
-      return data as DatabaseInstrument[];
-    },
-  });
-};
+    loadData();
+  }, []);
 
-export const useInstrumentsByBrand = (brand: string) => {
-  return useQuery({
-    queryKey: ['instruments', 'brand', brand],
-    queryFn: async () => {
-      console.log(`Fetching instruments for brand: ${brand}`);
-      const { data, error } = await supabase
-        .from('instruments')
-        .select('*')
-        .ilike('brand', brand)
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching instruments by brand:', error);
-        throw error;
-      }
-
-      console.log(`Fetched instruments for ${brand}:`, data);
-      return data as DatabaseInstrument[];
-    },
-  });
+  return { data, isLoading };
 };
 
 export const useBrands = () => {
-  return useQuery({
-    queryKey: ['brands'],
-    queryFn: async () => {
-      console.log('Fetching unique brands from database...');
-      const { data, error } = await supabase
-        .from('instruments')
-        .select('brand')
-        .order('brand');
+  const [data, setData] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-      if (error) {
-        console.error('Error fetching brands:', error);
-        throw error;
-      }
+  useEffect(() => {
+    const loadBrands = async () => {
+      setIsLoading(true);
+      await new Promise(resolve => setTimeout(resolve, 50));
+      setData(getBrands());
+      setIsLoading(false);
+    };
 
-      // Get unique brands
-      const uniqueBrands = [...new Set(data.map(item => item.brand))];
-      console.log('Unique brands:', uniqueBrands);
-      return uniqueBrands;
-    },
-  });
+    loadBrands();
+  }, []);
+
+  return { data, isLoading };
 };
