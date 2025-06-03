@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useInstruments } from "@/hooks/useInstruments";
 import { useCompare } from "@/contexts/CompareContext";
@@ -12,7 +13,7 @@ const CompareTable = () => {
   const { data: fields = [] } = useSpecFields();
 
   const comparedInstruments = instruments.filter(instrument => 
-    compareItems.includes(instrument.id)
+    compareItems.some(item => item.instrumentId === instrument.id)
   );
 
   const renderSpecValue = (value: unknown): React.ReactNode => {

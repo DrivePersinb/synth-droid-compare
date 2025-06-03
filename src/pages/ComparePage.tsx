@@ -43,7 +43,7 @@ const ComparePage = () => {
         </div>
         
         <div className="bg-androidBox rounded-xl overflow-hidden">
-          <CompareTable instruments={instruments} />
+          <CompareTable />
           
           {instruments.length > 0 && instruments.length < 4 && (
             <div className="p-6 border-t border-gray-700">
