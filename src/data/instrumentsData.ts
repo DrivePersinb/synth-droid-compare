@@ -1,3 +1,4 @@
+
 export type Brand = "Roland" | "Yamaha" | "Korg" | "Moog" | "Sequential" | "Novation" | "Arturia" | "Behringer" | "Nord" | "Access" | "Waldorf" | "Elektron" | "Casio";
 
 export interface Instrument {
@@ -54,6 +55,7 @@ export interface InstrumentBasic {
   rating: number;
   releaseYear: number;
   description: string;
+  popularityScore: number;
 }
 
 export const instruments: InstrumentBasic[] = [
@@ -65,7 +67,8 @@ export const instruments: InstrumentBasic[] = [
     price: 199999,
     rating: 4.8,
     releaseYear: 2019,
-    description: "Legendary Jupiter sound with modern ZEN-Core technology and deep synthesis capabilities."
+    description: "Legendary Jupiter sound with modern ZEN-Core technology and deep synthesis capabilities.",
+    popularityScore: 95
   },
   {
     id: "yamaha-montage-8",
@@ -75,7 +78,8 @@ export const instruments: InstrumentBasic[] = [
     price: 329999,
     rating: 4.9,
     releaseYear: 2016,
-    description: "Professional synthesizer workstation with AWM2 and FM-X sound engines."
+    description: "Professional synthesizer workstation with AWM2 and FM-X sound engines.",
+    popularityScore: 98
   },
   {
     id: "korg-minilogue-xd",
@@ -85,7 +89,8 @@ export const instruments: InstrumentBasic[] = [
     price: 54999,
     rating: 4.7,
     releaseYear: 2019,
-    description: "Analog synthesizer with digital multi-engine for hybrid sound creation."
+    description: "Analog synthesizer with digital multi-engine for hybrid sound creation.",
+    popularityScore: 92
   },
   {
     id: "korg-kronos-2",
@@ -95,7 +100,8 @@ export const instruments: InstrumentBasic[] = [
     price: 329999,
     rating: 4.8,
     releaseYear: 2017,
-    description: "Ultimate music workstation with 9 sound engines and comprehensive sampling."
+    description: "Ultimate music workstation with 9 sound engines and comprehensive sampling.",
+    popularityScore: 90
   },
   {
     id: "roland-fantom-8",
@@ -105,7 +111,8 @@ export const instruments: InstrumentBasic[] = [
     price: 279999,
     rating: 4.7,
     releaseYear: 2019,
-    description: "Next-generation music production workstation with ZEN-Core synthesis and advanced sampling."
+    description: "Next-generation music production workstation with ZEN-Core synthesis and advanced sampling.",
+    popularityScore: 89
   },
   {
     id: "sequential-prophet-5",
@@ -115,7 +122,8 @@ export const instruments: InstrumentBasic[] = [
     price: 429900,
     rating: 4.9,
     releaseYear: 2020,
-    description: "The return of a legend - the most iconic analog polysynth of all time."
+    description: "The return of a legend - the most iconic analog polysynth of all time.",
+    popularityScore: 97
   },
   {
     id: "moog-one-16",
@@ -125,7 +133,8 @@ export const instruments: InstrumentBasic[] = [
     price: 799900,
     rating: 4.9,
     releaseYear: 2018,
-    description: "The ultimate Moog synthesizer - a tri-timbral, polyphonic, analog dream machine."
+    description: "The ultimate Moog synthesizer - a tri-timbral, polyphonic, analog dream machine.",
+    popularityScore: 99
   },
   {
     id: "novation-summit",
@@ -135,7 +144,8 @@ export const instruments: InstrumentBasic[] = [
     price: 319900,
     rating: 4.7,
     releaseYear: 2019,
-    description: "A powerful hybrid synthesizer combining FPGA-based digital oscillators with analog filters and VCAs."
+    description: "A powerful hybrid synthesizer combining FPGA-based digital oscillators with analog filters and VCAs.",
+    popularityScore: 85
   },
   {
     id: "arturia-polybrute",
@@ -145,7 +155,8 @@ export const instruments: InstrumentBasic[] = [
     price: 64900,
     rating: 4.8,
     releaseYear: 2020,
-    description: "A groundbreaking polyphonic analog synthesizer with a unique morphing architecture."
+    description: "A groundbreaking polyphonic analog synthesizer with a unique morphing architecture.",
+    popularityScore: 93
   },
   {
     id: "behringer-pro-800",
@@ -155,7 +166,8 @@ export const instruments: InstrumentBasic[] = [
     price: 39900,
     rating: 4.6,
     releaseYear: 2023,
-    description: "An authentic recreation of a classic 1980s analog polysynth at an accessible price."
+    description: "An authentic recreation of a classic 1980s analog polysynth at an accessible price.",
+    popularityScore: 78
   },
   {
     id: "nord-wave-2",
@@ -165,7 +177,8 @@ export const instruments: InstrumentBasic[] = [
     price: 299900,
     rating: 4.7,
     releaseYear: 2020,
-    description: "A versatile performance synthesizer combining virtual analog, samples, FM, and wavetable synthesis."
+    description: "A versatile performance synthesizer combining virtual analog, samples, FM, and wavetable synthesis.",
+    popularityScore: 88
   },
   {
     id: "access-virus-ti2",
@@ -175,7 +188,8 @@ export const instruments: InstrumentBasic[] = [
     price: 379900,
     rating: 4.8,
     releaseYear: 2009,
-    description: "A powerful virtual analog synthesizer with extensive modulation capabilities and a unique 'Total Integration' system."
+    description: "A powerful virtual analog synthesizer with extensive modulation capabilities and a unique 'Total Integration' system.",
+    popularityScore: 86
   },
   {
     id: "waldorf-quantum",
@@ -185,7 +199,8 @@ export const instruments: InstrumentBasic[] = [
     price: 449900,
     rating: 4.9,
     releaseYear: 2018,
-    description: "A hybrid synthesizer combining wavetable, granular, and traditional synthesis methods."
+    description: "A hybrid synthesizer combining wavetable, granular, and traditional synthesis methods.",
+    popularityScore: 91
   },
   {
     id: "elektron-syntakt",
@@ -195,9 +210,10 @@ export const instruments: InstrumentBasic[] = [
     price: 99900,
     rating: 4.7,
     releaseYear: 2022,
-    description: "A powerful drum machine and synthesizer with a wide range of digital and analog sound engines."
+    description: "A powerful drum machine and synthesizer with a wide range of digital and analog sound engines.",
+    popularityScore: 83
   },
-    {
+  {
     id: "casio-cz-101",
     name: "Casio CZ-101",
     brand: "Casio",
@@ -205,9 +221,13 @@ export const instruments: InstrumentBasic[] = [
     price: 40000,
     rating: 4.5,
     releaseYear: 1984,
-    description: "A compact phase distortion synthesizer that defined the sound of the mid-1980s."
+    description: "A compact phase distortion synthesizer that defined the sound of the mid-1980s.",
+    popularityScore: 75
   },
 ];
+
+// Export as instrumentsData for backward compatibility
+export const instrumentsData = instruments;
 
 export const instrumentFilters = {
   brands: Array.from(new Set(instruments.map(i => i.brand))).sort(),
@@ -220,4 +240,8 @@ export const instrumentFilters = {
 
 export const getInstrumentById = (id: string): InstrumentBasic | undefined => {
   return instruments.find(instrument => instrument.id === id);
+};
+
+export const getBrands = (): string[] => {
+  return Array.from(new Set(instruments.map(i => i.brand))).sort();
 };
