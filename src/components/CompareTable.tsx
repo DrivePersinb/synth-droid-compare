@@ -1,127 +1,173 @@
-
 import React from "react";
-import { Link } from "react-router-dom";
-import { Instrument } from "@/data/instrumentTypes";
-import { Button } from "@/components/ui/button";
+import { useInstruments } from "@/hooks/useInstruments";
 import { useCompare } from "@/contexts/CompareContext";
-import { getInstrumentImagePath } from "@/data/instruments";
+import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
+import { useSpecCategories, useSpecFields } from "@/hooks/useSpecifications";
 
-interface CompareTableProps {
-  instruments: Instrument[];
-}
+const CompareTable = () => {
+  const { compareItems, removeFromCompare } = useCompare();
+  const { data: instruments = [] } = useInstruments();
+  const { data: categories = [] } = useSpecCategories();
+  const { data: fields = [] } = useSpecFields();
 
-const CompareTable: React.FC<CompareTableProps> = ({ instruments }) => {
-  const { removeFromCompare } = useCompare();
+  const comparedInstruments = instruments.filter(instrument => 
+    compareItems.includes(instrument.id)
+  );
 
-  if (instruments.length === 0) {
+  const renderSpecValue = (value: unknown): React.ReactNode => {
+    if (typeof value === 'boolean') {
+      return value ? 'Yes' : 'No';
+    }
+    if (value === null || value === undefined) {
+      return '-';
+    }
+    return String(value);
+  };
+
+  const getCategoryFields = (categoryId: string) => {
+    return fields
+      .filter(field => field.category_id === categoryId)
+      .sort((a, b) => a.display_order - b.display_order);
+  };
+
+  const hasAnyData = (fieldName: string) => {
+    return comparedInstruments.some(instrument => 
+      instrument.specs?.[fieldName] !== undefined && 
+      instrument.specs?.[fieldName] !== null && 
+      instrument.specs?.[fieldName] !== ""
+    );
+  };
+
+  const sortedCategories = [...categories].sort((a, b) => a.display_order - b.display_order);
+
+  if (comparedInstruments.length === 0) {
     return (
       <div className="text-center py-12">
         <h2 className="text-2xl font-bold mb-4">No instruments to compare</h2>
-        <p className="text-gray-400 mb-6">
-          Add some instruments to your comparison list to see them here
-        </p>
-        <Button asChild>
-          <Link to="/all-instruments">Browse Instruments</Link>
-        </Button>
+        <p className="text-gray-400">Add some instruments to your comparison list to see them here.</p>
       </div>
     );
   }
 
-  // Get all unique spec keys from all instruments
-  const allSpecs = new Set<string>();
-  instruments.forEach(instrument => {
-    Object.keys(instrument.specs).forEach(key => {
-      allSpecs.add(key);
-    });
-  });
-  
-  const specKeys = Array.from(allSpecs);
-
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-collapse">
-        {/* Header */}
         <thead>
-          <tr>
-            <th className="p-4 text-left border-b border-gray-700 bg-androidBox sticky left-0 z-10">Specification</th>
-            {instruments.map((instrument) => (
-              <th key={instrument.id} className="p-4 text-center border-b border-gray-700 bg-androidBox min-w-[200px]">
-                <div className="relative">
-                  <button 
-                    onClick={() => removeFromCompare(instrument.id)}
-                    className="absolute top-0 right-0 text-gray-400 hover:text-white"
-                    title="Remove from comparison"
-                  >
-                    <X size={16} />
-                  </button>
-                  <div className="h-32 flex items-center justify-center mb-2">
-                    <img 
-                      src={instrument.image === '/placeholder.svg' ? '/placeholder.svg' : getInstrumentImagePath(instrument.id)} 
-                      alt={instrument.name}
-                      className="max-h-full max-w-full object-contain"
-                    />
-                  </div>
-                  <div className="text-sm text-gray-400">{instrument.brand}</div>
-                  <div className="text-lg font-medium">{instrument.name}</div>
-                  <div className="text-xl font-bold text-primary mt-1">${instrument.price}</div>
-                  <div className="mt-2">
-                    <Button asChild size="sm">
-                      <Link to={`/product/${instrument.id}`}>View Details</Link>
+          <tr className="border-b border-gray-700">
+            <th className="text-left p-4 font-medium">Specification</th>
+            {comparedInstruments.map(instrument => (
+              <th key={instrument.id} className="text-left p-4 min-w-[200px]">
+                <div className="space-y-2">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h3 className="font-medium">{instrument.name}</h3>
+                      <p className="text-sm text-gray-400">{instrument.brand}</p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => removeFromCompare(instrument.id)}
+                      className="text-red-500 hover:text-red-400"
+                    >
+                      <X size={16} />
                     </Button>
+                  </div>
+                  <div className="text-primary font-bold">
+                    ₹{instrument.price?.toLocaleString()}
                   </div>
                 </div>
               </th>
             ))}
           </tr>
         </thead>
-        
-        {/* Body */}
         <tbody>
-          {/* Basic specs */}
-          <tr>
-            <td className="p-4 text-left border-b border-gray-700 bg-androidBox font-medium sticky left-0 z-10">
-              Rating
-            </td>
-            {instruments.map((instrument) => (
-              <td key={instrument.id} className="p-4 text-center border-b border-gray-700">
-                <div className="flex items-center justify-center">
-                  <span className="text-yellow-400">★</span> {instrument.rating}
-                </div>
+          {/* Basic Info */}
+          <tr className="border-b border-gray-700/50">
+            <td className="p-4 font-medium text-primary">Price</td>
+            {comparedInstruments.map(instrument => (
+              <td key={instrument.id} className="p-4">
+                ₹{instrument.price?.toLocaleString()}
               </td>
             ))}
           </tr>
-          
-          <tr>
-            <td className="p-4 text-left border-b border-gray-700 bg-androidBox font-medium sticky left-0 z-10">
-              Release Year
-            </td>
-            {instruments.map((instrument) => (
-              <td key={instrument.id} className="p-4 text-center border-b border-gray-700">
-                {instrument.releaseYear}
+          <tr className="border-b border-gray-700/50">
+            <td className="p-4 font-medium text-primary">Rating</td>
+            {comparedInstruments.map(instrument => (
+              <td key={instrument.id} className="p-4">
+                {instrument.rating ? `${instrument.rating}/5` : 'N/A'}
               </td>
             ))}
           </tr>
-          
-          {/* Dynamic specs */}
-          {specKeys.map((key) => (
-            <tr key={key}>
-              <td className="p-4 text-left border-b border-gray-700 bg-androidBox font-medium sticky left-0 z-10 capitalize">
-                {key.replace(/([A-Z])/g, ' $1').trim()}
+          <tr className="border-b border-gray-700/50">
+            <td className="p-4 font-medium text-primary">Release Year</td>
+            {comparedInstruments.map(instrument => (
+              <td key={instrument.id} className="p-4">
+                {instrument.release_year || 'N/A'}
               </td>
-              {instruments.map((instrument) => (
-                <td key={instrument.id} className="p-4 text-center border-b border-gray-700">
-                  {instrument.specs[key] !== undefined ? (
-                    typeof instrument.specs[key] === 'boolean' ? 
-                      instrument.specs[key] ? '✓' : '✗' : 
-                      instrument.specs[key]
-                  ) : (
-                    <span className="text-gray-500">—</span>
-                  )}
+            ))}
+          </tr>
+
+          {/* Categorized Specifications */}
+          {sortedCategories.map(category => {
+            const categoryFields = getCategoryFields(category.id);
+            const fieldsWithData = categoryFields.filter(field => hasAnyData(field.name));
+            
+            if (fieldsWithData.length === 0) return null;
+
+            return (
+              <React.Fragment key={category.id}>
+                <tr className="border-b border-gray-700">
+                  <td colSpan={comparedInstruments.length + 1} className="p-4 bg-gray-800/50">
+                    <h3 className="font-semibold text-primary">{category.name}</h3>
+                  </td>
+                </tr>
+                {fieldsWithData.map(field => (
+                  <tr key={field.id} className="border-b border-gray-700/50">
+                    <td className="p-4 font-medium">{field.display_name}</td>
+                    {comparedInstruments.map(instrument => (
+                      <td key={instrument.id} className="p-4">
+                        {renderSpecValue(instrument.specs?.[field.name])}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </React.Fragment>
+            );
+          })}
+
+          {/* Other specifications not in defined categories */}
+          {comparedInstruments.some(instrument => 
+            Object.keys(instrument.specs || {}).some(key => 
+              key !== 'buyLinks' && !fields.some(field => field.name === key)
+            )
+          ) && (
+            <>
+              <tr className="border-b border-gray-700">
+                <td colSpan={comparedInstruments.length + 1} className="p-4 bg-gray-800/50">
+                  <h3 className="font-semibold text-primary">Other Specifications</h3>
                 </td>
+              </tr>
+              {Array.from(new Set(
+                comparedInstruments.flatMap(instrument => 
+                  Object.keys(instrument.specs || {}).filter(key => 
+                    key !== 'buyLinks' && !fields.some(field => field.name === key)
+                  )
+                )
+              )).map(specKey => (
+                <tr key={specKey} className="border-b border-gray-700/50">
+                  <td className="p-4 font-medium capitalize">
+                    {specKey.replace(/([A-Z])/g, ' $1').trim()}
+                  </td>
+                  {comparedInstruments.map(instrument => (
+                    <td key={instrument.id} className="p-4">
+                      {renderSpecValue(instrument.specs?.[specKey])}
+                    </td>
+                  ))}
+                </tr>
               ))}
-            </tr>
-          ))}
+            </>
+          )}
         </tbody>
       </table>
     </div>

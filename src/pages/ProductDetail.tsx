@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import Header from "@/components/Header";
@@ -10,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { DatabaseInstrument } from "@/hooks/useInstruments";
 import BuyLinksDialog from "@/components/BuyLinksDialog";
+import StructuredSpecifications from "@/components/StructuredSpecifications";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -195,33 +195,13 @@ const ProductDetail = () => {
                   )}
                 </Button>
               </div>
-              
-              {/* Quick specs */}
-              <div className="bg-black/30 p-4 rounded-lg">
-                <h3 className="font-medium mb-3">Key Specifications</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  {Object.entries(instrument.specs || {}).slice(0, 6).map(([key, value]) => (
-                    <div key={key} className="flex justify-between">
-                      <span className="text-gray-400 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}:</span>
-                      <span>{renderSpecValue(value)}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
           </div>
           
-          {/* Full Specifications */}
+          {/* Full Specifications with Categories */}
           <div className="border-t border-gray-700 p-6">
             <h2 className="text-2xl font-bold mb-6">Full Specifications</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-              {Object.entries(instrument.specs || {}).map(([key, value]) => (
-                <div key={key} className="flex justify-between py-2 border-b border-gray-700">
-                  <span className="text-gray-400 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                  <span className="font-medium">{renderSpecValue(value)}</span>
-                </div>
-              ))}
-            </div>
+            <StructuredSpecifications specs={instrument.specs || {}} />
           </div>
         </div>
         

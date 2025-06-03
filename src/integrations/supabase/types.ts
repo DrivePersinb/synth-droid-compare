@@ -84,6 +84,62 @@ export type Database = {
         }
         Relationships: []
       }
+      spec_categories: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      spec_fields: {
+        Row: {
+          category_id: string | null
+          created_at: string
+          display_name: string
+          display_order: number
+          id: string
+          name: string
+        }
+        Insert: {
+          category_id?: string | null
+          created_at?: string
+          display_name: string
+          display_order?: number
+          id?: string
+          name: string
+        }
+        Update: {
+          category_id?: string | null
+          created_at?: string
+          display_name?: string
+          display_order?: number
+          id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "spec_fields_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "spec_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

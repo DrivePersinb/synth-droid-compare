@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -28,6 +27,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import AdminRequiredAuth from "@/components/AdminRequiredAuth";
 import InstrumentManagement from "@/components/InstrumentManagement";
+import SpecificationManagement from "@/components/SpecificationManagement";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -220,6 +220,9 @@ const AdminDashboard = () => {
         </header>
 
         <main className="container mx-auto p-4 mt-8 space-y-8">
+          {/* Specification Management Section */}
+          <SpecificationManagement />
+
           {/* Instrument Management Section */}
           <InstrumentManagement />
 
