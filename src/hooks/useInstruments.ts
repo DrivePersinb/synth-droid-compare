@@ -1,22 +1,14 @@
 
 import { useState, useEffect } from 'react';
-import { instrumentsData, InstrumentBasic, getBrands } from '@/data/instrumentsData';
+import { instruments, getBrands, InstrumentBasic } from '@/data/instrumentsData';
 
 export const useInstruments = () => {
   const [data, setData] = useState<InstrumentBasic[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate async loading
-    const loadData = async () => {
-      setIsLoading(true);
-      // Add small delay to simulate network request
-      await new Promise(resolve => setTimeout(resolve, 100));
-      setData(instrumentsData);
-      setIsLoading(false);
-    };
-
-    loadData();
+    setData(instruments);
+    setIsLoading(false);
   }, []);
 
   return { data, isLoading };
@@ -27,14 +19,8 @@ export const useBrands = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const loadBrands = async () => {
-      setIsLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 50));
-      setData(getBrands());
-      setIsLoading(false);
-    };
-
-    loadBrands();
+    setData(getBrands());
+    setIsLoading(false);
   }, []);
 
   return { data, isLoading };

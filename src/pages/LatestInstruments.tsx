@@ -4,11 +4,9 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import FilterSortBar from "@/components/FilterSortBar";
-import { instruments } from "@/data/instruments";
-import { FilterOptions, SortOption } from "@/data/instrumentTypes";
+import { instruments, FilterOptions, SortOption } from "@/data/instrumentsData";
 
 const LatestInstruments = () => {
-  // Get instruments sorted by release year (newest first)
   const latestInstruments = [...instruments].sort((a, b) => b.releaseYear - a.releaseYear);
   
   const [filteredInstruments, setFilteredInstruments] = useState(latestInstruments);
@@ -41,12 +39,6 @@ const LatestInstruments = () => {
       );
     }
     
-    if (newFilters.hasSequencer !== undefined) {
-      filtered = filtered.filter(
-        instr => instr.specs.sequencer === newFilters.hasSequencer
-      );
-    }
-    
     setFilteredInstruments(filtered);
     setCurrentFilters(newFilters);
   };
@@ -69,8 +61,6 @@ const LatestInstruments = () => {
         break;
       case "newest":
         sorted.sort((a, b) => b.releaseYear - a.releaseYear);
-        break;
-      default:
         break;
     }
     

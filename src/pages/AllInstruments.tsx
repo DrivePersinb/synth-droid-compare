@@ -4,11 +4,10 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import FilterSortBar from "@/components/FilterSortBar";
-import { instruments } from "@/data/instruments";
-import { Instrument, FilterOptions, SortOption } from "@/data/instrumentTypes";
+import { instruments, InstrumentBasic, FilterOptions, SortOption } from "@/data/instrumentsData";
 
 const AllInstruments = () => {
-  const [filteredInstruments, setFilteredInstruments] = useState<Instrument[]>(instruments);
+  const [filteredInstruments, setFilteredInstruments] = useState<InstrumentBasic[]>(instruments);
   const [currentSort, setCurrentSort] = useState<SortOption>("popularity");
   const [currentFilters, setCurrentFilters] = useState<FilterOptions>({
     priceRange: [0, 5000],
@@ -41,13 +40,6 @@ const AllInstruments = () => {
       );
     }
     
-    // Apply sequencer filter
-    if (currentFilters.hasSequencer !== undefined) {
-      filtered = filtered.filter(
-        instr => instr.specs.sequencer === currentFilters.hasSequencer
-      );
-    }
-    
     // Apply sorting
     switch (currentSort) {
       case "price-low-high":
@@ -64,8 +56,6 @@ const AllInstruments = () => {
         break;
       case "newest":
         filtered.sort((a, b) => b.releaseYear - a.releaseYear);
-        break;
-      default:
         break;
     }
     

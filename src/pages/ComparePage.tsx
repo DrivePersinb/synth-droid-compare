@@ -6,18 +6,17 @@ import Footer from "@/components/Footer";
 import CompareTable from "@/components/CompareTable";
 import { Button } from "@/components/ui/button";
 import { useCompare } from "@/contexts/CompareContext";
-import { getInstrumentById } from "@/data/instruments";
-import { Instrument } from "@/data/instrumentTypes";
+import { getInstrumentById, InstrumentBasic } from "@/data/instrumentsData";
 import { ArrowLeft, Trash } from "lucide-react";
 
 const ComparePage = () => {
   const { compareItems, clearCompare } = useCompare();
-  const [instruments, setInstruments] = useState<Instrument[]>([]);
+  const [instruments, setInstruments] = useState<InstrumentBasic[]>([]);
   
   useEffect(() => {
     const loadedInstruments = compareItems
       .map(item => getInstrumentById(item.instrumentId))
-      .filter(item => item !== undefined) as Instrument[];
+      .filter(item => item !== undefined) as InstrumentBasic[];
       
     setInstruments(loadedInstruments);
   }, [compareItems]);
