@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { ProductDetails } from '@/data/products/roland-jupiter-x';
 
@@ -7,6 +6,7 @@ const productDetailsMap: { [key: string]: () => Promise<ProductDetails> } = {
   'yamaha-montage-8': () => import('@/data/products/yamaha-montage-8').then(m => m.yamahaMontage8),
   'korg-minilogue-xd': () => import('@/data/products/korg-minilogue-xd').then(m => m.korgMinilogueXd),
   'korg-kronos-2': () => import('@/data/products/korg-kronos-2').then(m => m.korgKronos2),
+  'roland-fantom-8': () => import('@/data/products/roland-fantom-8').then(m => m.rolandFantom8),
 };
 
 export const useProductDetails = (productId: string) => {

@@ -1,25 +1,5 @@
 
-export interface BuyLink {
-  retailer: string;
-  url: string;
-  price?: number;
-}
-
-export interface FAQ {
-  question: string;
-  answer: string;
-}
-
-export interface SpecificationCategory {
-  name: string;
-  specs: Record<string, any>;
-}
-
-export interface ProductDetails {
-  specifications: SpecificationCategory[];
-  buyLinks: BuyLink[];
-  faq: FAQ[];
-}
+import { ProductDetails } from './roland-jupiter-x';
 
 export const korgKronos2: ProductDetails = {
   specifications: [
@@ -36,7 +16,7 @@ export const korgKronos2: ProductDetails = {
     {
       name: "Keyboard & Controls",
       specs: {
-        "Keys": "88 weighted keys",
+        "Keys": 88,
         "Key Type": "Natural Weighted Hammer Action",
         "Aftertouch": "Channel aftertouch",
         "Velocity": "4 curves + fixed",
@@ -95,23 +75,6 @@ export const korgKronos2: ProductDetails = {
       }
     }
   ],
-  buyLinks: [
-    {
-      retailer: "Sweetwater",
-      url: "https://www.sweetwater.com/store/detail/Kronos288",
-      price: 329999
-    },
-    {
-      retailer: "Guitar Center",
-      url: "https://www.guitarcenter.com/Korg/Kronos-88-Key-Music-Workstation.gc",
-      price: 329999
-    },
-    {
-      retailer: "Sam Ash",
-      url: "https://www.samash.com/korg-kronos-88-key-workstation",
-      price: 329999
-    }
-  ],
   faq: [
     {
       question: "What makes the Kronos 2 different from the original Kronos?",
@@ -137,5 +100,10 @@ export const korgKronos2: ProductDetails = {
       question: "Can I use it as an audio interface?",
       answer: "Yes, the Kronos 2 can function as a USB audio interface with support for multiple sample rates (44.1/48/88.2/96 kHz) and multiple audio outputs."
     }
+  ],
+  buyLinks: [
+    { store: "Sweetwater", url: "https://www.sweetwater.com/store/detail/Kronos288" },
+    { store: "Guitar Center", url: "https://www.guitarcenter.com/Korg/Kronos-88-Key-Music-Workstation.gc" },
+    { store: "Sam Ash", url: "https://www.samash.com/korg-kronos-88-key-workstation" }
   ]
 };

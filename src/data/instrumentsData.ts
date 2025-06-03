@@ -1,254 +1,223 @@
-export interface InstrumentBasic {
+export type Brand = "Roland" | "Yamaha" | "Korg" | "Moog" | "Sequential" | "Novation" | "Arturia" | "Behringer" | "Nord" | "Access" | "Waldorf" | "Elektron" | "Casio";
+
+export interface Instrument {
   id: string;
   name: string;
-  brand: string;
-  price: number;
+  brand: Brand;
   image: string;
-  description: string;
+  price: number;
   rating: number;
   releaseYear: number;
+  description: string;
+  specs: {
+    keys: number;
+    keyType: string;
+    soundEngine: string;
+    polyphony: number;
+    presets: number;
+    sequencer: boolean;
+    effects: number;
+    outputs: number;
+    weight: string;
+  };
+  compareCount: number;
   popularityScore: number;
 }
 
-export const instrumentsData: InstrumentBasic[] = [
+export interface FilterOptions {
+  priceRange: [number, number];
+  brands: Brand[];
+  releaseYears: number[];
+  keysCount?: number[];
+  hasSequencer?: boolean;
+  polyphony?: number[];
+}
+
+export type SortOption = 
+  | "price-low-high"
+  | "price-high-low" 
+  | "popularity"
+  | "rating"
+  | "newest";
+
+export interface CompareItem {
+  instrumentId: string;
+  dateAdded: Date;
+}
+
+export interface InstrumentBasic {
+  id: string;
+  name: string;
+  brand: Brand;
+  image: string;
+  price: number;
+  rating: number;
+  releaseYear: number;
+  description: string;
+}
+
+export const instruments: InstrumentBasic[] = [
   {
     id: "roland-jupiter-x",
-    name: "Jupiter-X",
+    name: "Roland Jupiter-X",
     brand: "Roland",
-    price: 149999,
     image: "/images/roland-jupiter-x.jpg",
-    description: "Advanced synthesizer with multiple sound engines and cutting-edge technology.",
+    price: 199999,
     rating: 4.8,
     releaseYear: 2019,
-    popularityScore: 95
+    description: "Legendary Jupiter sound with modern ZEN-Core technology and deep synthesis capabilities."
   },
   {
     id: "yamaha-montage-8",
-    name: "MONTAGE 8",
+    name: "Yamaha MONTAGE 8",
     brand: "Yamaha",
-    price: 399999,
     image: "/images/yamaha-montage-8.jpg",
-    description: "Professional 88-key flagship synthesizer with Motion Control.",
+    price: 329999,
     rating: 4.9,
     releaseYear: 2016,
-    popularityScore: 98
+    description: "Professional synthesizer workstation with AWM2 and FM-X sound engines."
   },
   {
     id: "korg-minilogue-xd",
-    name: "Minilogue XD",
+    name: "Korg minilogue xd",
     brand: "Korg",
-    price: 59999,
     image: "/images/korg-minilogue-xd.jpg",
-    description: "4-voice analog synthesizer with digital multi-engine.",
+    price: 54999,
     rating: 4.7,
     releaseYear: 2019,
-    popularityScore: 88
+    description: "Analog synthesizer with digital multi-engine for hybrid sound creation."
   },
   {
     id: "korg-kronos-2",
-    name: "Kronos 2",
+    name: "Korg Kronos 2",
     brand: "Korg",
-    price: 329999,
     image: "/images/korg-kronos-2.jpg",
-    description: "Professional workstation with advanced sampling and synthesis capabilities.",
+    price: 329999,
     rating: 4.8,
     releaseYear: 2017,
-    popularityScore: 93
+    description: "Ultimate music workstation with 9 sound engines and comprehensive sampling."
   },
   {
-    id: "moog-subsequent-37",
-    name: "Subsequent 37",
-    brand: "Moog",
-    price: 159999,
-    image: "/images/moog-subsequent-37.jpg",
-    description: "Analog synthesizer with classic Moog sound and modern features.",
-    rating: 4.8,
-    releaseYear: 2017,
-    popularityScore: 92
-  },
-  {
-    id: "novation-summit",
-    name: "Summit",
-    brand: "Novation",
-    price: 249999,
-    image: "/images/novation-summit.jpg",
-    description: "16-voice bi-timbral analog synthesizer with digital effects.",
-    rating: 4.6,
-    releaseYear: 2018,
-    popularityScore: 85
-  },
-  {
-    id: "roland-sh-101",
-    name: "SH-101",
+    id: "roland-fantom-8",
+    name: "Roland Fantom 8",
     brand: "Roland",
-    price: 89999,
-    image: "/images/roland-sh-101.jpg",
-    description: "Classic monophonic analog synthesizer reimagined.",
-    rating: 4.5,
+    image: "/images/roland-fantom-8.jpg",
+    price: 279999,
+    rating: 4.7,
     releaseYear: 2019,
-    popularityScore: 82
+    description: "Next-generation music production workstation with ZEN-Core synthesis and advanced sampling."
   },
   {
     id: "sequential-prophet-5",
-    name: "Prophet-5",
+    name: "Sequential Prophet-5",
     brand: "Sequential",
-    price: 349999,
     image: "/images/sequential-prophet-5.jpg",
-    description: "Legendary 5-voice analog synthesizer returns.",
+    price: 429900,
     rating: 4.9,
     releaseYear: 2020,
-    popularityScore: 96
+    description: "The return of a legend - the most iconic analog polysynth of all time."
   },
   {
-    id: "arturia-matrixbrute",
-    name: "MatrixBrute",
-    brand: "Arturia",
-    price: 199999,
-    image: "/images/arturia-matrixbrute.jpg",
-    description: "Massive analog synthesizer with modular matrix.",
-    rating: 4.7,
-    releaseYear: 2016,
-    popularityScore: 89
-  },
-  {
-    id: "roland-jd-xi",
-    name: "JD-Xi",
-    brand: "Roland",
-    price: 49999,
-    image: "/images/roland-jd-xi.jpg",
-    description: "Analog/digital crossover synthesizer.",
-    rating: 4.3,
-    releaseYear: 2015,
-    popularityScore: 78
-  },
-  {
-    id: "korg-prologue-16",
-    name: "Prologue 16",
-    brand: "Korg",
-    price: 179999,
-    image: "/images/korg-prologue-16.jpg",
-    description: "16-voice analog synthesizer with digital oscillator.",
-    rating: 4.6,
-    releaseYear: 2017,
-    popularityScore: 86
-  },
-  {
-    id: "yamaha-reface-cp",
-    name: "Reface CP",
-    brand: "Yamaha",
-    price: 34999,
-    image: "/images/yamaha-reface-cp.jpg",
-    description: "Vintage electric piano collection in portable format.",
-    rating: 4.4,
-    releaseYear: 2015,
-    popularityScore: 75
-  },
-  {
-    id: "moog-model-d",
-    name: "Model D",
+    id: "moog-one-16",
+    name: "Moog One 16-Voice",
     brand: "Moog",
-    price: 369999,
-    image: "/images/moog-model-d.jpg",
-    description: "Legendary monophonic analog synthesizer reissue.",
-    rating: 4.8,
-    releaseYear: 2016,
-    popularityScore: 94
+    image: "/images/moog-one-16.jpg",
+    price: 799900,
+    rating: 4.9,
+    releaseYear: 2018,
+    description: "The ultimate Moog synthesizer - a tri-timbral, polyphonic, analog dream machine."
   },
   {
-    id: "behringer-deepmind-12",
-    name: "DeepMind 12",
-    brand: "Behringer",
-    price: 69999,
-    image: "/images/behringer-deepmind-12.jpg",
-    description: "12-voice analog synthesizer with digital effects.",
-    rating: 4.2,
-    releaseYear: 2017,
-    popularityScore: 72
-  },
-  {
-    id: "dave-smith-ob-6",
-    name: "OB-6",
-    brand: "Sequential",
-    price: 279999,
-    image: "/images/dave-smith-ob-6.jpg",
-    description: "6-voice analog synthesizer collaboration with Tom Oberheim.",
+    id: "novation-summit",
+    name: "Novation Summit",
+    brand: "Novation",
+    image: "/images/novation-summit.jpg",
+    price: 319900,
     rating: 4.7,
-    releaseYear: 2016,
-    popularityScore: 90
+    releaseYear: 2019,
+    description: "A powerful hybrid synthesizer combining FPGA-based digital oscillators with analog filters and VCAs."
   },
   {
-    id: "korg-ms-20-mini",
-    name: "MS-20 Mini",
-    brand: "Korg",
-    price: 59999,
-    image: "/images/korg-ms-20-mini.jpg",
-    description: "Compact version of the legendary MS-20 synthesizer.",
-    rating: 4.5,
-    releaseYear: 2013,
-    popularityScore: 83
+    id: "arturia-polybrute",
+    name: "Arturia PolyBrute",
+    brand: "Arturia",
+    image: "/images/arturia-polybrute.jpg",
+    price: 64900,
+    rating: 4.8,
+    releaseYear: 2020,
+    description: "A groundbreaking polyphonic analog synthesizer with a unique morphing architecture."
   },
   {
-    id: "roland-system-8",
-    name: "System-8",
-    brand: "Roland",
-    price: 149999,
-    image: "/images/roland-system-8.jpg",
-    description: "8-voice digital synthesizer with ACB technology.",
-    rating: 4.4,
-    releaseYear: 2016,
-    popularityScore: 79
-  },
-  {
-    id: "nord-lead-a1",
-    name: "Lead A1",
-    brand: "Nord",
-    price: 89999,
-    image: "/images/nord-lead-a1.jpg",
-    description: "4-part multitimbral analog modeling synthesizer.",
+    id: "behringer-pro-800",
+    name: "Behringer Pro-800",
+    brand: "Behringer",
+    image: "/images/behringer-pro-800.png",
+    price: 39900,
     rating: 4.6,
-    releaseYear: 2014,
-    popularityScore: 84
+    releaseYear: 2023,
+    description: "An authentic recreation of a classic 1980s analog polysynth at an accessible price."
+  },
+  {
+    id: "nord-wave-2",
+    name: "Nord Wave 2",
+    brand: "Nord",
+    image: "/images/nord-wave-2.jpg",
+    price: 299900,
+    rating: 4.7,
+    releaseYear: 2020,
+    description: "A versatile performance synthesizer combining virtual analog, samples, FM, and wavetable synthesis."
   },
   {
     id: "access-virus-ti2",
-    name: "Virus TI2",
+    name: "Access Virus TI2",
     brand: "Access",
-    price: 199999,
     image: "/images/access-virus-ti2.jpg",
-    description: "Digital synthesizer with Total Integration technology.",
-    rating: 4.7,
+    price: 379900,
+    rating: 4.8,
     releaseYear: 2009,
-    popularityScore: 87
+    description: "A powerful virtual analog synthesizer with extensive modulation capabilities and a unique 'Total Integration' system."
   },
   {
-    id: "waldorf-blofeld",
-    name: "Blofeld",
+    id: "waldorf-quantum",
+    name: "Waldorf Quantum",
     brand: "Waldorf",
-    price: 49999,
-    image: "/images/waldorf-blofeld.jpg",
-    description: "Compact wavetable synthesizer with classic Waldorf sound.",
-    rating: 4.3,
-    releaseYear: 2007,
-    popularityScore: 76
+    image: "/images/waldorf-quantum.jpg",
+    price: 449900,
+    rating: 4.9,
+    releaseYear: 2018,
+    description: "A hybrid synthesizer combining wavetable, granular, and traditional synthesis methods."
   },
   {
-    id: "elektron-analog-four",
-    name: "Analog Four",
+    id: "elektron-syntakt",
+    name: "Elektron Syntakt",
     brand: "Elektron",
-    price: 134999,
-    image: "/images/elektron-analog-four.jpg",
-    description: "4-voice analog synthesizer with built-in sequencer.",
+    image: "/images/elektron-syntakt.png",
+    price: 99900,
+    rating: 4.7,
+    releaseYear: 2022,
+    description: "A powerful drum machine and synthesizer with a wide range of digital and analog sound engines."
+  },
+    {
+    id: "casio-cz-101",
+    name: "Casio CZ-101",
+    brand: "Casio",
+    image: "/images/casio-cz-101.jpg",
+    price: 40000,
     rating: 4.5,
-    releaseYear: 2013,
-    popularityScore: 81
-  }
+    releaseYear: 1984,
+    description: "A compact phase distortion synthesizer that defined the sound of the mid-1980s."
+  },
 ];
 
-export const getBrands = (): string[] => {
-  const brands = [...new Set(instrumentsData.map(instrument => instrument.brand))];
-  return brands.sort();
+export const instrumentFilters = {
+  brands: Array.from(new Set(instruments.map(i => i.brand))).sort(),
+  releaseYears: Array.from(new Set(instruments.map(i => i.releaseYear))).sort((a, b) => a - b),
+  priceRange: [
+    Math.min(...instruments.map(i => i.price)),
+    Math.max(...instruments.map(i => i.price))
+  ]
 };
 
 export const getInstrumentById = (id: string): InstrumentBasic | undefined => {
-  return instrumentsData.find(instrument => instrument.id === id);
+  return instruments.find(instrument => instrument.id === id);
 };
