@@ -6,6 +6,7 @@ const productDetailsMap: { [key: string]: () => Promise<ProductDetails> } = {
   'roland-jupiter-x': () => import('@/data/products/roland-jupiter-x').then(m => m.rolandJupiterX),
   'yamaha-montage-8': () => import('@/data/products/yamaha-montage-8').then(m => m.yamahaMontage8),
   'korg-minilogue-xd': () => import('@/data/products/korg-minilogue-xd').then(m => m.korgMinilogueXd),
+  'korg-kronos-2': () => import('@/data/products/korg-kronos-2').then(m => m.korgKronos2),
 };
 
 export const useProductDetails = (productId: string) => {

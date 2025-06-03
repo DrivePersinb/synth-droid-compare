@@ -1,4 +1,3 @@
-
 export interface InstrumentBasic {
   id: string;
   name: string;
@@ -44,6 +43,17 @@ export const instrumentsData: InstrumentBasic[] = [
     rating: 4.7,
     releaseYear: 2019,
     popularityScore: 88
+  },
+  {
+    id: "korg-kronos-2",
+    name: "Kronos 2",
+    brand: "Korg",
+    price: 329999,
+    image: "/images/korg-kronos-2.jpg",
+    description: "Professional workstation with advanced sampling and synthesis capabilities.",
+    rating: 4.8,
+    releaseYear: 2017,
+    popularityScore: 93
   },
   {
     id: "moog-subsequent-37",
