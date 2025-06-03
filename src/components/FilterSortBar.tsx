@@ -1,9 +1,8 @@
 
 import { useState } from "react";
-import { Filter, ChevronDown } from "lucide-react";
+import { Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { FilterOptions, SortOption, Brand } from "@/data/instrumentTypes";
-import { brands } from "@/data/instruments";
+import { FilterOptions, SortOption, Brand } from "@/data/instrumentsData";
 import { 
   Popover, 
   PopoverContent, 
@@ -38,6 +37,9 @@ const FilterSortBar: React.FC<FilterSortBarProps> = ({
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [filters, setFilters] = useState<FilterOptions>(currentFilters);
   
+  const brands: Brand[] = ["Roland", "Yamaha", "Korg"];
+  const years = [2019, 2017, 2016];
+  
   const handlePriceChange = (value: number[]) => {
     const newFilters = {
       ...filters,
@@ -70,15 +72,6 @@ const FilterSortBar: React.FC<FilterSortBarProps> = ({
     setFilters(newFilters);
   };
   
-  const handleSequencerToggle = () => {
-    const newFilters = {
-      ...filters,
-      hasSequencer: filters.hasSequencer === undefined ? true : 
-                   filters.hasSequencer === true ? false : undefined
-    };
-    setFilters(newFilters);
-  };
-  
   const handleApplyFilters = () => {
     onFilterChange(filters);
     setIsFilterOpen(false);
@@ -94,15 +87,13 @@ const FilterSortBar: React.FC<FilterSortBarProps> = ({
     onFilterChange(defaultFilters);
     setIsFilterOpen(false);
   };
-  
-  const years = [2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015];
 
   return (
-    <div className="bg-androidBox p-4 rounded-lg mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-      <div className="w-full md:w-auto">
+    <div className="bg-androidBox p-2 md:p-4 rounded-lg mb-4 md:mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 md:gap-4">
+      <div className="w-full sm:w-auto">
         <Popover open={isFilterOpen} onOpenChange={setIsFilterOpen}>
           <PopoverTrigger asChild>
-            <Button variant="outline" className="w-full md:w-auto">
+            <Button variant="outline" className="w-full sm:w-auto text-sm">
               <Filter className="h-4 w-4 mr-2" /> Filter
               <span className="ml-2 bg-primary/20 text-xs px-1.5 py-0.5 rounded-full">
                 {Object.values(filters).flat().filter(x => x !== undefined && x !== false).length}
@@ -111,10 +102,10 @@ const FilterSortBar: React.FC<FilterSortBarProps> = ({
           </PopoverTrigger>
           <PopoverContent className="w-full max-w-screen-sm md:max-w-md p-4">
             <div className="space-y-4">
-              <h3 className="font-medium text-lg">Filters</h3>
+              <h3 className="font-medium text-base md:text-lg">Filters</h3>
               
               <div>
-                <h4 className="font-medium mb-2">Price Range</h4>
+                <h4 className="font-medium mb-2 text-sm">Price Range</h4>
                 <div className="px-2">
                   <Slider
                     defaultValue={[filters.priceRange[0], filters.priceRange[1]]}
@@ -123,7 +114,7 @@ const FilterSortBar: React.FC<FilterSortBarProps> = ({
                     onValueChange={handlePriceChange}
                     className="mb-2"
                   />
-                  <div className="flex justify-between text-sm text-muted-foreground">
+                  <div className="flex justify-between text-xs text-muted-foreground">
                     <span>${filters.priceRange[0]}</span>
                     <span>${filters.priceRange[1]}</span>
                   </div>
@@ -131,7 +122,7 @@ const FilterSortBar: React.FC<FilterSortBarProps> = ({
               </div>
               
               <div>
-                <h4 className="font-medium mb-2">Brands</h4>
+                <h4 className="font-medium mb-2 text-sm">Brands</h4>
                 <div className="grid grid-cols-2 gap-2">
                   {brands.map((brand) => (
                     <div key={brand} className="flex items-center">
@@ -142,14 +133,14 @@ const FilterSortBar: React.FC<FilterSortBarProps> = ({
                         onChange={() => handleBrandToggle(brand)}
                         className="mr-2"
                       />
-                      <label htmlFor={`brand-${brand}`}>{brand}</label>
+                      <label htmlFor={`brand-${brand}`} className="text-sm">{brand}</label>
                     </div>
                   ))}
                 </div>
               </div>
               
               <div>
-                <h4 className="font-medium mb-2">Release Year</h4>
+                <h4 className="font-medium mb-2 text-sm">Release Year</h4>
                 <div className="grid grid-cols-3 gap-2">
                   {years.map((year) => (
                     <div key={year} className="flex items-center">
@@ -160,31 +151,17 @@ const FilterSortBar: React.FC<FilterSortBarProps> = ({
                         onChange={() => handleYearToggle(year)}
                         className="mr-2"
                       />
-                      <label htmlFor={`year-${year}`}>{year}</label>
+                      <label htmlFor={`year-${year}`} className="text-sm">{year}</label>
                     </div>
                   ))}
                 </div>
               </div>
               
-              <div>
-                <h4 className="font-medium mb-2">Features</h4>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="hasSequencer"
-                    checked={filters.hasSequencer === true}
-                    onChange={handleSequencerToggle}
-                    className="mr-2"
-                  />
-                  <label htmlFor="hasSequencer">Has Sequencer</label>
-                </div>
-              </div>
-              
               <div className="flex justify-between pt-4 border-t border-gray-700">
-                <Button variant="outline" onClick={clearFilters}>
+                <Button variant="outline" onClick={clearFilters} className="text-sm">
                   Clear Filters
                 </Button>
-                <Button onClick={handleApplyFilters}>
+                <Button onClick={handleApplyFilters} className="text-sm">
                   Apply Filters
                 </Button>
               </div>
@@ -193,12 +170,12 @@ const FilterSortBar: React.FC<FilterSortBarProps> = ({
         </Popover>
       </div>
       
-      <div className="w-full md:w-auto">
+      <div className="w-full sm:w-auto">
         <Select
           value={currentSort}
           onValueChange={(value) => onSortChange(value as SortOption)}
         >
-          <SelectTrigger className="w-full md:w-[180px]">
+          <SelectTrigger className="w-full sm:w-[180px] text-sm">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent>

@@ -1,7 +1,11 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "sonner";
-import { CompareItem } from "@/data/instrumentTypes";
+
+export interface CompareItem {
+  instrumentId: string;
+  dateAdded: Date;
+}
 
 interface CompareContextType {
   compareItems: CompareItem[];

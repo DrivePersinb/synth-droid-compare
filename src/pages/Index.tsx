@@ -6,19 +6,18 @@ import Footer from "@/components/Footer";
 import BrandCard from "@/components/BrandCard";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
-import { useInstruments, useBrands } from "@/hooks/useInstruments";
+import { useInstruments } from "@/hooks/useInstruments";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const HomePage = () => {
   const { data: instruments = [], isLoading: instrumentsLoading } = useInstruments();
-  const { data: brands = [], isLoading: brandsLoading } = useBrands();
 
-  // Get the three most popular instruments
+  const brands = ["Roland", "Yamaha", "Korg"];
+
   const popularInstruments = [...instruments]
     .sort((a, b) => b.popularityScore - a.popularityScore)
     .slice(0, 3);
 
-  // Get the newest instruments
   const newestInstruments = [...instruments]
     .sort((a, b) => {
       const yearA = a.releaseYear || 0;
@@ -32,22 +31,22 @@ const HomePage = () => {
       <Header />
       
       {/* Hero section */}
-      <section className="py-12 md:py-20 bg-black">
+      <section className="py-8 md:py-12 lg:py-20 bg-black">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center">
-            <div className="md:w-1/2 mb-8 md:mb-0">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fade-in">
+            <div className="md:w-1/2 mb-6 md:mb-0">
+              <h1 className="text-2xl md:text-4xl lg:text-6xl font-bold mb-4 md:mb-6 animate-fade-in">
                 Compare Your Perfect <span className="text-primary">Synthesizer</span>
               </h1>
-              <p className="text-lg text-gray-300 mb-8 animate-slide-up">
+              <p className="text-sm md:text-lg text-gray-300 mb-6 md:mb-8 animate-slide-up">
                 Find the ideal synthesizer for your music production needs by comparing 
                 top models from various brands side by side.
               </p>
-              <div className="flex flex-wrap gap-4">
-                <Button asChild size="lg">
+              <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
+                <Button asChild size="lg" className="w-full sm:w-auto">
                   <Link to="/all-instruments">Browse All Instruments</Link>
                 </Button>
-                <Button asChild variant="outline" size="lg">
+                <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
                   <Link to="/compare">Compare Now</Link>
                 </Button>
               </div>
@@ -67,42 +66,34 @@ const HomePage = () => {
       </section>
       
       {/* Brands section */}
-      <section className="py-12 bg-black/50">
+      <section className="py-8 md:py-12 bg-black/50">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8 text-center">Shop by Brand</h2>
-          {brandsLoading ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {[...Array(4)].map((_, i) => (
-                <Skeleton key={i} className="h-24 w-full rounded-xl" />
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {brands.map((brand) => (
-                <BrandCard key={brand} brand={brand} />
-              ))}
-            </div>
-          )}
+          <h2 className="text-xl md:text-3xl font-bold mb-6 md:mb-8 text-center">Shop by Brand</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+            {brands.map((brand) => (
+              <BrandCard key={brand} brand={brand} />
+            ))}
+          </div>
         </div>
       </section>
       
       {/* Popular instruments section */}
-      <section className="py-12 bg-gradient-to-b from-black/70 to-black/40">
+      <section className="py-8 md:py-12 bg-gradient-to-b from-black/70 to-black/40">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold">Popular Instruments</h2>
-            <Link to="/all-instruments" className="text-primary hover:underline">
+          <div className="flex justify-between items-center mb-6 md:mb-8">
+            <h2 className="text-xl md:text-3xl font-bold">Popular Instruments</h2>
+            <Link to="/all-instruments" className="text-primary hover:underline text-sm md:text-base">
               View all
             </Link>
           </div>
           {instrumentsLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
               {[...Array(3)].map((_, i) => (
-                <Skeleton key={i} className="h-64 w-full rounded-xl" />
+                <Skeleton key={i} className="h-48 md:h-64 w-full rounded-xl" />
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
               {popularInstruments.map((instrument) => (
                 <ProductCard key={instrument.id} instrument={instrument} />
               ))}
@@ -112,22 +103,22 @@ const HomePage = () => {
       </section>
       
       {/* Latest instruments section */}
-      <section className="py-12 bg-black/30">
+      <section className="py-8 md:py-12 bg-black/30">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold">Latest Models</h2>
-            <Link to="/latest" className="text-primary hover:underline">
+          <div className="flex justify-between items-center mb-6 md:mb-8">
+            <h2 className="text-xl md:text-3xl font-bold">Latest Models</h2>
+            <Link to="/latest" className="text-primary hover:underline text-sm md:text-base">
               View all
             </Link>
           </div>
           {instrumentsLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
               {[...Array(3)].map((_, i) => (
-                <Skeleton key={i} className="h-64 w-full rounded-xl" />
+                <Skeleton key={i} className="h-48 md:h-64 w-full rounded-xl" />
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
               {newestInstruments.map((instrument) => (
                 <ProductCard key={instrument.id} instrument={instrument} />
               ))}
@@ -137,10 +128,10 @@ const HomePage = () => {
       </section>
       
       {/* CTA section */}
-      <section className="py-16 bg-androidBox">
+      <section className="py-12 md:py-16 bg-androidBox">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to compare?</h2>
-          <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
+          <h2 className="text-xl md:text-3xl font-bold mb-4">Ready to compare?</h2>
+          <p className="text-sm md:text-lg text-gray-300 mb-6 md:mb-8 max-w-2xl mx-auto">
             Add instruments to your comparison list and find the perfect match for your music production needs.
           </p>
           <Button asChild size="lg">
