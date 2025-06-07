@@ -79,13 +79,36 @@ const FilterSortBar: React.FC<FilterSortBarProps> = ({
   
   const clearFilters = () => {
     const defaultFilters: FilterOptions = {
-      priceRange: [0, 5000],
+      priceRange: [0, 400000],
       brands: [],
       releaseYears: []
     };
     setFilters(defaultFilters);
     onFilterChange(defaultFilters);
     setIsFilterOpen(false);
+  };
+
+  // Calculate active filter count properly
+  const getActiveFilterCount = () => {
+    let count = 0;
+    
+    // Only count price range if it's not the default range
+    const isDefaultPriceRange = filters.priceRange[0] === 0 && filters.priceRange[1] === 400000;
+    if (!isDefaultPriceRange) {
+      count += 1;
+    }
+    
+    // Count selected brands
+    if (filters.brands.length > 0) {
+      count += filters.brands.length;
+    }
+    
+    // Count selected years
+    if (filters.releaseYears.length > 0) {
+      count += filters.releaseYears.length;
+    }
+    
+    return count;
   };
 
   return (
@@ -95,9 +118,11 @@ const FilterSortBar: React.FC<FilterSortBarProps> = ({
           <PopoverTrigger asChild>
             <Button variant="outline" className="w-full sm:w-auto text-sm">
               <Filter className="h-4 w-4 mr-2" /> Filter
-              <span className="ml-2 bg-primary/20 text-xs px-1.5 py-0.5 rounded-full">
-                {Object.values(filters).flat().filter(x => x !== undefined && x !== false).length}
-              </span>
+              {getActiveFilterCount() > 0 && (
+                <span className="ml-2 bg-primary/20 text-xs px-1.5 py-0.5 rounded-full">
+                  {getActiveFilterCount()}
+                </span>
+              )}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-full max-w-screen-sm md:max-w-md p-4">
@@ -109,14 +134,14 @@ const FilterSortBar: React.FC<FilterSortBarProps> = ({
                 <div className="px-2">
                   <Slider
                     defaultValue={[filters.priceRange[0], filters.priceRange[1]]}
-                    max={5000}
-                    step={100}
+                    max={400000}
+                    step={1000}
                     onValueChange={handlePriceChange}
                     className="mb-2"
                   />
                   <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>${filters.priceRange[0]}</span>
-                    <span>${filters.priceRange[1]}</span>
+                    <span>₹{filters.priceRange[0].toLocaleString()}</span>
+                    <span>₹{filters.priceRange[1].toLocaleString()}</span>
                   </div>
                 </div>
               </div>
