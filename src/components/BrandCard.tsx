@@ -22,12 +22,12 @@ const BrandCard: React.FC<BrandCardProps> = ({ brand }) => {
     <Link 
       to={`/brands/${brand.toLowerCase()}`} 
       className={`
-        brand-card border 
+        brand-card border group
         bg-gradient-to-br ${getBrandColors(brand)}
       `}
     >
-      <div className="text-3xl font-bold mb-2">{brand}</div>
-      <p className="text-sm text-gray-300">View all {brand} instruments</p>
+      <div className="text-2xl sm:text-3xl font-bold mb-2">{brand}</div>
+      <p className="text-xs sm:text-sm text-gray-300">View all {brand} instruments</p>
     </Link>
   );
 };

@@ -26,9 +26,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ instrument }) => {
   };
   
   return (
-    <div className="bg-androidBox rounded-lg overflow-hidden hover:shadow-lg border border-gray-800 transition-all duration-300 flex flex-col">
+    <div className="product-card group border border-border transition-all duration-300 flex flex-col">
       <Link to={`/product/${instrument.id}`} className="block relative">
-        <div className="aspect-[4/3] overflow-hidden bg-black">
+        <div className="aspect-[4/3] overflow-hidden bg-gradient-to-br from-gray-900 to-black">
           <img 
             src={instrument.image} 
             alt={instrument.name} 
@@ -37,7 +37,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ instrument }) => {
         </div>
       </Link>
       
-      <div className="p-4 flex-1 flex flex-col">
+      <div className="p-3 sm:p-4 flex-1 flex flex-col">
         <div className="flex justify-between items-start mb-2">
           <Link 
             to={`/brands/${instrument.brand?.toLowerCase()}`}
@@ -47,25 +47,25 @@ const ProductCard: React.FC<ProductCardProps> = ({ instrument }) => {
           </Link>
           
           <div className="flex items-center text-amber-400">
-            <Star className="fill-amber-400 stroke-amber-400 h-4 w-4 mr-1" />
+            <Star className="fill-amber-400 stroke-amber-400 h-3 w-3 sm:h-4 sm:w-4 mr-1" />
             <span className="text-xs">{instrument.rating?.toFixed(1) || "N/A"}</span>
           </div>
         </div>
         
         <Link to={`/product/${instrument.id}`} className="block mb-2">
-          <h3 className="font-medium text-lg leading-tight hover:text-primary transition-colors">
+          <h3 className="font-medium text-base sm:text-lg leading-tight hover:text-primary transition-colors">
             {instrument.name}
           </h3>
         </Link>
         
         <div className="mb-4 flex-grow">
-          <p className="text-sm text-gray-300 line-clamp-2">
+          <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
             {instrument.description?.substring(0, 100)}...
           </p>
         </div>
         
         <div className="flex justify-between items-center">
-          <div className="font-semibold">
+          <div className="font-semibold text-sm sm:text-base">
             ₹{instrument.price?.toLocaleString() || "Call for price"}
           </div>
           
@@ -77,6 +77,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ instrument }) => {
                 e.preventDefault();
                 setBuyDialogOpen(true);
               }}
+              className="text-xs sm:text-sm px-2 py-1 sm:px-3 sm:py-2"
             >
               Buy
             </Button>
