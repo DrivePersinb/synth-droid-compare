@@ -37,51 +37,62 @@ const BrandPage = () => {
       });
     }
   }, [brandName]);
+
+  const getBrandGradient = (brand: string) => {
+    switch (brand.toLowerCase()) {
+      case 'roland':
+        return 'from-red-500/20 to-red-600/30 border-red-500/40';
+      case 'yamaha':
+        return 'from-purple-500/20 to-purple-600/30 border-purple-500/40';
+      case 'korg':
+        return 'from-cyan-500/20 to-cyan-600/30 border-cyan-500/40';
+      default:
+        return 'from-primary/20 to-primary/30 border-primary/40';
+    }
+  };
   
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
       
-      <main className="flex-1 container mx-auto px-2 md:px-4 py-4 md:py-8">
-        <div className="mb-4 md:mb-8">
-          <Link to="/brands" className="text-primary hover:underline text-sm md:text-base">
+      <main className="flex-1 container mx-auto px-4 py-8">
+        <div className="mb-8">
+          <Link to="/brands" className="text-primary hover:text-primary/80 transition-colors">
             All Brands
           </Link>
-          {" › "}
-          <span className="font-medium text-sm md:text-base">{capitalizedBrandName}</span>
+          <span className="mx-3 text-muted-foreground">›</span>
+          <span className="font-medium">{capitalizedBrandName}</span>
         </div>
         
-        <div className="flex flex-col lg:flex-row items-start gap-4 md:gap-8 mb-4 md:mb-8">
-          <div className="w-full lg:w-1/3">
-            <div className={`
-              p-3 md:p-6 rounded-xl 
-              bg-gradient-to-br 
-              ${brandName === 'roland' ? 'from-roland/20 to-roland/40 border-roland/50' : ''}
-              ${brandName === 'yamaha' ? 'from-yamaha/20 to-yamaha/40 border-yamaha/50' : ''}
-              ${brandName === 'korg' ? 'from-korg/20 to-korg/40 border-korg/50' : ''}
-              border
-            `}>
-              <h1 className="text-xl md:text-3xl font-bold mb-2 md:mb-4">{capitalizedBrandName} Synthesizers</h1>
-              <p className="text-gray-300 mb-3 md:mb-4 text-sm md:text-base">
-                Discover the complete range of {capitalizedBrandName} synthesizers. 
-                Compare features, prices, and specifications to find your perfect instrument.
-              </p>
-              <div className="flex items-center gap-4 text-sm">
-                <div>
-                  <div className="text-lg md:text-2xl font-bold">{brandInstruments.length}</div>
-                  <div className="text-gray-400 text-xs md:text-sm">Products</div>
-                </div>
-                <div>
-                  <div className="text-lg md:text-2xl font-bold">
-                    ${Math.min(...brandInstruments.map(i => i.price))}+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          {/* Enhanced brand info card */}
+          <div className="lg:col-span-1">
+            <div className={`glass-effect p-8 rounded-3xl bg-gradient-to-br ${getBrandGradient(brandName || '')} border relative overflow-hidden`}>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-16 translate-x-16"></div>
+              <div className="relative z-10">
+                <h1 className="text-3xl md:text-4xl font-bold mb-4">{capitalizedBrandName}</h1>
+                <p className="text-muted-foreground mb-6 leading-relaxed">
+                  Discover the complete range of {capitalizedBrandName} synthesizers. 
+                  Compare features, prices, and specifications to find your perfect instrument.
+                </p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="glass-effect p-4 rounded-xl">
+                    <div className="text-2xl font-bold gradient-text">{brandInstruments.length}</div>
+                    <div className="text-sm text-muted-foreground">Products</div>
                   </div>
-                  <div className="text-gray-400 text-xs md:text-sm">Starting Price</div>
+                  <div className="glass-effect p-4 rounded-xl">
+                    <div className="text-2xl font-bold gradient-text">
+                      ₹{Math.min(...brandInstruments.map(i => i.price)).toLocaleString()}+
+                    </div>
+                    <div className="text-sm text-muted-foreground">Starting at</div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
           
-          <div className="w-full lg:w-2/3">
+          {/* Products section */}
+          <div className="lg:col-span-2 space-y-6">
             <FilterSortBar 
               onFilterChange={setCurrentFilters}
               onSortChange={setCurrentSort}
@@ -90,15 +101,15 @@ const BrandPage = () => {
             />
             
             {filteredInstruments.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {filteredInstruments.map(instrument => (
                   <ProductCard key={instrument.id} instrument={instrument} />
                 ))}
               </div>
             ) : (
-              <div className="text-center py-8 md:py-16 bg-androidBox rounded-lg">
-                <h2 className="text-lg md:text-2xl font-bold mb-2">No instruments found</h2>
-                <p className="text-gray-400 mb-4 md:mb-6 text-sm md:text-base px-4">
+              <div className="text-center py-16 glass-effect rounded-2xl">
+                <h2 className="text-2xl font-bold mb-4">No instruments found</h2>
+                <p className="text-muted-foreground mb-6">
                   Try adjusting your filters to see more results
                 </p>
                 <button 
@@ -107,7 +118,7 @@ const BrandPage = () => {
                     brands: [capitalizedBrandName],
                     releaseYears: []
                   })}
-                  className="android-btn bg-primary text-white hover:bg-primary/90 text-sm md:text-base"
+                  className="btn-primary"
                 >
                   Clear Filters
                 </button>

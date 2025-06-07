@@ -5,26 +5,26 @@
 
 @layer base {
   :root {
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
-    --card: 0 0% 20%;
-    --card-foreground: 0 0% 100%;
-    --popover: 0 0% 10%;
-    --popover-foreground: 0 0% 100%;
-    --primary: 210 100% 65%;
+    --background: 0 0% 3%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 220 100% 65%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 240 4% 26%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 0 0% 14%;
-    --muted-foreground: 0 0% 67%;
-    --accent: 0 0% 27%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 25%;
-    --input: 0 0% 25%;
-    --ring: 210 100% 65%;
-    --radius: 0.5rem;
+    --secondary: 240 4% 16%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 220 15% 20%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 220 100% 65%;
+    --radius: 0.75rem;
   }
 }
 
@@ -32,10 +32,18 @@
   * {
     @apply border-border;
   }
+  
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
     font-feature-settings: "rlig" 1, "calt" 1;
     font-size: 14px;
+    line-height: 1.6;
+  }
+
+  @media (min-width: 640px) {
+    body {
+      font-size: 15px;
+    }
   }
 
   @media (min-width: 768px) {
@@ -45,32 +53,40 @@
   }
 
   h1 {
-    font-size: 1.5rem;
-    line-height: 1.3;
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+  }
+
+  @media (min-width: 640px) {
+    h1 {
+      font-size: 2.25rem;
+    }
   }
 
   @media (min-width: 768px) {
     h1 {
-      font-size: 2rem;
-      line-height: 1.25;
+      font-size: 3rem;
     }
   }
 
   h2 {
-    font-size: 1.25rem;
-    line-height: 1.4;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.025em;
   }
 
   @media (min-width: 768px) {
     h2 {
-      font-size: 1.5rem;
-      line-height: 1.3;
+      font-size: 2rem;
     }
   }
 
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
   }
   
   ::-webkit-scrollbar-track {
@@ -81,32 +97,55 @@
     @apply bg-accent rounded-full;
   }
 
-  .android-focus {
-    @apply outline-none ring-1 ring-primary/50 transition-shadow duration-200;
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-accent/80;
   }
 }
 
 @layer components {
-  .card-shadow {
-    @apply shadow-[0_4px_12px_rgba(0,0,0,0.5)];
+  .glass-effect {
+    @apply bg-white/5 backdrop-blur-sm border border-white/10;
   }
   
-  .android-btn {
-    @apply rounded-md px-3 md:px-4 py-2 font-medium transition-all duration-200 
-           focus:android-focus active:scale-[0.98] text-sm md:text-base;
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary to-blue-400 bg-clip-text text-transparent;
   }
-
-  .compare-btn {
-    @apply android-btn bg-primary text-white hover:bg-primary/90;
+  
+  .card-hover {
+    @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/20;
   }
-
+  
   .brand-card {
-    @apply flex flex-col items-center justify-center p-4 md:p-6 bg-androidBox 
-           rounded-xl transition-all duration-300 hover:scale-[1.02] card-shadow;
+    @apply flex flex-col items-center justify-center p-6 md:p-8 
+           glass-effect rounded-2xl card-hover cursor-pointer
+           group relative overflow-hidden;
   }
-
+  
+  .brand-card::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent 
+           opacity-0 group-hover:opacity-100 transition-opacity duration-300;
+  }
+  
   .product-card {
-    @apply bg-androidBox rounded-xl overflow-hidden card-shadow 
-           transition-transform duration-200 hover:translate-y-[-4px];
+    @apply glass-effect rounded-2xl overflow-hidden card-hover
+           relative group;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary to-blue-500 text-white 
+           px-6 py-3 rounded-xl font-medium transition-all duration-200
+           hover:scale-105 hover:shadow-lg hover:shadow-primary/25
+           focus:ring-2 focus:ring-primary/50 focus:outline-none;
+  }
+  
+  .btn-secondary {
+    @apply glass-effect text-foreground px-6 py-3 rounded-xl font-medium
+           transition-all duration-200 hover:scale-105 hover:bg-white/10
+           focus:ring-2 focus:ring-primary/50 focus:outline-none;
+  }
+  
+  .section-gradient {
+    @apply bg-gradient-to-b from-background via-background/95 to-background/90;
   }
 }
