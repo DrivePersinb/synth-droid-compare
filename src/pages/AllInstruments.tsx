@@ -10,7 +10,7 @@ const AllInstruments = () => {
   const [filteredInstruments, setFilteredInstruments] = useState<InstrumentBasic[]>(instruments);
   const [currentSort, setCurrentSort] = useState<SortOption>("popularity");
   const [currentFilters, setCurrentFilters] = useState<FilterOptions>({
-    priceRange: [0, 5000],
+    priceRange: [0, 400000],
     brands: [],
     releaseYears: []
   });
@@ -67,7 +67,12 @@ const AllInstruments = () => {
       <Header />
       
       <main className="flex-1 container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">All Instruments</h1>
+        <div className="glass-effect rounded-3xl p-8 mb-8 bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
+          <h1 className="text-3xl md:text-4xl font-bold mb-4 gradient-text">All Instruments</h1>
+          <p className="text-muted-foreground text-lg">
+            Discover our complete collection of synthesizers and keyboards
+          </p>
+        </div>
         
         <FilterSortBar 
           onFilterChange={setCurrentFilters}
@@ -83,18 +88,18 @@ const AllInstruments = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-16 bg-androidBox rounded-lg">
-            <h2 className="text-2xl font-bold mb-2">No instruments found</h2>
-            <p className="text-gray-400 mb-6">
+          <div className="text-center py-16 glass-effect rounded-2xl">
+            <h2 className="text-2xl font-bold mb-4">No instruments found</h2>
+            <p className="text-muted-foreground mb-6">
               Try adjusting your filters to see more results
             </p>
             <button 
               onClick={() => setCurrentFilters({
-                priceRange: [0, 5000],
+                priceRange: [0, 400000],
                 brands: [],
                 releaseYears: []
               })}
-              className="android-btn bg-primary text-white hover:bg-primary/90"
+              className="btn-primary"
             >
               Clear Filters
             </button>

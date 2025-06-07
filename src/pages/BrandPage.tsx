@@ -21,7 +21,7 @@ const BrandPage = () => {
   const [filteredInstruments, setFilteredInstruments] = useState(brandInstruments);
   const [currentSort, setCurrentSort] = useState<SortOption>("popularity");
   const [currentFilters, setCurrentFilters] = useState<FilterOptions>({
-    priceRange: [0, 5000],
+    priceRange: [0, 400000],
     brands: [capitalizedBrandName],
     releaseYears: []
   });
@@ -114,7 +114,7 @@ const BrandPage = () => {
                 </p>
                 <button 
                   onClick={() => setCurrentFilters({
-                    priceRange: [0, 5000],
+                    priceRange: [0, 400000],
                     brands: [capitalizedBrandName],
                     releaseYears: []
                   })}
