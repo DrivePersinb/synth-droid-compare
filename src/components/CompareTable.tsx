@@ -14,11 +14,19 @@ const CompareTable = () => {
     compareItems.some(item => item.instrumentId === instrument.id)
   );
 
-  // Get product details for each compared instrument
-  const productDetailsQueries = comparedInstruments.map(instrument => 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useProductDetails(instrument.id)
-  );
+  // Get product details for each instrument ID individually
+  const productDetails1 = useProductDetails(comparedInstruments[0]?.id || '');
+  const productDetails2 = useProductDetails(comparedInstruments[1]?.id || '');
+  const productDetails3 = useProductDetails(comparedInstruments[2]?.id || '');
+  const productDetails4 = useProductDetails(comparedInstruments[3]?.id || '');
+
+  // Create an array of the product details in order
+  const productDetailsQueries = [
+    productDetails1,
+    productDetails2,
+    productDetails3,
+    productDetails4
+  ].slice(0, comparedInstruments.length);
 
   const renderSpecValue = (value: unknown): React.ReactNode => {
     if (typeof value === 'boolean') {
