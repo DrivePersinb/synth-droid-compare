@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -84,7 +83,7 @@ const AllInstruments = () => {
         {filteredInstruments.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredInstruments.map(instrument => (
-              <ProductCard key={instrument.id} instrument={instrument} />
+              <ProductCard key={instrument.uniqueId} instrument={instrument} />
             ))}
           </div>
         ) : (

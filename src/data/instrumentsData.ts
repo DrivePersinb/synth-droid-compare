@@ -83,7 +83,7 @@ export const instruments: InstrumentBasic[] = [
     rating: 4.7,
     releaseYear: 2019,
     description: "Next-generation music production workstation with ZEN-Core synthesis and advanced sampling.",
-    popularitulyScore: 89
+    popularityScore: 89
   }
 ];
 

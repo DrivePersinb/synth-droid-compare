@@ -103,7 +103,7 @@ const BrandPage = () => {
             {filteredInstruments.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {filteredInstruments.map(instrument => (
-                  <ProductCard key={instrument.id} instrument={instrument} />
+                  <ProductCard key={instrument.uniqueId} instrument={instrument} />
                 ))}
               </div>
             ) : (
