@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useInstruments } from "@/hooks/useInstruments";
 import { useCompare } from "@/contexts/CompareContext";
@@ -74,7 +75,6 @@ const CompareTable = () => {
                     <div>
                       <h3 className="font-medium">{instrument.name}</h3>
                       <p className="text-sm text-gray-400">{instrument.brand}</p>
-                      <p className="text-xs text-gray-500">ID: {instrument.uniqueId}</p>
                     </div>
                     <Button
                       variant="ghost"

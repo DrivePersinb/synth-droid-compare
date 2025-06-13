@@ -85,9 +85,6 @@ const ProductDetail = () => {
                   <span className="px-3 py-1 glass-effect rounded-full text-sm">
                     {instrument.releaseYear}
                   </span>
-                  <span className="px-3 py-1 bg-gray-800 rounded-full text-xs text-gray-400">
-                    ID: {instrument.uniqueId}
-                  </span>
                 </div>
                 <h1 className="text-3xl md:text-4xl font-bold mb-4">{instrument.name}</h1>
                 
