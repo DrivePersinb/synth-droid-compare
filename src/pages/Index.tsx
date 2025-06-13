@@ -143,7 +143,7 @@ const HomePage = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {popularInstruments.map((instrument) => (
-                <ProductCard key={instrument.id} instrument={instrument} />
+                <ProductCard key={instrument.uniqueId} instrument={instrument} />
               ))}
             </div>
           )}
@@ -168,7 +168,7 @@ const HomePage = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {newestInstruments.map((instrument) => (
-                <ProductCard key={instrument.id} instrument={instrument} />
+                <ProductCard key={instrument.uniqueId} instrument={instrument} />
               ))}
             </div>
           )}

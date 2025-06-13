@@ -14,20 +14,20 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ instrument }) => {
   const { addToCompare, removeFromCompare, isInCompare } = useCompare();
-  const isCompared = isInCompare(instrument.id);
+  const isCompared = isInCompare(instrument.uniqueId);
   const [buyDialogOpen, setBuyDialogOpen] = useState(false);
 
   const handleCompareToggle = () => {
     if (isCompared) {
-      removeFromCompare(instrument.id);
+      removeFromCompare(instrument.uniqueId);
     } else {
-      addToCompare(instrument.id);
+      addToCompare(instrument.uniqueId);
     }
   };
   
   return (
     <div className="product-card group border border-border transition-all duration-300 flex flex-col">
-      <Link to={`/product/${instrument.id}`} className="block relative">
+      <Link to={`/product/${instrument.uniqueId}`} className="block relative">
         <div className="aspect-[4/3] overflow-hidden bg-gradient-to-br from-gray-900 to-black">
           <img 
             src={instrument.image} 
@@ -52,7 +52,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ instrument }) => {
           </div>
         </div>
         
-        <Link to={`/product/${instrument.id}`} className="block mb-2">
+        <Link to={`/product/${instrument.uniqueId}`} className="block mb-2">
           <h3 className="font-medium text-base sm:text-lg leading-tight hover:text-primary transition-colors">
             {instrument.name}
           </h3>

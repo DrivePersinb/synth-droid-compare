@@ -2,8 +2,7 @@
 export type Brand = "Roland" | "Yamaha" | "Korg" | "Moog" | "Sequential" | "Novation" | "Arturia" | "Behringer" | "Nord" | "Access" | "Waldorf" | "Elektron" | "Casio";
 
 export interface InstrumentBasic {
-  id: string;
-  uniqueId: string; // 7-digit unique identifier
+  uniqueId: string; // 7-digit unique identifier - now the primary ID
   name: string;
   brand: Brand;
   image: string;
@@ -32,7 +31,6 @@ export type SortOption =
 
 export const instruments: InstrumentBasic[] = [
   {
-    id: "roland-jupiter-x",
     uniqueId: "1000001",
     name: "Roland Jupiter-X",
     brand: "Roland",
@@ -44,7 +42,6 @@ export const instruments: InstrumentBasic[] = [
     popularityScore: 95
   },
   {
-    id: "yamaha-montage-8",
     uniqueId: "2000001",
     name: "Yamaha MONTAGE 8",
     brand: "Yamaha",
@@ -56,7 +53,6 @@ export const instruments: InstrumentBasic[] = [
     popularityScore: 98
   },
   {
-    id: "korg-minilogue-xd",
     uniqueId: "3000001",
     name: "Korg minilogue xd",
     brand: "Korg",
@@ -68,7 +64,6 @@ export const instruments: InstrumentBasic[] = [
     popularityScore: 92
   },
   {
-    id: "korg-kronos-2",
     uniqueId: "3000002",
     name: "Korg Kronos 2",
     brand: "Korg",
@@ -80,7 +75,6 @@ export const instruments: InstrumentBasic[] = [
     popularityScore: 90
   },
   {
-    id: "roland-fantom-8",
     uniqueId: "1000002",
     name: "Roland Fantom 8",
     brand: "Roland",
@@ -89,13 +83,9 @@ export const instruments: InstrumentBasic[] = [
     rating: 4.7,
     releaseYear: 2019,
     description: "Next-generation music production workstation with ZEN-Core synthesis and advanced sampling.",
-    popularityScore: 89
+    popularitulyScore: 89
   }
 ];
-
-export const getInstrumentById = (id: string): InstrumentBasic | undefined => {
-  return instruments.find(instrument => instrument.id === id);
-};
 
 export const getInstrumentByUniqueId = (uniqueId: string): InstrumentBasic | undefined => {
   return instruments.find(instrument => instrument.uniqueId === uniqueId);

@@ -11,7 +11,7 @@ const CompareTable = () => {
   const { data: instruments = [] } = useInstruments();
 
   const comparedInstruments = instruments.filter(instrument => 
-    compareItems.some(item => item.instrumentId === instrument.id)
+    compareItems.some(item => item.instrumentId === instrument.uniqueId)
   );
 
   // Get product details using unique IDs
@@ -69,7 +69,7 @@ const CompareTable = () => {
           <tr className="border-b border-gray-700">
             <th className="text-left p-4 font-medium">Specification</th>
             {comparedInstruments.map(instrument => (
-              <th key={instrument.id} className="text-left p-4 min-w-[200px]">
+              <th key={instrument.uniqueId} className="text-left p-4 min-w-[200px]">
                 <div className="space-y-2">
                   <div className="flex items-start justify-between">
                     <div>
@@ -79,7 +79,7 @@ const CompareTable = () => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => removeFromCompare(instrument.id)}
+                      onClick={() => removeFromCompare(instrument.uniqueId)}
                       className="text-red-500 hover:text-red-400"
                     >
                       <X size={16} />
@@ -98,7 +98,7 @@ const CompareTable = () => {
           <tr className="border-b border-gray-700/50">
             <td className="p-4 font-medium text-primary">Price</td>
             {comparedInstruments.map(instrument => (
-              <td key={instrument.id} className="p-4">
+              <td key={instrument.uniqueId} className="p-4">
                 ₹{instrument.price?.toLocaleString()}
               </td>
             ))}
@@ -106,7 +106,7 @@ const CompareTable = () => {
           <tr className="border-b border-gray-700/50">
             <td className="p-4 font-medium text-primary">Rating</td>
             {comparedInstruments.map(instrument => (
-              <td key={instrument.id} className="p-4">
+              <td key={instrument.uniqueId} className="p-4">
                 {instrument.rating ? `${instrument.rating}/5` : 'N/A'}
               </td>
             ))}
@@ -114,7 +114,7 @@ const CompareTable = () => {
           <tr className="border-b border-gray-700/50">
             <td className="p-4 font-medium text-primary">Release Year</td>
             {comparedInstruments.map(instrument => (
-              <td key={instrument.id} className="p-4">
+              <td key={instrument.uniqueId} className="p-4">
                 {instrument.releaseYear || 'N/A'}
               </td>
             ))}
@@ -147,7 +147,7 @@ const CompareTable = () => {
                       const value = category?.specs[specKey];
                       
                       return (
-                        <td key={instrument.id} className="p-4">
+                        <td key={instrument.uniqueId} className="p-4">
                           {renderSpecValue(value)}
                         </td>
                       );

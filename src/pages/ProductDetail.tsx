@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import { useCompare } from "@/contexts/CompareContext";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, MinusCircle, ArrowLeft, Star } from "lucide-react";
-import { getInstrumentById } from "@/data/instrumentsData";
+import { getInstrumentByUniqueId } from "@/data/instrumentsData";
 import { useProductDetailsByUniqueId } from "@/hooks/useProductDetailsByUniqueId";
 import BuyLinksDialog from "@/components/BuyLinksDialog";
 import StructuredSpecifications from "@/components/StructuredSpecifications";
@@ -17,18 +17,18 @@ const ProductDetail = () => {
   const { addToCompare, removeFromCompare, isInCompare } = useCompare();
   const [buyDialogOpen, setBuyDialogOpen] = useState(false);
   
-  const instrument = id ? getInstrumentById(id) : undefined;
+  const instrument = id ? getInstrumentByUniqueId(id) : undefined;
   const { data: productDetails, isLoading: detailsLoading } = useProductDetailsByUniqueId(instrument?.uniqueId || '');
   
-  const inCompare = instrument ? isInCompare(instrument.id) : false;
+  const inCompare = instrument ? isInCompare(instrument.uniqueId) : false;
 
   const handleCompareToggle = () => {
     if (!instrument) return;
     
     if (inCompare) {
-      removeFromCompare(instrument.id);
+      removeFromCompare(instrument.uniqueId);
     } else {
-      addToCompare(instrument.id);
+      addToCompare(instrument.uniqueId);
     }
   };
 
