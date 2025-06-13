@@ -3,6 +3,7 @@ export type Brand = "Roland" | "Yamaha" | "Korg" | "Moog" | "Sequential" | "Nova
 
 export interface InstrumentBasic {
   id: string;
+  uniqueId: string; // 7-digit unique identifier
   name: string;
   brand: Brand;
   image: string;
@@ -32,6 +33,7 @@ export type SortOption =
 export const instruments: InstrumentBasic[] = [
   {
     id: "roland-jupiter-x",
+    uniqueId: "1000001",
     name: "Roland Jupiter-X",
     brand: "Roland",
     image: "/images/roland-jupiter-x.jpg",
@@ -43,6 +45,7 @@ export const instruments: InstrumentBasic[] = [
   },
   {
     id: "yamaha-montage-8",
+    uniqueId: "2000001",
     name: "Yamaha MONTAGE 8",
     brand: "Yamaha",
     image: "/images/yamaha-montage-8.jpg",
@@ -54,6 +57,7 @@ export const instruments: InstrumentBasic[] = [
   },
   {
     id: "korg-minilogue-xd",
+    uniqueId: "3000001",
     name: "Korg minilogue xd",
     brand: "Korg",
     image: "/images/korg-minilogue-xd.jpg",
@@ -65,6 +69,7 @@ export const instruments: InstrumentBasic[] = [
   },
   {
     id: "korg-kronos-2",
+    uniqueId: "3000002",
     name: "Korg Kronos 2",
     brand: "Korg",
     image: "/images/korg-kronos-2.jpg",
@@ -76,6 +81,7 @@ export const instruments: InstrumentBasic[] = [
   },
   {
     id: "roland-fantom-8",
+    uniqueId: "1000002",
     name: "Roland Fantom 8",
     brand: "Roland",
     image: "/images/roland-fantom-8.jpg",
@@ -89,6 +95,10 @@ export const instruments: InstrumentBasic[] = [
 
 export const getInstrumentById = (id: string): InstrumentBasic | undefined => {
   return instruments.find(instrument => instrument.id === id);
+};
+
+export const getInstrumentByUniqueId = (uniqueId: string): InstrumentBasic | undefined => {
+  return instruments.find(instrument => instrument.uniqueId === uniqueId);
 };
 
 export const getBrands = (): string[] => {

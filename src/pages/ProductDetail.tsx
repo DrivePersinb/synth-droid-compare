@@ -7,7 +7,7 @@ import { useCompare } from "@/contexts/CompareContext";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, MinusCircle, ArrowLeft, Star } from "lucide-react";
 import { getInstrumentById } from "@/data/instrumentsData";
-import { useProductDetails } from "@/hooks/useProductDetails";
+import { useProductDetailsByUniqueId } from "@/hooks/useProductDetailsByUniqueId";
 import BuyLinksDialog from "@/components/BuyLinksDialog";
 import StructuredSpecifications from "@/components/StructuredSpecifications";
 import FAQSection from "@/components/FAQSection";
@@ -18,7 +18,7 @@ const ProductDetail = () => {
   const [buyDialogOpen, setBuyDialogOpen] = useState(false);
   
   const instrument = id ? getInstrumentById(id) : undefined;
-  const { data: productDetails, isLoading: detailsLoading } = useProductDetails(id || '');
+  const { data: productDetails, isLoading: detailsLoading } = useProductDetailsByUniqueId(instrument?.uniqueId || '');
   
   const inCompare = instrument ? isInCompare(instrument.id) : false;
 
@@ -84,6 +84,9 @@ const ProductDetail = () => {
                   </span>
                   <span className="px-3 py-1 glass-effect rounded-full text-sm">
                     {instrument.releaseYear}
+                  </span>
+                  <span className="px-3 py-1 bg-gray-800 rounded-full text-xs text-gray-400">
+                    ID: {instrument.uniqueId}
                   </span>
                 </div>
                 <h1 className="text-3xl md:text-4xl font-bold mb-4">{instrument.name}</h1>

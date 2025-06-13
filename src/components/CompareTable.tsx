@@ -1,8 +1,7 @@
-
 import React from "react";
 import { useInstruments } from "@/hooks/useInstruments";
 import { useCompare } from "@/contexts/CompareContext";
-import { useProductDetails } from "@/hooks/useProductDetails";
+import { useProductDetailsByUniqueId } from "@/hooks/useProductDetailsByUniqueId";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 
@@ -14,11 +13,11 @@ const CompareTable = () => {
     compareItems.some(item => item.instrumentId === instrument.id)
   );
 
-  // Get product details for each instrument ID individually
-  const productDetails1 = useProductDetails(comparedInstruments[0]?.id || '');
-  const productDetails2 = useProductDetails(comparedInstruments[1]?.id || '');
-  const productDetails3 = useProductDetails(comparedInstruments[2]?.id || '');
-  const productDetails4 = useProductDetails(comparedInstruments[3]?.id || '');
+  // Get product details using unique IDs
+  const productDetails1 = useProductDetailsByUniqueId(comparedInstruments[0]?.uniqueId || '');
+  const productDetails2 = useProductDetailsByUniqueId(comparedInstruments[1]?.uniqueId || '');
+  const productDetails3 = useProductDetailsByUniqueId(comparedInstruments[2]?.uniqueId || '');
+  const productDetails4 = useProductDetailsByUniqueId(comparedInstruments[3]?.uniqueId || '');
 
   // Create an array of the product details in order
   const productDetailsQueries = [
@@ -75,6 +74,7 @@ const CompareTable = () => {
                     <div>
                       <h3 className="font-medium">{instrument.name}</h3>
                       <p className="text-sm text-gray-400">{instrument.brand}</p>
+                      <p className="text-xs text-gray-500">ID: {instrument.uniqueId}</p>
                     </div>
                     <Button
                       variant="ghost"
