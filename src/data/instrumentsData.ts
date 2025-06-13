@@ -2,7 +2,7 @@
 export type Brand = "Roland" | "Yamaha" | "Korg" | "Moog" | "Sequential" | "Novation" | "Arturia" | "Behringer" | "Nord" | "Access" | "Waldorf" | "Elektron" | "Casio";
 
 export interface InstrumentBasic {
-  uniqueId: string; // 7-digit unique identifier - now the primary ID
+  uniqueId: string;
   name: string;
   brand: Brand;
   image: string;
@@ -17,17 +17,9 @@ export interface FilterOptions {
   priceRange: [number, number];
   brands: Brand[];
   releaseYears: number[];
-  keysCount?: number[];
-  hasSequencer?: boolean;
-  polyphony?: number[];
 }
 
-export type SortOption = 
-  | "price-low-high"
-  | "price-high-low" 
-  | "popularity"
-  | "rating"
-  | "newest";
+export type SortOption = "price-low-high" | "price-high-low" | "popularity" | "rating" | "newest";
 
 export const instruments: InstrumentBasic[] = [
   {
@@ -94,15 +86,3 @@ export const getInstrumentByUniqueId = (uniqueId: string): InstrumentBasic | und
 export const getBrands = (): string[] => {
   return Array.from(new Set(instruments.map(i => i.brand))).sort();
 };
-
-export const instrumentFilters = {
-  brands: getBrands(),
-  releaseYears: Array.from(new Set(instruments.map(i => i.releaseYear))).sort((a, b) => a - b),
-  priceRange: [
-    Math.min(...instruments.map(i => i.price)),
-    Math.max(...instruments.map(i => i.price))
-  ]
-};
-
-// Backward compatibility
-export const instrumentsData = instruments;

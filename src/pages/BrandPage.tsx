@@ -27,16 +27,43 @@ const BrandPage = () => {
   });
   
   useEffect(() => {
-    if (brandName) {
-      const brand = brandName.charAt(0).toUpperCase() + brandName.slice(1) as Brand;
-      const filtered = instruments.filter(instrument => instrument.brand === brand);
-      setFilteredInstruments(filtered);
-      setCurrentFilters({
-        ...currentFilters,
-        brands: [brand]
-      });
+    let filtered = [...brandInstruments];
+    
+    // Apply filters
+    if (currentFilters.priceRange) {
+      filtered = filtered.filter(
+        instr => instr.price >= currentFilters.priceRange[0] && 
+                 instr.price <= currentFilters.priceRange[1]
+      );
     }
-  }, [brandName]);
+    
+    if (currentFilters.releaseYears && currentFilters.releaseYears.length > 0) {
+      filtered = filtered.filter(instr => 
+        currentFilters.releaseYears.includes(instr.releaseYear)
+      );
+    }
+    
+    // Apply sorting
+    switch (currentSort) {
+      case "price-low-high":
+        filtered.sort((a, b) => a.price - b.price);
+        break;
+      case "price-high-low":
+        filtered.sort((a, b) => b.price - a.price);
+        break;
+      case "popularity":
+        filtered.sort((a, b) => b.popularityScore - a.popularityScore);
+        break;
+      case "rating":
+        filtered.sort((a, b) => b.rating - a.rating);
+        break;
+      case "newest":
+        filtered.sort((a, b) => b.releaseYear - a.releaseYear);
+        break;
+    }
+    
+    setFilteredInstruments(filtered);
+  }, [currentSort, currentFilters, brandInstruments]);
 
   const getBrandGradient = (brand: string) => {
     switch (brand.toLowerCase()) {
@@ -65,7 +92,6 @@ const BrandPage = () => {
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-          {/* Enhanced brand info card */}
           <div className="lg:col-span-1">
             <div className={`glass-effect p-8 rounded-3xl bg-gradient-to-br ${getBrandGradient(brandName || '')} border relative overflow-hidden`}>
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-16 translate-x-16"></div>
@@ -91,7 +117,6 @@ const BrandPage = () => {
             </div>
           </div>
           
-          {/* Products section */}
           <div className="lg:col-span-2 space-y-6">
             <FilterSortBar 
               onFilterChange={setCurrentFilters}
@@ -109,9 +134,7 @@ const BrandPage = () => {
             ) : (
               <div className="text-center py-16 glass-effect rounded-2xl">
                 <h2 className="text-2xl font-bold mb-4">No instruments found</h2>
-                <p className="text-muted-foreground mb-6">
-                  Try adjusting your filters to see more results
-                </p>
+                <p className="text-muted-foreground mb-6">Try adjusting your filters to see more results</p>
                 <button 
                   onClick={() => setCurrentFilters({
                     priceRange: [0, 400000],
