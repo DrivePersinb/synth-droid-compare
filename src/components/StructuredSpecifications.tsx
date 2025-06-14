@@ -1,3 +1,4 @@
+
 import React from "react";
 import { SpecificationCategory } from "@/types/ProductDetails";
 
@@ -27,17 +28,17 @@ const StructuredSpecifications: React.FC<StructuredSpecificationsProps> = ({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {specifications.map((category, categoryIndex) => (
-        <div key={categoryIndex} className="space-y-3">
-          <h3 className="text-lg font-semibold text-primary border-b border-gray-700 pb-2">
+        <div key={categoryIndex} className="space-y-4">
+          <h3 className="text-xl font-semibold text-primary pb-2">
             {category.name}
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-3">
             {Object.entries(category.specs).map(([key, value]) => (
-              <div key={key} className="flex justify-between py-2 border-b border-gray-700/50">
-                <span className="text-gray-400">{key}</span>
-                <span className="font-medium">{renderSpecValue(value)}</span>
+              <div key={key} className="flex justify-between items-center py-3 border-b border-gray-700/30">
+                <span className="text-gray-300 font-medium">{key}</span>
+                <span className="text-white font-semibold">{renderSpecValue(value)}</span>
               </div>
             ))}
           </div>

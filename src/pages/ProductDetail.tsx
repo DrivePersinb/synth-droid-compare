@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useCompare } from "@/contexts/CompareContext";
@@ -13,7 +13,10 @@ import StructuredSpecifications from "@/components/StructuredSpecifications";
 import FAQSection from "@/components/FAQSection";
 
 const ProductDetail = () => {
-  const { id } = useParams<{ id: string }>();
+  const location = useLocation();
+  // Extract ID from URL path - assumes URL format is /product/ID
+  const id = location.pathname.split('/').pop();
+  
   const { addToCompare, removeFromCompare, isInCompare } = useCompare();
   const [buyDialogOpen, setBuyDialogOpen] = useState(false);
   
