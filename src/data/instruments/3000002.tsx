@@ -1,109 +1,82 @@
 
-import { ProductDetails } from '../products/roland-jupiter-x';
+import { ProductDetails } from '@/types/ProductDetails';
 
 export const instrument3000002: ProductDetails = {
   specifications: [
     {
+      name: "General",
+      specs: {
+        "Keys": 73,
+        "Key Type": "Natural Touch Semi-Weighted",
+        "Polyphony": 120,
+        "Multitimbrality": "16 timbers",
+        "Preset Sounds": 1000
+      }
+    },
+    {
       name: "Sound Engine",
       specs: {
-        "Sound Generation": "9 Sound Engines (SGX-2, EP-1, CX-3, STR-1, AL-1, MOD-7, MS-20EX, PolysixEX, MonopolyEX)",
-        "Max Polyphony": "140 voices",
-        "Oscillators": "Multiple types per engine",
-        "Filter Types": "Multi-mode filters per engine",
-        "Effects": "Insert, Master, Total effects"
-      }
-    },
-    {
-      name: "Keyboard & Controls",
-      specs: {
-        "Keys": 88,
-        "Key Type": "Natural Weighted Hammer Action",
-        "Aftertouch": "Channel aftertouch",
-        "Velocity": "4 curves + fixed",
-        "Controls": "TouchView display, joystick, ribbon controller"
-      }
-    },
-    {
-      name: "Memory & Storage",
-      specs: {
-        "Programs": "1,664 programs",
-        "Combinations": "1,536 combinations",
-        "Set Lists": "128 set lists",
-        "Internal Memory": "62 GB SSD",
-        "Sampling Memory": "Up to 62 GB",
-        "Sample Formats": "AIFF, WAV, SoundFont 2.0"
+        "Technology": "HD-1, EDS-X, SGX-2",
+        "Sampling": "120-voice polyphonic",
+        "Effects": "12 Insert + 2 Master + 1 Total",
+        "Arpeggiator": true
       }
     },
     {
       name: "Sequencer",
       specs: {
-        "Tracks": "16 MIDI tracks + 16 audio tracks",
-        "Recording": "Realtime/Step recording",
-        "Tempo Range": "40-300 BPM",
-        "Resolution": "480 ticks per quarter note",
-        "Pattern Length": "Up to 256 measures"
+        "Tracks": 16,
+        "Songs": 200,
+        "Patterns": 671,
+        "Recording": "Real-time/Step"
       }
     },
     {
-      name: "Audio Features",
+      name: "Interface",
       specs: {
-        "Sampling": "48 kHz/16-bit, 24-bit",
-        "Audio Tracks": "16 audio tracks",
-        "Audio Inputs": "2 analog inputs",
-        "USB Audio": "44.1/48/88.2/96 kHz",
-        "Audio Outputs": "L/Mono, R, Individual 1-4"
+        "Display": "TouchView color display",
+        "Knobs": 4,
+        "Sliders": 9
       }
     },
     {
       name: "Connectivity",
       specs: {
+        "Audio Outputs": "L/MONO, R, Headphones",
         "MIDI": "In, Out, Thru",
-        "USB": "USB-B (MIDI/Audio), USB-A (storage)",
-        "Audio I/O": "1/4\" TRS outputs, 1/4\" TRS inputs",
-        "Headphones": "1/4\" stereo output",
-        "Pedals": "Damper, switch, expression pedal inputs"
+        "USB": "To Host, To Device",
+        "SD Card": "SDHC compatible"
       }
     },
     {
       name: "Physical",
       specs: {
-        "Dimensions": "1,421 × 406 × 147 mm",
-        "Weight": "22 kg",
-        "Display": "8-inch TouchView color display",
-        "Power": "AC adapter included",
-        "Finish": "Black"
+        "Dimensions": "132.6 x 36.7 x 12.4 cm",
+        "Weight": "18.5 kg",
+        "Power": "30W"
       }
     }
   ],
   faq: [
     {
-      question: "What makes the Kronos 2 different from the original Kronos?",
-      answer: "The Kronos 2 features updated sound engines, increased polyphony, more internal storage (62GB SSD), improved operating system, and enhanced TouchView display functionality."
+      question: "What makes Kronos special?",
+      answer: "Kronos combines 9 different sound engines in one instrument, including HD-1 piano sampling, analog modeling, and FM synthesis."
     },
     {
-      question: "Can I expand the sample memory?",
-      answer: "The Kronos 2 comes with 62GB of internal SSD storage for samples. You can also use external USB storage devices for additional sample libraries and data."
+      question: "Can I expand the sounds?",
+      answer: "Yes, Kronos supports EXs (expansion libraries) and KSC (Kronos Sound Collections) for additional sounds and instruments."
     },
     {
-      question: "Does it support external audio recording?",
-      answer: "Yes, the Kronos 2 has 2 analog audio inputs and can record up to 16 audio tracks simultaneously in its built-in sequencer."
+      question: "Is it good for live performance?",
+      answer: "Absolutely! Kronos is designed for live use with Set Lists, smooth sound transitions, and dedicated performance controls."
     },
     {
-      question: "What sound engines are included?",
-      answer: "The Kronos 2 includes 9 sound engines: SGX-2 (sample playback), EP-1 (electric pianos), CX-3 (tonewheel organ), STR-1 (physical modeling), AL-1 (analog modeling), MOD-7 (FM synthesis), and vintage Korg recreations (MS-20EX, PolysixEX, MonopolyEX)."
-    },
-    {
-      question: "Is it suitable for live performance?",
-      answer: "Absolutely! The Kronos 2 features Set List mode for organizing sounds for live performance, smooth sound transitions, and a rugged build quality designed for touring musicians."
-    },
-    {
-      question: "Can I use it as an audio interface?",
-      answer: "Yes, the Kronos 2 can function as a USB audio interface with support for multiple sample rates (44.1/48/88.2/96 kHz) and multiple audio outputs."
+      question: "Can I sample with it?",
+      answer: "Yes, Kronos has extensive sampling capabilities with the Open Sampling System, allowing you to record and manipulate audio."
     }
   ],
   buyLinks: [
-    { store: "Sweetwater", url: "https://www.sweetwater.com/store/detail/Kronos288" },
-    { store: "Guitar Center", url: "https://www.guitarcenter.com/Korg/Kronos-88-Key-Music-Workstation.gc" },
-    { store: "Sam Ash", url: "https://www.samash.com/korg-kronos-88-key-workstation" }
+    { store: "Amazon", url: "https://amazon.in/korg-kronos-2" },
+    { store: "Flipkart", url: "https://flipkart.com/korg-kronos-2" }
   ]
 };

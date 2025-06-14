@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from 'react';
-import { ProductDetails } from '@/data/products/roland-jupiter-x';
+import { ProductDetails } from '@/types/ProductDetails';
 
 const productDetailsMap: { [key: string]: () => Promise<ProductDetails> } = {
   '1000001': () => import('@/data/instruments/1000001').then(m => m.instrument1000001),

@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import { FAQ } from '@/data/products/roland-jupiter-x';
+import { FAQ } from '@/types/ProductDetails';
 
 interface FAQSectionProps {
   faqs: FAQ[];

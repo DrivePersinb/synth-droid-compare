@@ -1,6 +1,5 @@
-
 import React from "react";
-import { SpecificationCategory } from "@/data/products/roland-jupiter-x";
+import { SpecificationCategory } from "@/types/ProductDetails";
 
 interface StructuredSpecificationsProps {
   specifications: SpecificationCategory[];

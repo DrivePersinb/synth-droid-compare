@@ -1,5 +1,4 @@
-
-import { ProductDetails } from '../products/roland-jupiter-x';
+import { ProductDetails } from '@/types/ProductDetails';
 
 export const instrument2000001: ProductDetails = {
   specifications: [
