@@ -21,7 +21,7 @@ const App = () => (
     <Toaster />
     <Sonner />
     <CompareProvider>
-      <BrowserRouter>
+      <BrowserRouter basename="/">
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/all-instruments" element={<AllInstruments />} />
