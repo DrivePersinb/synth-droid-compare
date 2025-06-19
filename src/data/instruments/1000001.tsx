@@ -1,3 +1,9 @@
+/**
+ * Roland Jupiter-X Product Details
+ * Instrument ID: 1000001
+ * Referenced in: src/data/instrumentDetailsRegistry.ts
+ */
+
 import { ProductDetails } from '@/types/ProductDetails';
 
 export const instrument1000001: ProductDetails = {

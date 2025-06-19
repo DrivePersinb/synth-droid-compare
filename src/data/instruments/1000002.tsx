@@ -1,3 +1,9 @@
+/**
+ * Roland Fantom 8 Product Details
+ * Instrument ID: 1000002
+ * Referenced in: src/data/instrumentDetailsRegistry.ts
+ */
+
 import { ProductDetails } from '@/types/ProductDetails';
 
 export const instrument1000002: ProductDetails = {
