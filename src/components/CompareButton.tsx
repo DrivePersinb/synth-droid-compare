@@ -13,6 +13,13 @@ const CompareButton: React.FC<CompareButtonProps> = ({ variant = "default", onCl
   const { compareItems } = useCompare();
   const count = compareItems.length;
 
+  // Generate URL with instrument IDs
+  const getCompareUrl = () => {
+    if (compareItems.length === 0) return "/compare";
+    const ids = compareItems.map(item => item.instrumentId).join('+');
+    return `/compare?ids=${ids}`;
+  };
+
   if (onClick) {
     return (
       <Button 
@@ -27,7 +34,7 @@ const CompareButton: React.FC<CompareButtonProps> = ({ variant = "default", onCl
 
   if (variant === "compact") {
     return (
-      <Link to="/compare" className={`
+      <Link to={getCompareUrl()} className={`
         inline-flex items-center justify-center px-3 py-1 
         bg-primary rounded-md text-sm font-medium
         ${count > 0 ? "animate-pulse" : ""}
@@ -43,7 +50,7 @@ const CompareButton: React.FC<CompareButtonProps> = ({ variant = "default", onCl
       variant={count > 0 ? "default" : "secondary"}
       className={count > 0 ? "animate-pulse" : ""}
     >
-      <Link to="/compare">
+      <Link to={getCompareUrl()}>
         {count > 0 ? `Compare (${count})` : "Compare"}
       </Link>
     </Button>

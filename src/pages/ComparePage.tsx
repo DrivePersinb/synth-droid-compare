@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CompareTable from "@/components/CompareTable";
@@ -10,16 +10,50 @@ import { getInstrumentByUniqueId, InstrumentBasic } from "@/data/instrumentsData
 import { ArrowLeft, Trash } from "lucide-react";
 
 const ComparePage = () => {
-  const { compareItems, clearCompare } = useCompare();
+  const { compareItems, clearCompare, addToCompare, removeFromCompare } = useCompare();
   const [instruments, setInstruments] = useState<InstrumentBasic[]>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   
+  // Load instruments from URL parameters on component mount
+  useEffect(() => {
+    const idsParam = searchParams.get('ids');
+    if (idsParam) {
+      const urlIds = idsParam.split('+').filter(id => id.trim());
+      
+      // Clear existing compare items and add URL instruments
+      clearCompare();
+      urlIds.forEach(id => {
+        const instrument = getInstrumentByUniqueId(id);
+        if (instrument) {
+          addToCompare(id);
+        }
+      });
+    }
+  }, [searchParams, clearCompare, addToCompare]);
+  
+  // Update instruments state when compareItems change
   useEffect(() => {
     const loadedInstruments = compareItems
       .map(item => getInstrumentByUniqueId(item.instrumentId))
       .filter(item => item !== undefined) as InstrumentBasic[];
       
     setInstruments(loadedInstruments);
-  }, [compareItems]);
+    
+    // Update URL when compare items change (but only if not initially loading from URL)
+    if (loadedInstruments.length > 0) {
+      const ids = loadedInstruments.map(inst => inst.uniqueId).join('+');
+      setSearchParams({ ids });
+    } else if (compareItems.length === 0) {
+      // Clear URL params when no items to compare
+      setSearchParams({});
+    }
+  }, [compareItems, setSearchParams]);
+
+  const handleClearAll = () => {
+    clearCompare();
+    setSearchParams({});
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -35,7 +69,7 @@ const ComparePage = () => {
           </div>
           
           {instruments.length > 0 && (
-            <Button variant="outline" onClick={clearCompare} className="flex items-center">
+            <Button variant="outline" onClick={handleClearAll} className="flex items-center">
               <Trash size={16} className="mr-2" /> Clear All
             </Button>
           )}
