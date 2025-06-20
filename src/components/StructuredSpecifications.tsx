@@ -28,15 +28,15 @@ const StructuredSpecifications: React.FC<StructuredSpecificationsProps> = ({
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {specifications.map((category, categoryIndex) => (
-        <div key={categoryIndex} className="space-y-4">
+        <div key={categoryIndex} className="space-y-3">
           <h3 className="text-xl font-semibold text-primary pb-2">
             {category.name}
           </h3>
-          <div className="space-y-3">
+          <div className="space-y-1">
             {Object.entries(category.specs).map(([key, value]) => (
-              <div key={key} className="flex justify-between items-center py-3 border-b border-gray-700/30">
+              <div key={key} className="flex justify-between items-center py-2 border-b border-gray-700/30">
                 <span className="text-gray-300 font-medium">{key}</span>
                 <span className="text-white font-semibold">{renderSpecValue(value)}</span>
               </div>
