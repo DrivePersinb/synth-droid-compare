@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export interface CompareItem {
   instrumentId: string;
@@ -55,14 +55,21 @@ export const CompareProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const newItems = [...compareItems, newItem];
     setCompareItems(newItems);
     
-    // Show toast with link to comparison page
+    // Show toast with navigation function instead of Link
+    const compareUrl = getCompareUrl(newItems);
     toast.success(
       <div className="flex items-center justify-between w-full">
         <span>Added to comparison list</span>
-        <Button asChild size="sm" variant="outline" className="ml-2">
-          <Link to={getCompareUrl(newItems)}>
-            Start Comparison
-          </Link>
+        <Button 
+          size="sm" 
+          variant="outline" 
+          className="ml-2"
+          onClick={() => {
+            // Navigate programmatically
+            window.location.href = compareUrl;
+          }}
+        >
+          Start Comparison
         </Button>
       </div>,
       {
