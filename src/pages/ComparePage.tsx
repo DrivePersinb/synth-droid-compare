@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CompareTable from "@/components/CompareTable";
@@ -12,15 +12,14 @@ import { ArrowLeft, Trash } from "lucide-react";
 const ComparePage = () => {
   const { compareItems, clearCompare, addToCompare, removeFromCompare } = useCompare();
   const [instruments, setInstruments] = useState<InstrumentBasic[]>([]);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { ids } = useParams<{ ids?: string }>();
   const navigate = useNavigate();
   const isInitialLoad = useRef(true);
   
   // Load instruments from URL parameters on component mount
   useEffect(() => {
-    const idsParam = searchParams.get('ids');
-    if (idsParam && isInitialLoad.current) {
-      const urlIds = idsParam.split('+').filter(id => id.trim());
+    if (ids && isInitialLoad.current) {
+      const urlIds = ids.split('+').filter(id => id.trim());
       
       // Clear existing compare items and add URL instruments
       clearCompare();
@@ -32,7 +31,7 @@ const ComparePage = () => {
       });
       isInitialLoad.current = false;
     }
-  }, [searchParams]);
+  }, [ids, clearCompare, addToCompare]);
   
   // Update instruments state when compareItems change
   useEffect(() => {
@@ -45,18 +44,18 @@ const ComparePage = () => {
     // Update URL when compare items change (but only if not initially loading from URL)
     if (!isInitialLoad.current) {
       if (loadedInstruments.length > 0) {
-        const ids = loadedInstruments.map(inst => inst.uniqueId).join('+');
-        setSearchParams({ ids });
+        const newIds = loadedInstruments.map(inst => inst.uniqueId).join('+');
+        navigate(`/compare/${newIds}`, { replace: true });
       } else if (compareItems.length === 0) {
-        // Clear URL params when no items to compare
-        setSearchParams({});
+        // Navigate to base compare page when no items
+        navigate('/compare', { replace: true });
       }
     }
-  }, [compareItems]);
+  }, [compareItems, navigate]);
 
   const handleClearAll = () => {
     clearCompare();
-    setSearchParams({});
+    navigate('/compare', { replace: true });
   };
 
   return (
@@ -67,7 +66,7 @@ const ComparePage = () => {
         <div className="flex justify-between items-center mb-8">
           <div>
             <Link to="/" className="inline-flex items-center text-primary hover:underline mb-2">
-              <ArrowLeft size={16} className="mr-1" /> Back to home
+              <ArrowLeft size={16} className="mr-1" /> Back to Home
             </Link>
             <h1 className="text-3xl font-bold">Compare Instruments</h1>
           </div>
@@ -79,17 +78,17 @@ const ComparePage = () => {
           )}
         </div>
         
-        <div className="bg-androidBox rounded-[10px] overflow-hidden">
+        <div className="bg-card border border-border rounded-[10px] overflow-hidden">
           <CompareTable />
           
           {instruments.length > 0 && instruments.length < 4 && (
-            <div className="p-6 border-t border-gray-700">
+            <div className="p-6 border-t border-border">
               <div className="flex flex-wrap items-center gap-4">
-                <div className="text-gray-300">
-                  You can add up to {4 - instruments.length} more instrument{instruments.length === 3 ? '' : 's'} to compare
+                <div className="text-muted-foreground">
+                  You can add up to {4 - instruments.length} more instrument{instruments.length === 3 ? '' : 's'} for comparison
                 </div>
                 <Button asChild>
-                  <Link to="/all-instruments">Add More Instruments</Link>
+                  <Link to="/all-instruments">Browse More Instruments</Link>
                 </Button>
               </div>
             </div>

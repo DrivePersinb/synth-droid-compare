@@ -1,6 +1,8 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 export interface CompareItem {
   instrumentId: string;
@@ -28,14 +30,20 @@ export const CompareProvider: React.FC<{ children: React.ReactNode }> = ({ child
     localStorage.setItem("compareItems", JSON.stringify(compareItems));
   }, [compareItems]);
 
+  const getCompareUrl = (items: CompareItem[]) => {
+    if (items.length === 0) return "/compare";
+    const ids = items.map(item => item.instrumentId).join('+');
+    return `/compare/${ids}`;
+  };
+
   const addToCompare = (instrumentId: string) => {
     if (compareItems.length >= 4) {
-      toast.error("You can compare up to 4 instruments at a time. Please remove one to add another.");
+      toast.error("Maximum 4 instruments can be compared at once. Please remove one to add another.");
       return;
     }
     
     if (isInCompare(instrumentId)) {
-      toast.info("This instrument is already in your compare list");
+      toast.info("This instrument is already in your comparison list.");
       return;
     }
     
@@ -44,8 +52,23 @@ export const CompareProvider: React.FC<{ children: React.ReactNode }> = ({ child
       dateAdded: new Date()
     };
     
-    setCompareItems(prevItems => [...prevItems, newItem]);
-    toast.success("Added to comparison list");
+    const newItems = [...compareItems, newItem];
+    setCompareItems(newItems);
+    
+    // Show toast with link to comparison page
+    toast.success(
+      <div className="flex items-center justify-between w-full">
+        <span>Added to comparison list</span>
+        <Button asChild size="sm" variant="outline" className="ml-2">
+          <Link to={getCompareUrl(newItems)}>
+            Start Comparison
+          </Link>
+        </Button>
+      </div>,
+      {
+        duration: 4000,
+      }
+    );
   };
 
   const removeFromCompare = (instrumentId: string) => {

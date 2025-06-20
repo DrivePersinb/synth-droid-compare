@@ -29,6 +29,7 @@ const App = () => (
           <Route path="/brands/:brandName" element={<BrandPage />} />
           <Route path="/product/:id" element={<ProductDetail />} />
           <Route path="/compare" element={<ComparePage />} />
+          <Route path="/compare/:ids" element={<ComparePage />} />
           <Route path="/latest" element={<LatestInstruments />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

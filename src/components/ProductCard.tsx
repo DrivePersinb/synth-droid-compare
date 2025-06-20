@@ -68,7 +68,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ instrument }) => {
         
         <div className="flex justify-between items-center">
           <div className="font-semibold text-sm sm:text-base">
-            ₹{instrument.price?.toLocaleString() || "Call for price"}
+            ₹{instrument.price?.toLocaleString() || "Contact for Pricing"}
           </div>
           
           <div className="flex space-x-2">
@@ -81,10 +81,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ instrument }) => {
               }}
               className="text-xs sm:text-sm px-2 py-1 sm:px-3 sm:py-2"
             >
-              Buy
+              Buy Now
             </Button>
             <CompareButton 
               onClick={handleCompareToggle}
+              instrumentId={instrument.uniqueId}
             />
           </div>
         </div>
