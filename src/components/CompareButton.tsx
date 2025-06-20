@@ -10,7 +10,7 @@ interface CompareButtonProps {
 }
 
 const CompareButton: React.FC<CompareButtonProps> = ({ variant = "default", onClick }) => {
-  const { compareItems } = useCompare();
+  const { compareItems, isInCompare } = useCompare();
   const count = compareItems.length;
 
   // Generate URL with instrument IDs
@@ -24,10 +24,9 @@ const CompareButton: React.FC<CompareButtonProps> = ({ variant = "default", onCl
     return (
       <Button 
         variant={count > 0 ? "default" : "secondary"}
-        className={count > 0 ? "animate-pulse" : ""}
         onClick={onClick}
       >
-        {count > 0 ? `Compare (${count})` : "Compare"}
+        {count > 0 ? `Added (${count})` : "Compare"}
       </Button>
     );
   }
@@ -36,10 +35,9 @@ const CompareButton: React.FC<CompareButtonProps> = ({ variant = "default", onCl
     return (
       <Link to={getCompareUrl()} className={`
         inline-flex items-center justify-center px-3 py-1 
-        bg-primary rounded-md text-sm font-medium
-        ${count > 0 ? "animate-pulse" : ""}
+        bg-primary rounded-[10px] text-sm font-medium
       `}>
-        {count > 0 ? `Compare (${count})` : "Compare"}
+        {count > 0 ? `Added (${count})` : "Compare"}
       </Link>
     );
   }
@@ -48,10 +46,9 @@ const CompareButton: React.FC<CompareButtonProps> = ({ variant = "default", onCl
     <Button 
       asChild
       variant={count > 0 ? "default" : "secondary"}
-      className={count > 0 ? "animate-pulse" : ""}
     >
       <Link to={getCompareUrl()}>
-        {count > 0 ? `Compare (${count})` : "Compare"}
+        {count > 0 ? `Added (${count})` : "Compare"}
       </Link>
     </Button>
   );

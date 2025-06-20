@@ -11,6 +11,7 @@ import { useProductDetailsByUniqueId } from "@/hooks/useProductDetailsByUniqueId
 import BuyLinksDialog from "@/components/BuyLinksDialog";
 import StructuredSpecifications from "@/components/StructuredSpecifications";
 import FAQSection from "@/components/FAQSection";
+import ImageCarousel from "@/components/ImageCarousel";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -50,6 +51,9 @@ const ProductDetail = () => {
     );
   }
 
+  // For now, use single image, but this can be extended to support multiple images
+  const images = instrument.image ? [instrument.image] : [];
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
@@ -61,28 +65,24 @@ const ProductDetail = () => {
           </Link>
         </div>
         
-        <div className="glass-effect rounded-3xl overflow-hidden">
+        <div className="glass-effect rounded-[10px] overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
-            {/* Enhanced image section */}
+            {/* Enhanced image section with carousel */}
             <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-gray-900 to-black rounded-2xl flex items-center justify-center p-8 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent"></div>
-                <img 
-                  src={instrument.image || '/placeholder.svg'} 
-                  alt={instrument.name}
-                  className="relative z-10 max-w-full max-h-full object-contain"
-                />
-              </div>
+              <ImageCarousel 
+                images={images}
+                alt={instrument.name}
+              />
             </div>
             
             {/* Enhanced info section */}
             <div className="space-y-6">
               <div>
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="px-4 py-2 bg-primary/20 text-primary rounded-full text-sm font-medium">
+                  <span className="px-4 py-2 bg-primary/20 text-primary rounded-[10px] text-sm font-medium">
                     {instrument.brand}
                   </span>
-                  <span className="px-3 py-1 glass-effect rounded-full text-sm">
+                  <span className="px-3 py-1 glass-effect rounded-[10px] text-sm">
                     {instrument.releaseYear}
                   </span>
                 </div>

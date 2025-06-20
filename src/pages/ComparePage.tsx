@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -14,11 +14,12 @@ const ComparePage = () => {
   const [instruments, setInstruments] = useState<InstrumentBasic[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const isInitialLoad = useRef(true);
   
   // Load instruments from URL parameters on component mount
   useEffect(() => {
     const idsParam = searchParams.get('ids');
-    if (idsParam) {
+    if (idsParam && isInitialLoad.current) {
       const urlIds = idsParam.split('+').filter(id => id.trim());
       
       // Clear existing compare items and add URL instruments
@@ -29,8 +30,9 @@ const ComparePage = () => {
           addToCompare(id);
         }
       });
+      isInitialLoad.current = false;
     }
-  }, [searchParams, clearCompare, addToCompare]);
+  }, [searchParams]);
   
   // Update instruments state when compareItems change
   useEffect(() => {
@@ -41,14 +43,16 @@ const ComparePage = () => {
     setInstruments(loadedInstruments);
     
     // Update URL when compare items change (but only if not initially loading from URL)
-    if (loadedInstruments.length > 0) {
-      const ids = loadedInstruments.map(inst => inst.uniqueId).join('+');
-      setSearchParams({ ids });
-    } else if (compareItems.length === 0) {
-      // Clear URL params when no items to compare
-      setSearchParams({});
+    if (!isInitialLoad.current) {
+      if (loadedInstruments.length > 0) {
+        const ids = loadedInstruments.map(inst => inst.uniqueId).join('+');
+        setSearchParams({ ids });
+      } else if (compareItems.length === 0) {
+        // Clear URL params when no items to compare
+        setSearchParams({});
+      }
     }
-  }, [compareItems, setSearchParams]);
+  }, [compareItems]);
 
   const handleClearAll = () => {
     clearCompare();
@@ -75,7 +79,7 @@ const ComparePage = () => {
           )}
         </div>
         
-        <div className="bg-androidBox rounded-xl overflow-hidden">
+        <div className="bg-androidBox rounded-[10px] overflow-hidden">
           <CompareTable />
           
           {instruments.length > 0 && instruments.length < 4 && (

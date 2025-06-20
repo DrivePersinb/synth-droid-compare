@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useCompare } from '@/contexts/CompareContext';
 import CompareButton from './CompareButton';
 import BuyLinksDialog from './BuyLinksDialog';
+import ImageCarousel from './ImageCarousel';
 import { InstrumentBasic } from '@/data/instrumentsData';
 
 interface ProductCardProps {
@@ -24,17 +25,18 @@ const ProductCard: React.FC<ProductCardProps> = ({ instrument }) => {
       addToCompare(instrument.uniqueId);
     }
   };
+
+  // For now, we'll use a single image, but this can be extended to support multiple images
+  const images = instrument.image ? [instrument.image] : [];
   
   return (
-    <div className="product-card group border border-border transition-all duration-300 flex flex-col">
+    <div className="product-card group border border-border transition-all duration-300 flex flex-col rounded-[10px] overflow-hidden">
       <Link to={`/product/${instrument.uniqueId}`} className="block relative">
-        <div className="aspect-[4/3] overflow-hidden bg-gradient-to-br from-gray-900 to-black">
-          <img 
-            src={instrument.image} 
-            alt={instrument.name} 
-            className="w-full h-full object-contain mix-blend-lighten p-2"
-          />
-        </div>
+        <ImageCarousel 
+          images={images}
+          alt={instrument.name}
+          className="rounded-none"
+        />
       </Link>
       
       <div className="p-3 sm:p-4 flex-1 flex flex-col">
