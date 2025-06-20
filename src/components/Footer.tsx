@@ -10,11 +10,10 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-xl font-bold mb-4 text-white">
-              <span className="text-primary">Synth</span>Droid
+              <span className="text-primary">Vaj</span>intra
             </h3>
             <p className="text-gray-300 text-sm">
-              The ultimate comparison tool for synthesizers and musical instruments.
-              Find the perfect instrument for your needs.
+              Get all information about your dream instrument!
             </p>
           </div>
           
