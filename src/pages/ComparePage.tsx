@@ -14,24 +14,23 @@ const ComparePage = () => {
   const [instruments, setInstruments] = useState<InstrumentBasic[]>([]);
   const { ids } = useParams<{ ids?: string }>();
   const navigate = useNavigate();
-  const isInitialLoad = useRef(true);
+  const hasLoadedFromUrl = useRef(false);
   
   // Load instruments from URL parameters on component mount
   useEffect(() => {
-    if (ids && isInitialLoad.current) {
+    if (ids && !hasLoadedFromUrl.current) {
       const urlIds = ids.split('+').filter(id => id.trim());
       
-      // Clear existing compare items and add URL instruments
-      clearCompare();
+      // Only add instruments that aren't already in the compare list
       urlIds.forEach(id => {
         const instrument = getInstrumentByUniqueId(id);
-        if (instrument) {
+        if (instrument && !compareItems.some(item => item.instrumentId === id)) {
           addToCompare(id);
         }
       });
-      isInitialLoad.current = false;
+      hasLoadedFromUrl.current = true;
     }
-  }, [ids, clearCompare, addToCompare]);
+  }, [ids, addToCompare, compareItems]);
   
   // Update instruments state when compareItems change
   useEffect(() => {
@@ -41,8 +40,8 @@ const ComparePage = () => {
       
     setInstruments(loadedInstruments);
     
-    // Update URL when compare items change (but only if not initially loading from URL)
-    if (!isInitialLoad.current) {
+    // Update URL when compare items change (but only if we've already loaded from URL)
+    if (hasLoadedFromUrl.current) {
       if (loadedInstruments.length > 0) {
         const newIds = loadedInstruments.map(inst => inst.uniqueId).join('+');
         navigate(`/compare/${newIds}`, { replace: true });

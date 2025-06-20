@@ -17,9 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Slider
-} from "@/components/ui/slider";
+import { Input } from "@/components/ui/input";
 
 interface FilterSortBarProps {
   onFilterChange: (filters: FilterOptions) => void;
@@ -40,10 +38,20 @@ const FilterSortBar: React.FC<FilterSortBarProps> = ({
   const brands: Brand[] = ["Roland", "Yamaha", "Korg"];
   const years = [2019, 2017, 2016];
   
-  const handlePriceChange = (value: number[]) => {
+  const handleMinPriceChange = (value: string) => {
+    const minPrice = parseInt(value) || 0;
     const newFilters = {
       ...filters,
-      priceRange: [value[0], value[1]] as [number, number]
+      priceRange: [minPrice, filters.priceRange[1]] as [number, number]
+    };
+    setFilters(newFilters);
+  };
+  
+  const handleMaxPriceChange = (value: string) => {
+    const maxPrice = parseInt(value) || 400000;
+    const newFilters = {
+      ...filters,
+      priceRange: [filters.priceRange[0], maxPrice] as [number, number]
     };
     setFilters(newFilters);
   };
@@ -88,22 +96,18 @@ const FilterSortBar: React.FC<FilterSortBarProps> = ({
     setIsFilterOpen(false);
   };
 
-  // Calculate active filter count properly
   const getActiveFilterCount = () => {
     let count = 0;
     
-    // Only count price range if it's not the default range
     const isDefaultPriceRange = filters.priceRange[0] === 0 && filters.priceRange[1] === 400000;
     if (!isDefaultPriceRange) {
       count += 1;
     }
     
-    // Count selected brands
     if (filters.brands.length > 0) {
       count += filters.brands.length;
     }
     
-    // Count selected years
     if (filters.releaseYears.length > 0) {
       count += filters.releaseYears.length;
     }
@@ -112,36 +116,45 @@ const FilterSortBar: React.FC<FilterSortBarProps> = ({
   };
 
   return (
-    <div className="bg-androidBox p-2 md:p-4 rounded-lg mb-4 md:mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 md:gap-4">
+    <div className="bg-card border border-border p-3 rounded-[10px] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
       <div className="w-full sm:w-auto">
         <Popover open={isFilterOpen} onOpenChange={setIsFilterOpen}>
           <PopoverTrigger asChild>
-            <Button variant="outline" className="w-full sm:w-auto text-sm">
+            <Button variant="ghost" size="sm" className="w-full sm:w-auto text-sm border-0">
               <Filter className="h-4 w-4 mr-2" /> Filter
               {getActiveFilterCount() > 0 && (
-                <span className="ml-2 bg-primary/20 text-xs px-1.5 py-0.5 rounded-full">
+                <span className="ml-2 bg-primary text-primary-foreground text-xs px-1.5 py-0.5 rounded-full">
                   {getActiveFilterCount()}
                 </span>
               )}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-full max-w-screen-sm md:max-w-md p-4">
+          <PopoverContent className="w-80 p-4">
             <div className="space-y-4">
-              <h3 className="font-medium text-base md:text-lg">Filters</h3>
+              <h3 className="font-medium">Filters</h3>
               
               <div>
-                <h4 className="font-medium mb-2 text-sm">Price Range</h4>
-                <div className="px-2">
-                  <Slider
-                    defaultValue={[filters.priceRange[0], filters.priceRange[1]]}
-                    max={400000}
-                    step={1000}
-                    onValueChange={handlePriceChange}
-                    className="mb-2"
-                  />
-                  <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>₹{filters.priceRange[0].toLocaleString()}</span>
-                    <span>₹{filters.priceRange[1].toLocaleString()}</span>
+                <h4 className="font-medium mb-3 text-sm">Price Range</h4>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-xs text-muted-foreground">Min Price</label>
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={filters.priceRange[0]}
+                      onChange={(e) => handleMinPriceChange(e.target.value)}
+                      className="text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground">Max Price</label>
+                    <Input
+                      type="number"
+                      placeholder="400000"
+                      value={filters.priceRange[1]}
+                      onChange={(e) => handleMaxPriceChange(e.target.value)}
+                      className="text-sm"
+                    />
                   </div>
                 </div>
               </div>
@@ -182,12 +195,12 @@ const FilterSortBar: React.FC<FilterSortBarProps> = ({
                 </div>
               </div>
               
-              <div className="flex justify-between pt-4 border-t border-gray-700">
-                <Button variant="outline" onClick={clearFilters} className="text-sm">
-                  Clear Filters
+              <div className="flex justify-between pt-4 border-t">
+                <Button variant="outline" size="sm" onClick={clearFilters}>
+                  Clear
                 </Button>
-                <Button onClick={handleApplyFilters} className="text-sm">
-                  Apply Filters
+                <Button size="sm" onClick={handleApplyFilters}>
+                  Apply
                 </Button>
               </div>
             </div>
@@ -200,7 +213,7 @@ const FilterSortBar: React.FC<FilterSortBarProps> = ({
           value={currentSort}
           onValueChange={(value) => onSortChange(value as SortOption)}
         >
-          <SelectTrigger className="w-full sm:w-[180px] text-sm">
+          <SelectTrigger className="w-full sm:w-[160px] text-sm border-0">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
           <SelectContent>

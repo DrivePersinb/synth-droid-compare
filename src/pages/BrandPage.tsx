@@ -93,7 +93,7 @@ const BrandPage = () => {
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
           <div className="lg:col-span-1">
-            <div className={`glass-effect p-8 rounded-3xl bg-gradient-to-br ${getBrandGradient(brandName || '')} border relative overflow-hidden`}>
+            <div className={`glass-effect p-8 rounded-[10px] bg-gradient-to-br ${getBrandGradient(brandName || '')} border relative overflow-hidden`}>
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-16 translate-x-16"></div>
               <div className="relative z-10">
                 <h1 className="text-3xl md:text-4xl font-bold mb-4">{capitalizedBrandName}</h1>
@@ -101,18 +101,6 @@ const BrandPage = () => {
                   Discover the complete range of {capitalizedBrandName} synthesizers. 
                   Compare features, prices, and specifications to find your perfect instrument.
                 </p>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="glass-effect p-4 rounded-xl">
-                    <div className="text-2xl font-bold gradient-text">{brandInstruments.length}</div>
-                    <div className="text-sm text-muted-foreground">Products</div>
-                  </div>
-                  <div className="glass-effect p-4 rounded-xl">
-                    <div className="text-2xl font-bold gradient-text">
-                      ₹{Math.min(...brandInstruments.map(i => i.price)).toLocaleString()}+
-                    </div>
-                    <div className="text-sm text-muted-foreground">Starting at</div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
@@ -132,7 +120,7 @@ const BrandPage = () => {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-16 glass-effect rounded-2xl">
+              <div className="text-center py-16 glass-effect rounded-[10px]">
                 <h2 className="text-2xl font-bold mb-4">No instruments found</h2>
                 <p className="text-muted-foreground mb-6">Try adjusting your filters to see more results</p>
                 <button 
